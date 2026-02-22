@@ -62,6 +62,9 @@ namespace iiMenu.Extensions
             if (concatStringOfCosmeticsAllowed.Contains("S. FIRST LOGIN"))
                 suspiciouslySteam++;
 
+            if (concatStringOfCosmeticsAllowed.Contains("LMAKT.")) // https://www.meta.com/en-gb/experiences/app/developer-post/1169018307664941/
+                suspiciouslyQuest++;
+
             if (concatStringOfCosmeticsAllowed.Contains("FIRST LOGIN") || rig.GetPhotonPlayer().CustomProperties.Count >= 2)
                 suspiciouslyPC++;
 
