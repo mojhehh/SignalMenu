@@ -21,7 +21,7 @@ namespace SignalMenu
 
         public const string BaseDirectory = ".gtdata";
         public const string ClientResourcePath = "SignalMenu.Resources.Client";
-        public const string ServerResourcePath = "https://raw.githubusercontent.com/mojhehh/SignalMenu/main/Resources/Server";
+        public const string ServerResourcePath = "https://raw.githubusercontent.com/mojhehh/SignalMenu/master/Resources/Server";
         public const string FallbackResourcePath = "https://raw.githubusercontent.com/iiDk-the-actual/iis.Stupid.Menu/master/Resources/Server";
         public const string ServerAPI = "";
 
