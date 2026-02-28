@@ -1,9 +1,9 @@
-﻿/*
- * ii's Stupid Menu  Mods/Sound.cs
+/*
+ * Signal Safety Menu  Mods/Sound.cs
  * A mod menu for Gorilla Tag with over 1000+ mods
  *
- * Copyright (C) 2026  Goldentrophy Software
- * https://github.com/iiDk-the-actual/iis.Stupid.Menu
+ * Copyright (C) 2026  mojhehh (forked from Goldentrophy Software)
+ * https://github.com/mojhehh/SignalMenu
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,11 +21,11 @@
 
 using ExitGames.Client.Photon;
 using GorillaLocomotion;
-using iiMenu.Classes.Menu;
-using iiMenu.Extensions;
-using iiMenu.Managers;
-using iiMenu.Menu;
-using iiMenu.Patches.Menu;
+using SignalMenu.Classes.Menu;
+using SignalMenu.Extensions;
+using SignalMenu.Managers;
+using SignalMenu.Menu;
+using SignalMenu.Patches.Menu;
 using Photon.Pun;
 using Photon.Realtime;
 using Photon.Voice.Unity;
@@ -35,12 +35,12 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using UnityEngine;
-using static iiMenu.Menu.Main;
-using static iiMenu.Utilities.AssetUtilities;
-using static iiMenu.Utilities.FileUtilities;
+using static SignalMenu.Menu.Main;
+using static SignalMenu.Utilities.AssetUtilities;
+using static SignalMenu.Utilities.FileUtilities;
 using Random = UnityEngine.Random;
 
-namespace iiMenu.Mods
+namespace SignalMenu.Mods
 {
     public static class Sound
     {

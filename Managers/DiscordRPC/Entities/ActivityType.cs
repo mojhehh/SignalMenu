@@ -1,4 +1,4 @@
-﻿namespace iiMenu.Managers.DiscordRPC
+namespace SignalMenu.Managers.DiscordRPC
 {
 	/// <summary>
 	/// Rich Presence activity type

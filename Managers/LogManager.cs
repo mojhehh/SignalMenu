@@ -1,9 +1,9 @@
 /*
- * ii's Stupid Menu  Managers/LogManager.cs
+ * Signal Safety Menu  Managers/LogManager.cs
  * A mod menu for Gorilla Tag with over 1000+ mods
  *
- * Copyright (C) 2026  Goldentrophy Software
- * https://github.com/iiDk-the-actual/iis.Stupid.Menu
+ * Copyright (C) 2026  mojhehh (forked from Goldentrophy Software)
+ * https://github.com/mojhehh/SignalMenu
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,7 +19,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-namespace iiMenu.Managers
+namespace SignalMenu.Managers
 {
     public class LogManager
     {
@@ -54,18 +54,18 @@ namespace iiMenu.Managers
             Plugin.PluginLogger.LogError(string.Format(log.ToString(), args));
 
         /// <summary>
-        /// Logs a warning message (as debug).
+        /// Logs a warning message.
         /// </summary>
         /// <param name="log">The warning message or object to log.</param>
         public static void LogWarning(object log) =>
-            Plugin.PluginLogger.LogDebug(log);
+            Plugin.PluginLogger.LogWarning(log);
 
         /// <summary>
-        /// Logs a formatted warning message (as debug).
+        /// Logs a formatted warning message.
         /// </summary>
         /// <param name="log">The warning message format string.</param>
         /// <param name="args">Arguments to format the warning message.</param>
         public static void LogWarning(object log, object[] args) =>
-            Plugin.PluginLogger.LogDebug(string.Format(log.ToString(), args));
+            Plugin.PluginLogger.LogWarning(string.Format(log.ToString(), args));
     }
 }

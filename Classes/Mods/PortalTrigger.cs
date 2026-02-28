@@ -1,9 +1,9 @@
-﻿/*
- * ii's Stupid Menu  Classes/Mods/PortalTrigger.cs
+/*
+ * Signal Safety Menu  Classes/Mods/PortalTrigger.cs
  * A mod menu for Gorilla Tag with over 1000+ mods
  *
- * Copyright (C) 2026  Goldentrophy Software
- * https://github.com/iiDk-the-actual/iis.Stupid.Menu
+ * Copyright (C) 2026  mojhehh (forked from Goldentrophy Software)
+ * https://github.com/mojhehh/SignalMenu
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,13 +20,13 @@
  */
 
 using GorillaLocomotion;
-using iiMenu.Managers;
-using iiMenu.Mods;
+using SignalMenu.Managers;
+using SignalMenu.Mods;
 using System;
 using System.Linq;
 using UnityEngine;
 
-namespace iiMenu.Classes.Mods
+namespace SignalMenu.Classes.Mods
 {
     public class PortalTrigger : MonoBehaviour
     {

@@ -1,9 +1,9 @@
 /*
- * ii's Stupid Menu  Plugin.cs
+ * Signal Safety Menu  Plugin.cs
  * A mod menu for Gorilla Tag with over 1000+ mods
  *
- * Copyright (C) 2026  Goldentrophy Software
- * https://github.com/iiDk-the-actual/iis.Stupid.Menu
+ * Copyright (C) 2026  mojhehh (forked from Goldentrophy Software)
+ * https://github.com/mojhehh/SignalMenu
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,18 +21,21 @@
 
 using BepInEx;
 using BepInEx.Logging;
-using iiMenu.Classes.Menu;
-using iiMenu.Managers;
-using iiMenu.Menu;
-using iiMenu.Patches;
-using iiMenu.Patches.Menu;
+using SignalMenu.Classes.Menu;
+using SignalMenu.Managers;
+using SignalMenu.Menu;
+using SignalMenu.Patches;
+using SignalMenu.Patches.Menu;
+using System;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using UnityEngine;
+using SignalMenu.SignalSafety;
 using Console = System.Console;
 
-namespace iiMenu
+namespace SignalMenu
 {
     [Description(PluginInfo.Description)]
     [BepInPlugin(PluginInfo.GUID, PluginInfo.Name, PluginInfo.Version)]
@@ -44,25 +47,9 @@ namespace iiMenu
 
         private void Awake()
         {
-            // Set console title
-            Console.Title = $"ii's Stupid Menu // Build {PluginInfo.Version}";
             instance = this;
 
-            string logoLines = PluginInfo.Logo.Split(@"
-")
-                .Aggregate("", (current, line) => current + (System.Environment.NewLine + "     " + line));
-
-            LogManager.Log($@"
-{logoLines}
-    ii's Stupid Menu  {(PluginInfo.BetaBuild ? "Beta " : "Build")} {PluginInfo.Version}
-    Compiled {PluginInfo.BuildTimestamp}
-    
-    This program comes with ABSOLUTELY NO WARRANTY;
-    for details see `https://github.com/iiDk-the-actual/iis.Stupid.Menu/GPL/WARRANTY`
-    
-    This is free software, and you are welcome to redistribute it under certain conditions;
-    see `https://github.com/iiDk-the-actual/iis.Stupid.Menu/GPL/REDISTRIBUTION` for details.
-");
+            LogManager.Log($"[{PluginInfo.Name}] v{PluginInfo.Version} loaded");
 
             FirstLaunch = !Directory.Exists(PluginInfo.BaseDirectory);
 
@@ -87,16 +74,15 @@ namespace iiMenu
                     Directory.CreateDirectory(DirectoryTarget);
             }
 
-            PatchHandler.PatchAll(true);
-
             // Ugily hard-coded but works so well
-            if (File.Exists($"{PluginInfo.BaseDirectory}/iiMenu_Preferences.txt"))
+            if (File.Exists($"{PluginInfo.BaseDirectory}/prefs.dat"))
             {
-                if (File.ReadAllLines($"{PluginInfo.BaseDirectory}/iiMenu_Preferences.txt")[0].Split(";;").Contains("Accept TOS"))
+                var lines = File.ReadAllLines($"{PluginInfo.BaseDirectory}/prefs.dat");
+                if (lines.Length > 0 && lines[0].Split(";;").Contains("Accept TOS"))
                     TOSPatches.enabled = true;
             }
 
-            if (File.Exists($"{PluginInfo.BaseDirectory}/iiMenu_DisableTelemetry.txt"))
+            if (File.Exists($"{PluginInfo.BaseDirectory}/notelem.dat"))
                 ServerData.DisableTelemetry = true;
             
             GorillaTagger.OnPlayerSpawned(LoadMenu);
@@ -107,14 +93,25 @@ namespace iiMenu
 
         private static void LoadMenu()
         {
+            // Initialize file I/O safety filtering before patches are applied
+            try
+            {
+                string gamePath = Assembly.GetExecutingAssembly().Location.Replace("\\", "/").Split("/BepInEx")[0];
+                Patches.Safety.FileIOPatches.Initialize(gamePath);
+            }
+            catch (Exception ex) { Managers.LogManager.LogError($"FileIOPatches init failed: {ex.Message}"); }
+
             PatchHandler.PatchAll();
 
-            GameObject Loader = new GameObject("iiMenu_Loader");
+            GameObject Loader = new GameObject(ObjectNames.Get("Loader"));
             Loader.AddComponent<CoroutineManager>();
             Loader.AddComponent<NotificationManager>();
             Loader.AddComponent<CustomBoardManager>();
 
             Loader.AddComponent<UI>();
+
+            var safetyRunner = Loader.AddComponent<SignalSafety.SafetyLoader>();
+            SignalSafety.SafetyLoader.Initialize(safetyRunner);
 
             DontDestroyOnLoad(Loader);
         }
@@ -123,15 +120,15 @@ namespace iiMenu
         // Don't merge these methods, it just doesn't work
         public static void Inject()
         {
-            GameObject iiMenu = new GameObject("iiMenu");
-            iiMenu.AddComponent<Plugin>();
+            GameObject menuObj = new GameObject(ObjectNames.Get("Inject"));
+            menuObj.AddComponent<Plugin>();
         }
 
         public static void InjectDontDestroy()
         {
-            GameObject iiMenu = new GameObject("iiMenu");
-            iiMenu.AddComponent<Plugin>();
-            DontDestroyOnLoad(iiMenu);
+            GameObject menuObj = new GameObject(ObjectNames.Get("Inject"));
+            menuObj.AddComponent<Plugin>();
+            DontDestroyOnLoad(menuObj);
         }
     }
 }

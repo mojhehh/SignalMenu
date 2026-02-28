@@ -1,9 +1,9 @@
 /*
- * ii's Stupid Menu  Utilities/FileUtilities.cs
+ * Signal Safety Menu  Utilities/FileUtilities.cs
  * A mod menu for Gorilla Tag with over 1000+ mods
  *
- * Copyright (C) 2026  Goldentrophy Software
- * https://github.com/iiDk-the-actual/iis.Stupid.Menu
+ * Copyright (C) 2026  mojhehh (forked from Goldentrophy Software)
+ * https://github.com/mojhehh/SignalMenu
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,7 +24,7 @@ using System.Linq;
 using System.Reflection;
 using UnityEngine;
 
-namespace iiMenu.Utilities
+namespace SignalMenu.Utilities
 {
     public class FileUtilities
     {
@@ -39,19 +39,10 @@ namespace iiMenu.Utilities
 
         public static string RemoveFileExtension(string file)
         {
-            int index = 0;
-            string output = "";
-            string[] split = file.Split(".");
-            foreach (string data in split)
-            {
-                index++;
-                if (index == split.Length) continue;
-                if (index > 1)
-                    output += ".";
-
-                output += data;
-            }
-            return output;
+            if (string.IsNullOrEmpty(file)) return "";
+            int lastDot = file.LastIndexOf('.');
+            if (lastDot <= 0) return file; // No extension or dot at start (hidden file)
+            return file[..lastDot];
         }
 
         public static AudioType GetAudioType(string extension)
@@ -68,11 +59,11 @@ namespace iiMenu.Utilities
 
         public static string GetFullPath(Transform transform)
         {
-            string path = "";
+            string path = transform.name;
             while (transform.parent != null)
             {
                 transform = transform.parent;
-                path = path == "" ? transform.name : transform.name + "/" + path;
+                path = transform.name + "/" + path;
             }
             return path;
         }

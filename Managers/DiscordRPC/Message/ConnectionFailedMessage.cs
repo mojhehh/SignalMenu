@@ -1,4 +1,4 @@
-﻿namespace iiMenu.Managers.DiscordRPC.Message
+namespace SignalMenu.Managers.DiscordRPC.Message
 {
 	/// <summary>
 	/// Failed to establish any connection with discord. Discord is potentially not running?

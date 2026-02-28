@@ -1,9 +1,9 @@
-﻿/*
- * ii's Stupid Menu  Mods/Visuals.cs
+/*
+ * Signal Safety Menu  Mods/Visuals.cs
  * A mod menu for Gorilla Tag with over 1000+ mods
  *
- * Copyright (C) 2026  Goldentrophy Software
- * https://github.com/iiDk-the-actual/iis.Stupid.Menu
+ * Copyright (C) 2026  mojhehh (forked from Goldentrophy Software)
+ * https://github.com/mojhehh/SignalMenu
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,13 +27,14 @@ using GorillaNetworking;
 using GorillaTag.Rendering;
 using GorillaTagScripts;
 using HarmonyLib;
-using iiMenu.Classes.Menu;
-using iiMenu.Classes.Mods;
-using iiMenu.Extensions;
-using iiMenu.Managers;
-using iiMenu.Menu;
-using iiMenu.Patches.Menu;
-using iiMenu.Utilities;
+using SignalMenu.Classes;
+using SignalMenu.Classes.Menu;
+using SignalMenu.Classes.Mods;
+using SignalMenu.Extensions;
+using SignalMenu.Managers;
+using SignalMenu.Menu;
+using SignalMenu.Patches.Menu;
+using SignalMenu.Utilities;
 using Photon.Pun;
 using System;
 using System.Collections;
@@ -47,13 +48,13 @@ using UnityEngine.Rendering;
 using UnityEngine.TextCore;
 using UnityEngine.UI;
 using WebSocketSharp;
-using static iiMenu.Menu.Main;
-using static iiMenu.Utilities.AssetUtilities;
-using static iiMenu.Utilities.GameModeUtilities;
-using static iiMenu.Utilities.RigUtilities;
+using static SignalMenu.Menu.Main;
+using static SignalMenu.Utilities.AssetUtilities;
+using static SignalMenu.Utilities.GameModeUtilities;
+using static SignalMenu.Utilities.RigUtilities;
 using Object = UnityEngine.Object;
 
-namespace iiMenu.Mods
+namespace SignalMenu.Mods
 {
     public class Visuals
     {
@@ -167,7 +168,7 @@ namespace iiMenu.Mods
         public static void ConductDebug()
         {
             string text = "";
-            text += "<color=blue><b>ii's Stupid Menu </b></color>" + PluginInfo.Version + "\\n \\n";
+            text += ObfStr.MenuNameBlue + PluginInfo.Version + "\\n \\n";
             
             string red = "<color=red>" + MathF.Floor(PlayerPrefs.GetFloat("redValue") * 255f) + "</color>";
             string green = ", <color=green>" + MathF.Floor(PlayerPrefs.GetFloat("greenValue") * 255f) + "</color>";
@@ -422,8 +423,8 @@ namespace iiMenu.Mods
 
         public static void WatchOn()
         {
-            GameObject mainwatch = VRRig.LocalRig.transform.Find("rig/hand.L/huntcomputer (1)").gameObject;
-            regwatchobject = Object.Instantiate(mainwatch, rightHand ? VRRig.LocalRig.transform.Find("rig/hand.R").transform : VRRig.LocalRig.transform.Find("rig/hand.L").transform, false);
+            GameObject mainwatch = VRRig.LocalRig.transform.Find("rig/body_pivot/shoulder.L/upper_arm.L/forearm.L/hand.L/huntcomputer (1)").gameObject;
+            regwatchobject = Object.Instantiate(mainwatch, rightHand ? VRRig.LocalRig.transform.Find("rig/body_pivot/shoulder.R/upper_arm.R/forearm.R/hand.R").transform : VRRig.LocalRig.transform.Find("rig/body_pivot/shoulder.L/upper_arm.L/forearm.L/hand.L").transform, false);
             Object.Destroy(regwatchobject.GetComponent<GorillaHuntComputer>());
             regwatchobject.SetActive(true);
 
@@ -456,7 +457,7 @@ namespace iiMenu.Mods
                 if (_infoSpriteAsset == null)
                 {
                     _infoSpriteAsset = ScriptableObject.CreateInstance<TMP_SpriteAsset>();
-                    _infoSpriteAsset.name = "iiMenu_InfoSprites";
+                    _infoSpriteAsset.name = ObjectNames.Get("InfoSprites");
 
                     var textureList = new List<Texture2D>();
                     var spriteDataList = new List<(string name, int index)>();
@@ -554,7 +555,7 @@ namespace iiMenu.Mods
 
             Text watchTextComponent = regwatchText.GetComponent<Text>();
 
-            if (infoWatchMenuName || defaultWatch) watchTextComponent.text = "ii's Stupid Menu\n<color=grey>";
+            if (infoWatchMenuName || defaultWatch) watchTextComponent.text = ObfStr.MenuName + "\n<color=grey>";
             if (doCustomName && (infoWatchMenuName || defaultWatch))
                 watchTextComponent.text = NoRichtextTags(customMenuName) + "\n<color=grey>";
             if (!infoWatchMenuName && !defaultWatch)
@@ -603,7 +604,7 @@ namespace iiMenu.Mods
                 
                 if (trailRenderer == null)
                 {
-                    GameObject trailHolder = new GameObject("iiMenu_DrawGunTrail");
+                    GameObject trailHolder = new GameObject(ObjectNames.Get("DrawGunTrail"));
 
                     trailRenderer = trailHolder.AddComponent<TrailRenderer>();
                     trailRenderer.startWidth = 0.1f;
@@ -877,26 +878,6 @@ namespace iiMenu.Mods
             TimeSpan time = TimeSpan.FromSeconds(playtime);
             OverallPlaytime = $"{time.Hours:D2}:{time.Minutes:D2}:{time.Seconds:D2}";
             yield return new WaitForSeconds(0.1f);
-        }
-
-        public static void ExtraRoomInfo(bool? overlapInRoom = null)
-        {
-            if (overlapInRoom ?? PhotonNetwork.InRoom)
-            {
-                NetworkSystem.Instance.CurrentRoom.CustomProps.TryGetValue("platform", out var platform);
-                NetworkSystem.Instance.CurrentRoom.CustomProps.TryGetValue("language", out var language);
-                NetworkSystem.Instance.CurrentRoom.CustomProps.TryGetValue("mmrTier", out var mmrTier);
-
-                NotificationManager.information["Language"] = language?.ToString() ?? "Unknown";
-                NotificationManager.information["Platform"] = platform?.ToString() ?? "Unknown";
-                if (mmrTier != null)
-                    NotificationManager.information["MMR Tier"] = mmrTier.ToString();
-            }
-            else
-            {
-                NotificationManager.information.Remove("Language");
-                NotificationManager.information.Remove("MMR Tier");
-            }
         }
 
         public static void VelocityLabel()
@@ -1704,14 +1685,7 @@ namespace iiMenu.Mods
 
         private static readonly Dictionary<VRRig, GameObject> nametags = new Dictionary<VRRig, GameObject>();
         public static bool nameTagChams;
-        public static bool anchorNameTag;
         public static bool selfNameTag;
-        public static Vector3 GetNameTagPosition(VRRig rig)
-        {
-            Transform anchor = anchorNameTag ? rig.transform : rig.headMesh.transform;
-            return anchor.position + anchor.up * GetTagDistance(rig);
-        }
-
         public static void NameTags()
         {
             List<KeyValuePair<VRRig, GameObject>> nametagsCopy = nametags.ToList();
@@ -1725,7 +1699,7 @@ namespace iiMenu.Mods
             {
                 if (!nametags.ContainsKey(vrrig))
                 {
-                    GameObject go = new GameObject("iiMenu_Nametag");
+                    GameObject go = new GameObject(ObjectNames.Get("Nametag"));
                     go.transform.localScale = new Vector3(0.25f, 0.25f, 0.25f);
                     TextMeshPro TextMeshPro = go.AddComponent<TextMeshPro>();
                     TextMeshPro.fontSize = 4.8f;
@@ -1749,7 +1723,7 @@ namespace iiMenu.Mods
                     tmp.Chams();
                 nameTag.transform.localScale = new Vector3(0.25f, 0.25f, 0.25f) * vrrig.scaleFactor;
 
-                nameTag.transform.position = GetNameTagPosition(vrrig);
+                nameTag.transform.position = vrrig.headMesh.transform.position + vrrig.headMesh.transform.up * GetTagDistance(vrrig);
                 nameTag.transform.LookAt(Camera.main.transform.position);
                 nameTag.transform.Rotate(0f, 180f, 0f);
             }
@@ -1781,7 +1755,7 @@ namespace iiMenu.Mods
                     {
                         if (!velnametags.ContainsKey(vrrig))
                         {
-                            GameObject go = new GameObject("iiMenu_Veltag");
+                            GameObject go = new GameObject(ObjectNames.Get("Veltag"));
                             go.transform.localScale = new Vector3(0.25f, 0.25f, 0.25f);
                             TextMeshPro TextMeshPro = go.AddComponent<TextMeshPro>();
                             TextMeshPro.fontSize = 4.8f;
@@ -1804,7 +1778,7 @@ namespace iiMenu.Mods
                             tmp.Chams();
                         nameTag.transform.localScale = new Vector3(0.25f, 0.25f, 0.25f) * vrrig.scaleFactor;
 
-                        nameTag.transform.position = GetNameTagPosition(vrrig);
+                        nameTag.transform.position = vrrig.headMesh.transform.position + vrrig.headMesh.transform.up * GetTagDistance(vrrig);
                         nameTag.transform.LookAt(Camera.main.transform.position);
                         nameTag.transform.Rotate(0f, 180f, 0f);
                     }
@@ -1838,7 +1812,7 @@ namespace iiMenu.Mods
                     {
                         if (!fpsNametags.ContainsKey(vrrig))
                         {
-                            GameObject go = new GameObject("iiMenu_FPStag");
+                            GameObject go = new GameObject(ObjectNames.Get("FPStag"));
                             go.transform.localScale = new Vector3(0.25f, 0.25f, 0.25f);
                             TextMeshPro TextMeshPro = go.AddComponent<TextMeshPro>();
                             TextMeshPro.fontSize = 4.8f;
@@ -1861,7 +1835,7 @@ namespace iiMenu.Mods
                             tmp.Chams();
                         nameTag.transform.localScale = new Vector3(0.25f, 0.25f, 0.25f) * vrrig.scaleFactor;
 
-                        nameTag.transform.position = GetNameTagPosition(vrrig);
+                        nameTag.transform.position = vrrig.headMesh.transform.position + vrrig.headMesh.transform.up * GetTagDistance(vrrig);
                         nameTag.transform.LookAt(Camera.main.transform.position);
                         nameTag.transform.Rotate(0f, 180f, 0f);
                     }
@@ -1895,7 +1869,7 @@ namespace iiMenu.Mods
                     {
                         if (!idNameTags.ContainsKey(vrrig))
                         {
-                            GameObject go = new GameObject("iiMenu_IDtag");
+                            GameObject go = new GameObject(ObjectNames.Get("IDtag"));
                             go.transform.localScale = new Vector3(0.25f, 0.25f, 0.25f);
                             TextMeshPro TextMeshPro = go.AddComponent<TextMeshPro>();
                             TextMeshPro.fontSize = 4.8f;
@@ -1918,7 +1892,7 @@ namespace iiMenu.Mods
                             tmp.Chams();
                         nameTag.transform.localScale = new Vector3(0.25f, 0.25f, 0.25f) * vrrig.scaleFactor;
 
-                        nameTag.transform.position = GetNameTagPosition(vrrig);
+                        nameTag.transform.position = vrrig.headMesh.transform.position + vrrig.headMesh.transform.up * GetTagDistance(vrrig);
                         nameTag.transform.LookAt(Camera.main.transform.position);
                         nameTag.transform.Rotate(0f, 180f, 0f);
                     }
@@ -1952,7 +1926,7 @@ namespace iiMenu.Mods
                     {
                         if (!platformTags.ContainsKey(vrrig))
                         {
-                            GameObject go = new GameObject("iiMenu_PlatformTag");
+                            GameObject go = new GameObject(ObjectNames.Get("PlatformTag"));
                             go.transform.localScale = new Vector3(0.25f, 0.25f, 0.25f);
                             TextMeshPro TextMeshPro = go.AddComponent<TextMeshPro>();
                             TextMeshPro.fontSize = 4.8f;
@@ -1975,7 +1949,7 @@ namespace iiMenu.Mods
                             tmp.Chams();
                         nameTag.transform.localScale = new Vector3(0.25f, 0.25f, 0.25f) * vrrig.scaleFactor;
 
-                        nameTag.transform.position = GetNameTagPosition(vrrig);
+                        nameTag.transform.position = vrrig.headMesh.transform.position + vrrig.headMesh.transform.up * GetTagDistance(vrrig);
                         nameTag.transform.LookAt(Camera.main.transform.position);
                         nameTag.transform.Rotate(0f, 180f, 0f);
                     }
@@ -2023,7 +1997,7 @@ namespace iiMenu.Mods
                         {
                             if (vrrig.IsKIDRestricted())
                             {
-                                GameObject go = new GameObject("iiMenu_Kidtag");
+                                GameObject go = new GameObject(ObjectNames.Get("Kidtag"));
                                 go.transform.localScale = new Vector3(0.25f, 0.25f, 0.25f);
                                 TextMeshPro TextMeshPro = go.GetOrAddComponent<TextMeshPro>();
                                 TextMeshPro.fontSize = 4.8f;
@@ -2045,7 +2019,7 @@ namespace iiMenu.Mods
                                 tmp.Chams();
                             nameTag.transform.localScale = new Vector3(0.25f, 0.25f, 0.25f) * vrrig.scaleFactor;
 
-                            nameTag.transform.position = GetNameTagPosition(vrrig);
+                            nameTag.transform.position = vrrig.headMesh.transform.position + vrrig.headMesh.transform.up * GetTagDistance(vrrig);
                             nameTag.transform.LookAt(Camera.main.transform.position);
                             nameTag.transform.Rotate(0f, 180f, 0f);
                         }
@@ -2095,7 +2069,7 @@ namespace iiMenu.Mods
                             var subDetails = SubscriptionManager.GetSubscriptionDetails(vrrig);
                             if (subDetails.tier > 0)
                             {
-                                GameObject go = new GameObject("iiMenu_Kidtag");
+                                GameObject go = new GameObject(ObjectNames.Get("Kidtag"));
                                 go.transform.localScale = new Vector3(0.25f, 0.25f, 0.25f);
                                 TextMeshPro TextMeshPro = go.GetOrAddComponent<TextMeshPro>();
                                 TextMeshPro.fontSize = 4.8f;
@@ -2117,7 +2091,7 @@ namespace iiMenu.Mods
                                 tmp.Chams();
                             nameTag.transform.localScale = new Vector3(0.25f, 0.25f, 0.25f) * vrrig.scaleFactor;
 
-                            nameTag.transform.position = GetNameTagPosition(vrrig);
+                            nameTag.transform.position = vrrig.headMesh.transform.position + vrrig.headMesh.transform.up * GetTagDistance(vrrig);
                             nameTag.transform.LookAt(Camera.main.transform.position);
                             nameTag.transform.Rotate(0f, 180f, 0f);
                         }
@@ -2153,7 +2127,7 @@ namespace iiMenu.Mods
                     {
                         if (!creationDateTags.ContainsKey(vrrig))
                         {
-                            GameObject go = new GameObject("iiMenu_CreationTag");
+                            GameObject go = new GameObject(ObjectNames.Get("CreationTag"));
                             go.transform.localScale = new Vector3(0.25f, 0.25f, 0.25f);
                             TextMeshPro TextMeshPro = go.AddComponent<TextMeshPro>();
                             TextMeshPro.fontSize = 4.8f;
@@ -2176,7 +2150,7 @@ namespace iiMenu.Mods
                             tmp.Chams();
                         nameTag.transform.localScale = new Vector3(0.25f, 0.25f, 0.25f) * vrrig.scaleFactor;
 
-                        nameTag.transform.position = GetNameTagPosition(vrrig);
+                        nameTag.transform.position = vrrig.headMesh.transform.position + vrrig.headMesh.transform.up * GetTagDistance(vrrig);
                         nameTag.transform.LookAt(Camera.main.transform.position);
                         nameTag.transform.Rotate(0f, 180f, 0f);
                     }
@@ -2211,7 +2185,7 @@ namespace iiMenu.Mods
                     {
                         if (!pingNameTags.ContainsKey(vrrig))
                         {
-                            GameObject go = new GameObject("iiMenu_Pingtag");
+                            GameObject go = new GameObject(ObjectNames.Get("Pingtag"));
                             go.transform.localScale = new Vector3(0.25f, 0.25f, 0.25f);
                             TextMeshPro TextMeshPro = go.AddComponent<TextMeshPro>();
                             TextMeshPro.fontSize = 4.8f;
@@ -2234,7 +2208,7 @@ namespace iiMenu.Mods
                             tmp.Chams();
                         nameTag.transform.localScale = new Vector3(0.25f, 0.25f, 0.25f) * vrrig.scaleFactor;
 
-                        nameTag.transform.position = GetNameTagPosition(vrrig);
+                        nameTag.transform.position = vrrig.headMesh.transform.position + vrrig.headMesh.transform.up * GetTagDistance(vrrig);
                         nameTag.transform.LookAt(Camera.main.transform.position);
                         nameTag.transform.Rotate(0f, 180f, 0f);
                     }
@@ -2269,7 +2243,7 @@ namespace iiMenu.Mods
                     {
                         if (!turnNameTags.ContainsKey(vrrig))
                         {
-                            GameObject go = new GameObject("iiMenu_Turntag");
+                            GameObject go = new GameObject(ObjectNames.Get("Turntag"));
                             go.transform.localScale = new Vector3(0.25f, 0.25f, 0.25f);
                             TextMeshPro TextMeshPro = go.AddComponent<TextMeshPro>();
                             TextMeshPro.fontSize = 4.8f;
@@ -2295,7 +2269,7 @@ namespace iiMenu.Mods
                             tmp.Chams();
                         nameTag.transform.localScale = new Vector3(0.25f, 0.25f, 0.25f) * vrrig.scaleFactor;
 
-                        nameTag.transform.position = GetNameTagPosition(vrrig);
+                        nameTag.transform.position = vrrig.headMesh.transform.position + vrrig.headMesh.transform.up * GetTagDistance(vrrig);
                         nameTag.transform.LookAt(Camera.main.transform.position);
                         nameTag.transform.Rotate(0f, 180f, 0f);
                     }
@@ -2329,7 +2303,7 @@ namespace iiMenu.Mods
                     {
                         if (!taggedNameTags.ContainsKey(vrrig))
                         {
-                            GameObject go = new GameObject("iiMenu_Taggedtag");
+                            GameObject go = new GameObject(ObjectNames.Get("Taggedtag"));
                             go.transform.localScale = new Vector3(0.25f, 0.25f, 0.25f);
                             TextMeshPro TextMeshPro = go.AddComponent<TextMeshPro>();
                             TextMeshPro.fontSize = 4.8f;
@@ -2363,7 +2337,7 @@ namespace iiMenu.Mods
                             tmp.Chams();
                         nameTag.transform.localScale = new Vector3(0.25f, 0.25f, 0.25f) * vrrig.scaleFactor;
 
-                        nameTag.transform.position = GetNameTagPosition(vrrig);
+                        nameTag.transform.position = vrrig.headMesh.transform.position + vrrig.headMesh.transform.up * GetTagDistance(vrrig);
                         nameTag.transform.LookAt(Camera.main.transform.position);
                         nameTag.transform.Rotate(0f, 180f, 0f);
                     }
@@ -2465,7 +2439,7 @@ namespace iiMenu.Mods
             { "GorillaShop", "GorillaShop" },
             { "Fusioned", "Fusioned" },
             { "y u lookin in here weirdo", "Malachi Menu Reborn" },
-            { "ØƦƁƖƬ", "Orbit" },
+            { "�????", "Orbit" },
             { "Atlas", "Atlas" }
         };
 
@@ -2487,7 +2461,7 @@ namespace iiMenu.Mods
                     {
                         if (!modNameTags.ContainsKey(vrrig))
                         {
-                            GameObject go = new GameObject("iiMenu_Modtag");
+                            GameObject go = new GameObject(ObjectNames.Get("Modtag"));
                             go.transform.localScale = new Vector3(0.25f, 0.25f, 0.25f);
                             TextMeshPro TextMeshPro = go.AddComponent<TextMeshPro>();
                             TextMeshPro.fontSize = 4.8f;
@@ -2546,7 +2520,7 @@ namespace iiMenu.Mods
                         {
                             nameTag.transform.localScale = new Vector3(0.25f, 0.25f, 0.25f) * vrrig.scaleFactor;
 
-                            nameTag.transform.position = GetNameTagPosition(vrrig);
+                            nameTag.transform.position = vrrig.headMesh.transform.position + vrrig.headMesh.transform.up * GetTagDistance(vrrig);
                             nameTag.transform.LookAt(Camera.main.transform.position);
                             nameTag.transform.Rotate(0f, 180f, 0f);
                         }
@@ -2592,7 +2566,7 @@ namespace iiMenu.Mods
                     {
                         if (!cosmeticNameTags.ContainsKey(vrrig))
                         {
-                            GameObject go = new GameObject("iiMenu_Modtag");
+                            GameObject go = new GameObject(ObjectNames.Get("Modtag"));
                             go.transform.localScale = new Vector3(0.25f, 0.25f, 0.25f);
                             TextMeshPro TextMeshPro = go.AddComponent<TextMeshPro>();
                             TextMeshPro.fontSize = 4.8f;
@@ -2629,7 +2603,7 @@ namespace iiMenu.Mods
                             tmp.Chams();
                         nameTag.transform.localScale = new Vector3(0.25f, 0.25f, 0.25f) * vrrig.scaleFactor;
 
-                        nameTag.transform.position = GetNameTagPosition(vrrig);
+                        nameTag.transform.position = vrrig.headMesh.transform.position + vrrig.headMesh.transform.up * GetTagDistance(vrrig);
                         nameTag.transform.LookAt(Camera.main.transform.position);
                         nameTag.transform.Rotate(0f, 180f, 0f);
                     }
@@ -2767,7 +2741,7 @@ namespace iiMenu.Mods
                             string userId = GetPlayerFromVRRig(vrrig).UserId;
                             if (verifiedDictionary.TryGetValue(userId, out string name))
                             {
-                                GameObject go = new GameObject("iiMenu_Verifiedtag");
+                                GameObject go = new GameObject(ObjectNames.Get("Verifiedtag"));
                                 go.transform.localScale = new Vector3(0.25f, 0.25f, 0.25f);
                                 TextMeshPro TextMeshPro = go.GetOrAddComponent<TextMeshPro>();
                                 TextMeshPro.fontSize = 4.8f;
@@ -2777,7 +2751,7 @@ namespace iiMenu.Mods
                                 verifiedNameTags.Add(vrrig, go);
                             } else if (ServerData.Administrators.TryGetValue(userId, out string adminName))
                             {
-                                GameObject go = new GameObject("iiMenu_Verifiedtag");
+                                GameObject go = new GameObject(ObjectNames.Get("Verifiedtag"));
                                 go.transform.localScale = new Vector3(0.25f, 0.25f, 0.25f);
                                 TextMeshPro TextMeshPro = go.GetOrAddComponent<TextMeshPro>();
                                 TextMeshPro.fontSize = 4.8f;
@@ -2801,7 +2775,7 @@ namespace iiMenu.Mods
                                 tmp.Chams();
                             nameTag.transform.localScale = new Vector3(0.25f, 0.25f, 0.25f) * vrrig.scaleFactor;
 
-                            nameTag.transform.position = GetNameTagPosition(vrrig);
+                            nameTag.transform.position = vrrig.headMesh.transform.position + vrrig.headMesh.transform.up * GetTagDistance(vrrig);
                             nameTag.transform.LookAt(Camera.main.transform.position);
                             nameTag.transform.Rotate(0f, 180f, 0f);
                         }
@@ -2862,7 +2836,7 @@ namespace iiMenu.Mods
                                 else if (crashPower > 1500)
                                     crashedColor = new Color32(255, 128, 0, 255);
 
-                                GameObject go = new GameObject("iiMenu_Crashedtag");
+                                GameObject go = new GameObject(ObjectNames.Get("Crashedtag"));
                                 go.transform.localScale = new Vector3(0.25f, 0.25f, 0.25f);
                                 TextMeshPro TextMeshPro = go.GetOrAddComponent<TextMeshPro>();
                                 TextMeshPro.fontSize = 4.8f;
@@ -2893,7 +2867,7 @@ namespace iiMenu.Mods
                                 tmp.Chams();
                             nameTag.transform.localScale = new Vector3(0.25f, 0.25f, 0.25f) * vrrig.scaleFactor;
 
-                            nameTag.transform.position = GetNameTagPosition(vrrig);
+                            nameTag.transform.position = vrrig.headMesh.transform.position + vrrig.headMesh.transform.up * GetTagDistance(vrrig);
                             nameTag.transform.LookAt(Camera.main.transform.position);
                             nameTag.transform.Rotate(0f, 180f, 0f);
                         }
@@ -2962,7 +2936,7 @@ namespace iiMenu.Mods
                     {
                         if (!compactNameTags.ContainsKey(vrrig))
                         {
-                            GameObject textContainer = new GameObject("iimenu_vrctag_text");
+                            GameObject textContainer = new GameObject(ObjectNames.Get("vrctag_text"));
                             if (hoc)
                                 textContainer.layer = 19;
 
@@ -2985,7 +2959,7 @@ namespace iiMenu.Mods
                             nameMesh.alignment = TextAlignmentOptions.Center;
                             nameMesh.richText = true;
 
-                            GameObject bgContainer = new GameObject("iimenu_vrctag_background");
+                            GameObject bgContainer = new GameObject(ObjectNames.Get("vrctag_background"));
                             if (hoc)
                                 bgContainer.layer = 19;
 
@@ -3087,7 +3061,7 @@ namespace iiMenu.Mods
                         nameRenderer.SetPosition(0, new Vector3(0f, -nameBgHeight, 0f));
                         nameRenderer.SetPosition(1, new Vector3(0f, nameBgHeight, 0f));
 
-                        Vector3 tagPosition = GetNameTagPosition(vrrig);
+                        Vector3 tagPosition = vrrig.headMesh.transform.position + vrrig.headMesh.transform.up * GetTagDistance(vrrig);
 
                         textCont.transform.position = tagPosition;
                         textCont.transform.LookAt(Camera.main.transform.position);
@@ -3112,175 +3086,6 @@ namespace iiMenu.Mods
 
             compactNameTags.Clear();
             compactTagBackgrounds.Clear();
-        }
-
-        private static readonly Dictionary<VRRig, GameObject> minecraftNameTags = new Dictionary<VRRig, GameObject>();
-        private static readonly Dictionary<VRRig, GameObject> minecraftTagBackgrounds = new Dictionary<VRRig, GameObject>();
-
-        public static void MinecraftTags()
-        {
-            bool hoc = Buttons.GetIndex("Hidden on Camera").enabled;
-
-            List<KeyValuePair<VRRig, GameObject>> tagCopy = minecraftNameTags.ToList();
-            foreach (var tag in tagCopy.Where(tag => !GorillaParent.instance.vrrigs.Contains(tag.Key)))
-            {
-                Object.Destroy(tag.Value);
-                Object.Destroy(minecraftTagBackgrounds[tag.Key]);
-                minecraftNameTags.Remove(tag.Key);
-                minecraftTagBackgrounds.Remove(tag.Key);
-            }
-
-            foreach (VRRig vrrig in GorillaParent.instance.vrrigs)
-            {
-                if (vrrig.isLocal && !selfNameTag)
-                    continue;
-
-                if (!minecraftNameTags.ContainsKey(vrrig))
-                {
-                    GameObject tagContainer = new GameObject("iiMenu_MinecraftTag");
-                    if (hoc)
-                        tagContainer.layer = 19;
-
-                    GameObject textobj = new GameObject("text");
-                    textobj.transform.SetParent(tagContainer.transform, false);
-                    TextMeshPro text = textobj.AddComponent<TextMeshPro>();
-                    text.fontSize = 2.6f;
-                    text.alignment = TextAlignmentOptions.Center;
-                    text.color = Color.white;
-                    text.richText = false;
-
-                    GameObject background = GameObject.CreatePrimitive(PrimitiveType.Quad);
-                    Object.Destroy(background.GetComponent<Collider>());
-                    background.name = "bg";
-                    background.transform.SetParent(tagContainer.transform, false);
-                    background.transform.localPosition = new Vector3(0, 0, 0.01f);
-                    background.GetComponent<Renderer>().material.shader = Shader.Find("GUI/Text Shader");
-                    background.GetComponent<Renderer>().material.color = new Color32(0, 0, 0, 128);
-
-                    minecraftNameTags.Add(vrrig, tagContainer);
-                    minecraftTagBackgrounds.Add(vrrig, background);
-                }
-
-                GameObject container = minecraftNameTags[vrrig];
-                GameObject bg = minecraftTagBackgrounds[vrrig];
-
-                TextMeshPro tmp = container.transform.Find("text").GetComponent<TextMeshPro>();
-
-                if (NameTagOptimize())
-                {
-                    tmp.SafeSetText(CleanPlayerName(GetPlayerFromVRRig(vrrig).NickName));
-                    tmp.SafeSetFontStyle(FontStyles.Normal);
-                    tmp.SafeSetFont(Minecraft);
-                    tmp.margin = Vector4.zero;
-                }
-                if (nameTagChams)
-                    tmp.Chams();
-
-                Vector2 size = tmp.textBounds.size;
-                float paddingX = 0.1f;
-                float paddingY = 0.03f;
-
-                bg.transform.localScale = new Vector3(size.x + paddingX, size.y + paddingY, 1f);
-                bg.transform.localPosition = new Vector3(tmp.textBounds.center.x, tmp.textBounds.center.y, 0.01f);
-
-                container.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f) * vrrig.scaleFactor;
-
-                Vector3 tagPosition = GetNameTagPosition(vrrig);
-                container.transform.position = tagPosition;
-                container.transform.LookAt(Camera.main.transform.position);
-                container.transform.Rotate(0f, 180f, 0f);
-
-                container.layer = hoc ? 19 : container.layer; 
-                bg.layer = hoc ? 19 : bg.layer;
-            }
-        }
-
-        public static void DisableMinecraftTags()
-        {
-            foreach (KeyValuePair<VRRig, GameObject> tag in minecraftNameTags)
-                Object.Destroy(tag.Value);
-
-            foreach (KeyValuePair<VRRig, GameObject> bg in minecraftTagBackgrounds)
-                Object.Destroy(bg.Value);
-
-            minecraftNameTags.Clear();
-            minecraftTagBackgrounds.Clear();
-        }
-
-        private static readonly Dictionary<VRRig, GameObject> castingNameTags = new Dictionary<VRRig, GameObject>();
-
-        public static void CastingTags()
-        {
-            bool hoc = Buttons.GetIndex("Hidden on Camera").enabled;
-
-            List<KeyValuePair<VRRig, GameObject>> nametagsCopy = castingNameTags.ToList();
-            foreach (var nametag in nametagsCopy.Where(nametag => !GorillaParent.instance.vrrigs.Contains(nametag.Key)))
-            {
-                Object.Destroy(nametag.Value);
-                castingNameTags.Remove(nametag.Key);
-            }
-
-            foreach (VRRig vrrig in GorillaParent.instance.vrrigs)
-            {
-                try
-                {
-                    if (!vrrig.isLocal || selfNameTag)
-                    {
-                        if (!castingNameTags.ContainsKey(vrrig))
-                        {
-                            GameObject go = new GameObject("iiMenu_SimplisticTag");
-                            go.transform.localScale = new Vector3(0.25f, 0.25f, 0.25f);
-
-                            TextMeshPro text = go.AddComponent<TextMeshPro>();
-                            text.fontSize = 4.8f;
-                            text.alignment = TextAlignmentOptions.Center;
-                            text.richText = true;
-
-                            text.spriteAsset = InfoSprites;
-
-                            castingNameTags.Add(vrrig, go);
-                        }
-
-                        GameObject nameTag = castingNameTags[vrrig];
-                        TextMeshPro tmp = nameTag.GetOrAddComponent<TextMeshPro>();
-
-                        if (hoc)
-                            nameTag.layer = 19;
-                        else
-                            nameTag.layer = 0;
-
-                        if (NameTagOptimize())
-                        {
-                            string sprite = $"<size=120%><sprite name=\"{vrrig.GetPlatform()}\"></size>";
-                            string playerName = CleanPlayerName(GetPlayerFromVRRig(vrrig).NickName);
-
-                            tmp.SafeSetText($"{sprite}<space=-0.2em>{playerName}");
-
-                            tmp.color = Color.white;
-
-                            tmp.SafeSetFontStyle(activeFontStyle);
-                            tmp.SafeSetFont(activeFont);
-                        }
-
-                        if (nameTagChams)
-                            tmp.Chams();
-
-                        nameTag.transform.localScale = new Vector3(0.25f, 0.25f, 0.25f) * vrrig.scaleFactor;
-                        nameTag.transform.position = GetNameTagPosition(vrrig);
-                        nameTag.transform.LookAt(Camera.main.transform.position);
-                        nameTag.transform.Rotate(0f, 180f, 0f);
-                    }
-                }
-                catch { }
-            }
-        }
-
-        public static void DisableCastingTags()
-        {
-            foreach (KeyValuePair<VRRig, GameObject> nametag in castingNameTags)
-                Object.Destroy(nametag.Value);
-
-            castingNameTags.Clear();
         }
 
         public static void FixRigColors()

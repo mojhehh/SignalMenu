@@ -1,9 +1,9 @@
 /*
- * ii's Stupid Menu  Utilities/AssetUtilities.cs
+ * Signal Safety Menu  Utilities/AssetUtilities.cs
  * A mod menu for Gorilla Tag with over 1000+ mods
  *
- * Copyright (C) 2026  Goldentrophy Software
- * https://github.com/iiDk-the-actual/iis.Stupid.Menu
+ * Copyright (C) 2026  mojhehh (forked from Goldentrophy Software)
+ * https://github.com/mojhehh/SignalMenu
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,7 +19,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-using iiMenu.Managers;
+using SignalMenu.Managers;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
@@ -27,9 +27,9 @@ using System.Reflection;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Networking;
-using static iiMenu.Utilities.FileUtilities;
+using static SignalMenu.Utilities.FileUtilities;
 
-namespace iiMenu.Utilities
+namespace SignalMenu.Utilities
 {
     public class AssetUtilities
     {
@@ -89,13 +89,11 @@ namespace iiMenu.Utilities
             string filePath = $"{PluginInfo.BaseDirectory}/{fileName}";
             string directory = Path.GetDirectoryName(filePath);
             if (!Directory.Exists(directory))
-                // ReSharper disable once AssignNullToNotNullAttribute
                 Directory.CreateDirectory(directory);
 
             if (File.Exists(filePath)) return LoadSoundFromFile(fileName);
             LogManager.Log("Downloading " + fileName);
-            using WebClient stream = new WebClient();
-            stream.DownloadFile(resourcePath, filePath);
+            DownloadWithFallback(resourcePath, filePath, fileName);
 
             return LoadSoundFromFile(fileName);
         }
@@ -133,14 +131,12 @@ namespace iiMenu.Utilities
             string filePath = $"{PluginInfo.BaseDirectory}/{fileName}";
             string directory = Path.GetDirectoryName(filePath);
             if (!Directory.Exists(directory))
-                // ReSharper disable once AssignNullToNotNullAttribute
                 Directory.CreateDirectory(directory);
 
             if (!File.Exists(filePath))
             {
                 LogManager.Log("Downloading " + fileName);
-                WebClient stream = new WebClient();
-                stream.DownloadFile(resourcePath, filePath);
+                DownloadWithFallback(resourcePath, filePath, fileName);
             }
 
             Texture2D texture = LoadTextureFromFile(fileName);
@@ -148,6 +144,32 @@ namespace iiMenu.Utilities
             textureUrlDictionary[resourcePath] = texture;
 
             return texture;
+        }
+
+        private static void DownloadWithFallback(string primaryUrl, string filePath, string fileName)
+        {
+            using WebClient client = new WebClient();
+            try
+            {
+                client.DownloadFile(primaryUrl, filePath);
+                if (new FileInfo(filePath).Length > 0) return;
+                File.Delete(filePath);
+            }
+            catch
+            {
+                try { if (File.Exists(filePath)) File.Delete(filePath); } catch { }
+            }
+
+            try
+            {
+                string fallbackUrl = $"{PluginInfo.FallbackResourcePath}/{fileName}";
+                LogManager.Log("Primary failed, trying fallback for " + fileName);
+                client.DownloadFile(fallbackUrl, filePath);
+            }
+            catch
+            {
+                LogManager.LogError("Failed to download " + fileName + " from both sources");
+            }
         }
 
         public static readonly Dictionary<string, Texture2D> textureFileDirectory = new Dictionary<string, Texture2D>();

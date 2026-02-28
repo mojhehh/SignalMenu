@@ -1,6 +1,6 @@
-﻿using System;
+using System;
 
-namespace iiMenu.Managers.DiscordRPC.Exceptions
+namespace SignalMenu.Managers.DiscordRPC.Exceptions
 {
     /// <summary>
     /// Thrown when an action is performed on a client that has not yet been initialized

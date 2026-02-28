@@ -1,9 +1,9 @@
 /*
- * ii's Stupid Menu  Patches/Menu/MultiplySelfKnockbackPatch.cs
+ * Signal Safety Menu  Patches/Menu/MultiplySelfKnockbackPatch.cs
  * A mod menu for Gorilla Tag with over 1000+ mods
  *
- * Copyright (C) 2026  Goldentrophy Software
- * https://github.com/iiDk-the-actual/iis.Stupid.Menu
+ * Copyright (C) 2026  mojhehh (forked from Goldentrophy Software)
+ * https://github.com/mojhehh/SignalMenu
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,10 +20,9 @@
  */
 
 using HarmonyLib;
-using iiMenu.Extensions;
-using iiMenu.Mods;
+using SignalMenu.Mods;
 
-namespace iiMenu.Patches.Menu
+namespace SignalMenu.Patches.Menu
 {
     [HarmonyPatch(typeof(SlingshotProjectile), nameof(SlingshotProjectile.CheckForAOEKnockback))]
     public class MultiplySelfKnockbackPatch
@@ -32,7 +31,7 @@ namespace iiMenu.Patches.Menu
 
         public static void Prefix(SlingshotProjectile __instance)
         {
-            if (enabled && __instance.projectileOwner == VRRig.LocalRig.GetPlayer())
+            if (enabled && __instance.projectileOwner == VRRig.LocalRig.Creator)
             {
                 if (__instance.aoeKnockbackConfig != null)
                 {

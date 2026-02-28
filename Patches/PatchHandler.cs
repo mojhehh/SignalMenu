@@ -1,9 +1,9 @@
 /*
- * ii's Stupid Menu  Patches/PatchHandler.cs
+ * Signal Safety Menu  Patches/PatchHandler.cs
  * A mod menu for Gorilla Tag with over 1000+ mods
  *
- * Copyright (C) 2026  Goldentrophy Software
- * https://github.com/iiDk-the-actual/iis.Stupid.Menu
+ * Copyright (C) 2026  mojhehh (forked from Goldentrophy Software)
+ * https://github.com/mojhehh/SignalMenu
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,35 +20,26 @@
  */
 
 using HarmonyLib;
-using iiMenu.Managers;
-using iiMenu.Patches.Safety;
+using SignalMenu.Managers;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace iiMenu.Patches
+namespace SignalMenu.Patches
 {
     public class PatchHandler
     {
-        public static bool IsPatched { get; internal set; }
-        public static int PatchErrors { get; internal set; }
+        public static bool IsPatched { get; private set; }
+        public static int PatchErrors { get; private set; }
 
-        public static bool CriticalPatchFailed { get; internal set; }
-
-        [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
-        public class SecurityPatch : Attribute { }
-
-        [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
-        public class PatchOnAwake : Attribute { }
-
-        public static void PatchAll(bool awake = false)
+        public static void PatchAll()
         {
             if (IsPatched) return;
             instance ??= new Harmony(PluginInfo.GUID);
+            PatchErrors = 0; // Reset error count for fresh patch cycle
 
             foreach (var type in Assembly.GetExecutingAssembly().GetTypes()
-                         .Where(t => t.IsClass && t.GetCustomAttribute<HarmonyPatch>() != null && t.GetCustomAttribute<PatchOnAwake>() != null == awake))
+                         .Where(t => t.IsClass && t.GetCustomAttribute<HarmonyPatch>() != null))
             {
                 try
                 {
@@ -57,16 +48,13 @@ namespace iiMenu.Patches
                 catch (Exception ex)
                 {
                     PatchErrors++;
-                    if (type.GetCustomAttribute<SecurityPatch>() != null)
-                        CriticalPatchFailed = true;
-                    CriticalPatchFailed = true;
                     LogManager.LogError($"Failed to patch {type.FullName}: {ex}");
                 }
             }
 
             LogManager.Log($"Patched with {PatchErrors} errors");
 
-            IsPatched = !awake;
+            IsPatched = true;
         }
 
         public static void UnpatchAll()
@@ -79,6 +67,9 @@ namespace iiMenu.Patches
 
         public static void ApplyPatch(Type targetClass, string methodName, MethodInfo prefix = null, MethodInfo postfix = null, Type[] parameterTypes = null)
         {
+            if (instance == null)
+                throw new InvalidOperationException("Harmony instance not initialized. Call PatchAll() first.");
+
             var original =
                 (parameterTypes == null ?
                 targetClass.GetMethod(methodName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static) :
@@ -90,6 +81,9 @@ namespace iiMenu.Patches
 
         public static void RemovePatch(Type targetClass, string methodName, Type[] parameterTypes = null)
         {
+            if (instance == null)
+                throw new InvalidOperationException("Harmony instance not initialized. Call PatchAll() first.");
+
             var original =
                 (parameterTypes == null ?
                 targetClass.GetMethod(methodName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static) :

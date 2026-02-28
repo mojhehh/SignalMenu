@@ -1,9 +1,9 @@
 /*
- * ii's Stupid Menu  Patches/Menu/CreatePatch.cs
+ * Signal Safety Menu  Patches/Menu/CreatePatch.cs
  * A mod menu for Gorilla Tag with over 1000+ mods
  *
- * Copyright (C) 2026  Goldentrophy Software
- * https://github.com/iiDk-the-actual/iis.Stupid.Menu
+ * Copyright (C) 2026  mojhehh (forked from Goldentrophy Software)
+ * https://github.com/mojhehh/SignalMenu
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,9 +21,9 @@
 
 ﻿using GorillaTagScripts;
 using HarmonyLib;
-using iiMenu.Mods;
+using SignalMenu.Mods;
 
-namespace iiMenu.Patches.Menu
+namespace SignalMenu.Patches.Menu
 {
     [HarmonyPatch(typeof(BuilderTableNetworking), nameof(BuilderTableNetworking.PieceCreatedByShelfRPC))]
     public class CreatePatch

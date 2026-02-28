@@ -1,9 +1,9 @@
 /*
- * ii's Stupid Menu  Patches/Safety/PlayFabTelemetryPatches.cs
+ * Signal Safety Menu  Patches/Safety/PlayFabTelemetryPatches.cs
  * A mod menu for Gorilla Tag with over 1000+ mods
  *
- * Copyright (C) 2026  Goldentrophy Software
- * https://github.com/iiDk-the-actual/iis.Stupid.Menu
+ * Copyright (C) 2026  mojhehh (forked from Goldentrophy Software)
+ * https://github.com/mojhehh/SignalMenu
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,15 +25,13 @@ using PlayFab.ClientModels;
 using PlayFab.Internal;
 using System;
 using System.Collections.Generic;
-using static iiMenu.Utilities.RandomUtilities;
+using static SignalMenu.Utilities.RandomUtilities;
 using Random = UnityEngine.Random;
-using static iiMenu.Patches.PatchHandler;
 
-namespace iiMenu.Patches.Safety
+namespace SignalMenu.Patches.Safety
 {
     public class PlayFabTelemetryPatches
     {
-        [PatchOnAwake]
         [HarmonyPatch(typeof(PlayFabDeviceUtil), nameof(PlayFabDeviceUtil.SendDeviceInfoToPlayFab))]
         public class PlayfabUtil01
         {
@@ -41,7 +39,6 @@ namespace iiMenu.Patches.Safety
                 false;
         }
 
-        [PatchOnAwake]
         [HarmonyPatch(typeof(PlayFabClientInstanceAPI), nameof(PlayFabClientInstanceAPI.ReportDeviceInfo))]
         public class PlayfabUtil02
         {
@@ -49,7 +46,6 @@ namespace iiMenu.Patches.Safety
                 false;
         }
 
-        [PatchOnAwake]
         [HarmonyPatch(typeof(PlayFabClientAPI), nameof(PlayFabClientAPI.ReportDeviceInfo))]
         public class PlayfabUtil03
         {
@@ -64,7 +60,6 @@ namespace iiMenu.Patches.Safety
                 false;
         }
 
-        [PatchOnAwake]
         [HarmonyPatch(typeof(PlayFabClientAPI), nameof(PlayFabClientAPI.AttributeInstall))]
         public class PlayfabUtil05
         {
@@ -72,7 +67,6 @@ namespace iiMenu.Patches.Safety
                 false;
         }
 
-        [PatchOnAwake]
         [HarmonyPatch(typeof(PlayFabHttp), nameof(PlayFabHttp.InitializeScreenTimeTracker))]
         public class PlayfabUtil06
         {
@@ -80,12 +74,11 @@ namespace iiMenu.Patches.Safety
                 false;
         }
 
-        [PatchOnAwake]
         [HarmonyPatch(typeof(PlayFabClientAPI), nameof(PlayFabClientAPI.UpdateUserTitleDisplayName))] // Credits to Shiny for letting me use this
         public class DisplayNamePatch
         {
             public static void Prefix(ref UpdateUserTitleDisplayNameRequest request, Action<UpdateUserTitleDisplayNameResult> resultCallback, Action<PlayFabError> errorCallback, object customData = null, Dictionary<string, string> extraHeaders = null) =>
-                request.DisplayName = RandomString(Random.Range(3, 12)); // Min and max is 3 and 12, do not modify this
+                request.DisplayName = RandomString(Random.Range(3, 13)); // Min 3, max 12 inclusive (Range upper bound is exclusive)
         }
     }
 }

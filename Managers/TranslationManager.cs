@@ -1,9 +1,9 @@
-﻿/*
- * ii's Stupid Menu  Managers/TranslationManager.cs
+/*
+ * Signal Safety Menu  Managers/TranslationManager.cs
  * A mod menu for Gorilla Tag with over 1000+ mods
  *
- * Copyright (C) 2026  Goldentrophy Software
- * https://github.com/iiDk-the-actual/iis.Stupid.Menu
+ * Copyright (C) 2026  mojhehh (forked from Goldentrophy Software)
+ * https://github.com/mojhehh/SignalMenu
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,9 +29,9 @@ using UnityEngine;
 using UnityEngine.Networking;
 using Valve.Newtonsoft.Json;
 using Valve.Newtonsoft.Json.Linq;
-using static iiMenu.Menu.Main;
+using static SignalMenu.Menu.Main;
 
-namespace iiMenu.Managers
+namespace SignalMenu.Managers
 {
     public class TranslationManager
     {

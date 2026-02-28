@@ -1,9 +1,9 @@
 /*
- * ii's Stupid Menu  Classes/Menu/ScrollMaterial.cs
+ * Signal Safety Menu  Classes/Menu/ScrollMaterial.cs
  * A mod menu for Gorilla Tag with over 1000+ mods
  *
- * Copyright (C) 2026  Goldentrophy Software
- * https://github.com/iiDk-the-actual/iis.Stupid.Menu
+ * Copyright (C) 2026  mojhehh (forked from Goldentrophy Software)
+ * https://github.com/mojhehh/SignalMenu
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,10 +19,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-using iiMenu.Menu;
+using SignalMenu.Menu;
 using UnityEngine;
 
-namespace iiMenu.Classes.Menu
+namespace SignalMenu.Classes.Menu
 {
     public class ScrollMaterial : MonoBehaviour
     {

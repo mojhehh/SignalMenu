@@ -1,9 +1,9 @@
 /*
- * ii's Stupid Menu  Mods/CustomMaps/Manager.cs
+ * Signal Safety Menu  Mods/CustomMaps/Manager.cs
  * A mod menu for Gorilla Tag with over 1000+ mods
  *
- * Copyright (C) 2026  Goldentrophy Software
- * https://github.com/iiDk-the-actual/iis.Stupid.Menu
+ * Copyright (C) 2026  mojhehh (forked from Goldentrophy Software)
+ * https://github.com/mojhehh/SignalMenu
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,10 +20,10 @@
  */
 
 using GorillaTagScripts.VirtualStumpCustomMaps;
-using iiMenu.Classes.Menu;
-using iiMenu.Managers;
-using iiMenu.Menu;
-using iiMenu.Utilities;
+using SignalMenu.Classes.Menu;
+using SignalMenu.Managers;
+using SignalMenu.Menu;
+using SignalMenu.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -31,7 +31,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 
-namespace iiMenu.Mods.CustomMaps
+namespace SignalMenu.Mods.CustomMaps
 {
     public static class Manager
     {

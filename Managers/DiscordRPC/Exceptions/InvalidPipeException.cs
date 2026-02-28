@@ -1,6 +1,6 @@
-﻿using System;
+using System;
 
-namespace iiMenu.Managers.DiscordRPC.Exceptions
+namespace SignalMenu.Managers.DiscordRPC.Exceptions
 {
 	/// <summary>
 	/// The exception that is thrown when a error occurs while communicating with a pipe or when a connection attempt fails.

@@ -1,9 +1,9 @@
-﻿/*
- * ii's Stupid Menu  Extensions/MiscellaneousExtensions.cs
+/*
+ * Signal Safety Menu  Extensions/MiscellaneousExtensions.cs
  * A mod menu for Gorilla Tag with over 1000+ mods
  *
- * Copyright (C) 2026  Goldentrophy Software
- * https://github.com/iiDk-the-actual/iis.Stupid.Menu
+ * Copyright (C) 2026  mojhehh (forked from Goldentrophy Software)
+ * https://github.com/mojhehh/SignalMenu
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,16 +19,16 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-using iiMenu.Utilities;
+using SignalMenu.Utilities;
 using Photon.Pun;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using UnityEngine;
-using static iiMenu.Menu.Main;
+using static SignalMenu.Menu.Main;
 
-namespace iiMenu.Extensions
+namespace SignalMenu.Extensions
 {
     public static class MiscellaneousExtensions
     {

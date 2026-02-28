@@ -1,8 +1,8 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Text;
 
-namespace iiMenu.Managers.DiscordRPC.Helper
+namespace SignalMenu.Managers.DiscordRPC.Helper
 {
 	/// <summary>
 	/// Collectin of helpful string extensions

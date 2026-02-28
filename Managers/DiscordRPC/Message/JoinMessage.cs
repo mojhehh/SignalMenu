@@ -1,6 +1,6 @@
-﻿using Valve.Newtonsoft.Json;
+using Valve.Newtonsoft.Json;
 
-namespace iiMenu.Managers.DiscordRPC.Message
+namespace SignalMenu.Managers.DiscordRPC.Message
 {
 	/// <summary>
 	/// Called when the Discord Client wishes for this process to join a game. D -> C.

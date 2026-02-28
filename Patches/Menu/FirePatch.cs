@@ -1,9 +1,9 @@
 /*
- * ii's Stupid Menu  Patches/Menu/FirePatch.cs
+ * Signal Safety Menu  Patches/Menu/FirePatch.cs
  * A mod menu for Gorilla Tag with over 1000+ mods
  *
- * Copyright (C) 2026  Goldentrophy Software
- * https://github.com/iiDk-the-actual/iis.Stupid.Menu
+ * Copyright (C) 2026  mojhehh (forked from Goldentrophy Software)
+ * https://github.com/mojhehh/SignalMenu
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,13 +20,13 @@
  */
 
 using HarmonyLib;
-using iiMenu.Extensions;
+using SignalMenu.Extensions;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using static iiMenu.Utilities.GameModeUtilities;
+using static SignalMenu.Utilities.GameModeUtilities;
 
-namespace iiMenu.Patches.Menu
+namespace SignalMenu.Patches.Menu
 {
     [HarmonyPatch(typeof(SIGadgetChargeBlaster), nameof(SIGadgetChargeBlaster.FireProjectile))]
     public class FirePatch

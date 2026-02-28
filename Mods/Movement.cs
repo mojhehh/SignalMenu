@@ -1,9 +1,9 @@
-﻿/*
- * ii's Stupid Menu  Mods/Movement.cs
+/*
+ * Signal Safety Menu  Mods/Movement.cs
  * A mod menu for Gorilla Tag with over 1000+ mods
  *
- * Copyright (C) 2026  Goldentrophy Software
- * https://github.com/iiDk-the-actual/iis.Stupid.Menu
+ * Copyright (C) 2026  mojhehh (forked from Goldentrophy Software)
+ * https://github.com/mojhehh/SignalMenu
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,13 +25,13 @@ using GorillaExtensions;
 using GorillaLocomotion;
 using GorillaLocomotion.Climbing;
 using GorillaLocomotion.Swimming;
-using iiMenu.Classes.Menu;
-using iiMenu.Classes.Mods;
-using iiMenu.Extensions;
-using iiMenu.Managers;
-using iiMenu.Menu;
-using iiMenu.Patches.Menu;
-using iiMenu.Utilities;
+using SignalMenu.Classes.Menu;
+using SignalMenu.Classes.Mods;
+using SignalMenu.Extensions;
+using SignalMenu.Managers;
+using SignalMenu.Menu;
+using SignalMenu.Patches.Menu;
+using SignalMenu.Utilities;
 using Photon.Pun;
 using Photon.Realtime;
 using System;
@@ -47,14 +47,14 @@ using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
 using UnityEngine.XR;
 using Valve.Newtonsoft.Json.Linq;
-using static iiMenu.Menu.Main;
-using static iiMenu.Utilities.AssetUtilities;
-using static iiMenu.Utilities.RandomUtilities;
-using static iiMenu.Utilities.RigUtilities;
+using static SignalMenu.Menu.Main;
+using static SignalMenu.Utilities.AssetUtilities;
+using static SignalMenu.Utilities.RandomUtilities;
+using static SignalMenu.Utilities.RigUtilities;
 using Object = UnityEngine.Object;
 using Random = UnityEngine.Random;
 
-namespace iiMenu.Mods
+namespace SignalMenu.Mods
 {
     public static class Movement
     {
@@ -695,27 +695,6 @@ namespace iiMenu.Mods
             driveSpeed = speedamounts[driveInt];
             Buttons.GetIndex("cdSpeed").overlapText = "Change Drive Speed <color=grey>[</color><color=green>" + speedNames[driveInt] + "</color><color=grey>]</color>";
         }
-
-        public static int fastRopesInt;
-        public static void ChangeFastRopesSpeed(bool positive = true)
-        {
-            float[] speedamounts = { 5f, 10f, 30f };
-            string[] speedNames = { "Normal", "Fast", "Ultra Fast", };
-
-            if (positive)
-                fastRopesInt++;
-            else
-                fastRopesInt--;
-
-            fastRopesInt %= speedamounts.Length;
-            if (fastRopesInt < 0)
-                fastRopesInt = speedamounts.Length - 1;
-
-            RopePatch.amplifier = speedamounts[driveInt];
-            Buttons.GetIndex("Change Fast Ropes Speed").overlapText = "Change Fast Ropes Speed <color=grey>[</color><color=green>" + speedNames[driveInt] + "</color><color=grey>]</color>";
-        }
-
-
 
         public static Vector2 driveLerpDirection = Vector2.zero;
         public static void Drive()

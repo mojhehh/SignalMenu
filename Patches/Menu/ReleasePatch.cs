@@ -1,9 +1,9 @@
 /*
- * ii's Stupid Menu  Patches/Menu/ReleasePatch.cs
+ * Signal Safety Menu  Patches/Menu/ReleasePatch.cs
  * A mod menu for Gorilla Tag with over 1000+ mods
  *
- * Copyright (C) 2026  Goldentrophy Software
- * https://github.com/iiDk-the-actual/iis.Stupid.Menu
+ * Copyright (C) 2026  mojhehh (forked from Goldentrophy Software)
+ * https://github.com/mojhehh/SignalMenu
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,10 +21,9 @@
 
 ﻿using GorillaLocomotion;
 using HarmonyLib;
-using iiMenu.Extensions;
 using UnityEngine;
 
-namespace iiMenu.Patches.Menu
+namespace SignalMenu.Patches.Menu
 {
     [HarmonyPatch(typeof(TakeMyHand_HandLink), nameof(TakeMyHand_HandLink.OnRelease))]
     public class ReleasePatch
@@ -56,7 +55,7 @@ namespace iiMenu.Patches.Menu
                     if (grounded)
                     {
                         Vector3 averageVelocity = (handLink.isLeftHand ? GTPlayer.Instance.LeftHand.velocityTracker : GTPlayer.Instance.RightHand.velocityTracker).GetAverageVelocity(true).normalized * 20f;
-                        __instance.myRig.netView.SendRPC("DroppedByPlayer", __instance.myRig.GetPlayer(), averageVelocity);
+                        __instance.myRig.netView.SendRPC("DroppedByPlayer", __instance.myRig.Creator, averageVelocity);
                         __instance.myRig.ApplyLocalTrajectoryOverride(averageVelocity);
                     }
 

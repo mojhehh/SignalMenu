@@ -1,9 +1,9 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Reflection;
 using Valve.Newtonsoft.Json;
 
-namespace iiMenu.Managers.DiscordRPC.Converters
+namespace SignalMenu.Managers.DiscordRPC.Converters
 {
 	/// <summary>
 	/// Converts enums with the <see cref="EnumValueAttribute"/> into Json friendly terms. 

@@ -1,9 +1,9 @@
 /*
- * ii's Stupid Menu  Menu/UI.cs
+ * Signal Safety Menu  Menu/UI.cs
  * A mod menu for Gorilla Tag with over 1000+ mods
  *
- * Copyright (C) 2026  Goldentrophy Software
- * https://github.com/iiDk-the-actual/iis.Stupid.Menu
+ * Copyright (C) 2026  mojhehh (forked from Goldentrophy Software)
+ * https://github.com/mojhehh/SignalMenu
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,9 +21,10 @@
 
 using BepInEx;
 using GorillaNetworking;
-using iiMenu.Classes.Menu;
-using iiMenu.Extensions;
-using iiMenu.Managers;
+using SignalMenu.Classes;
+using SignalMenu.Classes.Menu;
+using SignalMenu.Extensions;
+using SignalMenu.Managers;
 using Photon.Pun;
 using System.Collections.Generic;
 using System.IO;
@@ -32,10 +33,10 @@ using System.Text.RegularExpressions;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using static iiMenu.Menu.Main;
-using static iiMenu.Utilities.AssetUtilities;
+using static SignalMenu.Menu.Main;
+using static SignalMenu.Utilities.AssetUtilities;
 
-namespace iiMenu.Menu
+namespace SignalMenu.Menu
 {
     public class UI : MonoBehaviour
     {
@@ -322,7 +323,7 @@ namespace iiMenu.Menu
                 uiPrefab.SetActive(false);
         }
 
-        private readonly string hideGUIPath = $"{PluginInfo.BaseDirectory}/iiMenu_HideGUI.txt";
+        private readonly string hideGUIPath = $"{PluginInfo.BaseDirectory}/Signal_HideGUI.txt";
         private void ToggleGUI()
         {
             isOpen = !isOpen;
@@ -334,7 +335,7 @@ namespace iiMenu.Menu
             else
             {
                 if (!File.Exists(hideGUIPath))
-                    File.WriteAllText(hideGUIPath, "Text file generated with ii's Stupid Menu");
+                    File.WriteAllText(hideGUIPath, ObfStr.FileTag);
             }
 
             GameObject closeMessage = uiPrefab.transform.Find("Canvas")?.Find("HideMessage")?.gameObject;

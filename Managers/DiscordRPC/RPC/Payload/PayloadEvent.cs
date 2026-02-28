@@ -1,8 +1,8 @@
-﻿using iiMenu.Managers.DiscordRPC.Converters;
+using SignalMenu.Managers.DiscordRPC.Converters;
 using Valve.Newtonsoft.Json;
 using Valve.Newtonsoft.Json.Linq;
 
-namespace iiMenu.Managers.DiscordRPC.RPC.Payload
+namespace SignalMenu.Managers.DiscordRPC.RPC.Payload
 {
 	/// <summary>
 	/// Used for Discord IPC Events

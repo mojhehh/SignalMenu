@@ -1,6 +1,6 @@
-﻿using System;
+using System;
 
-namespace iiMenu.Managers.DiscordRPC.Helper
+namespace SignalMenu.Managers.DiscordRPC.Helper
 {
 
 	internal class BackoffDelay

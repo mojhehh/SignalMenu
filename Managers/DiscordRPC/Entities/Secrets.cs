@@ -1,9 +1,9 @@
-﻿using iiMenu.Managers.DiscordRPC.Exceptions;
+using SignalMenu.Managers.DiscordRPC.Exceptions;
 using System;
 using System.Text;
 using Valve.Newtonsoft.Json;
 
-namespace iiMenu.Managers.DiscordRPC
+namespace SignalMenu.Managers.DiscordRPC
 {
 	/// <summary>
 	/// The secrets used for Joining. Secrets are obfuscated data of your choosing. They could be match ids, player ids, lobby ids, etc.

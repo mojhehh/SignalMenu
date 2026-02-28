@@ -1,9 +1,9 @@
 /*
- * ii's Stupid Menu  Mods/CustomMaps/Maps/MonkeMagic.cs
+ * Signal Safety Menu  Mods/CustomMaps/Maps/MonkeMagic.cs
  * A mod menu for Gorilla Tag with over 1000+ mods
  *
- * Copyright (C) 2026  Goldentrophy Software
- * https://github.com/iiDk-the-actual/iis.Stupid.Menu
+ * Copyright (C) 2026  mojhehh (forked from Goldentrophy Software)
+ * https://github.com/mojhehh/SignalMenu
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,18 +20,18 @@
  */
 
 using ExitGames.Client.Photon;
-using iiMenu.Classes.Menu;
-using iiMenu.Managers;
+using SignalMenu.Classes.Menu;
+using SignalMenu.Managers;
 using Photon.Pun;
 using Photon.Realtime;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using static iiMenu.Extensions.VRRigExtensions;
-using static iiMenu.Menu.Main;
-using static iiMenu.Utilities.RigUtilities;
+using static SignalMenu.Extensions.VRRigExtensions;
+using static SignalMenu.Menu.Main;
+using static SignalMenu.Utilities.RigUtilities;
 
-namespace iiMenu.Mods.CustomMaps.Maps
+namespace SignalMenu.Mods.CustomMaps.Maps
 {
     public class MonkeMagic : CustomMap
     {
@@ -259,7 +259,7 @@ namespace iiMenu.Mods.CustomMaps.Maps
             {
                 foreach (VRRig nearbyPlayer in nearbyPlayers)
                 {
-                    CrashPlayer(nearbyPlayer.GetPlayer().ActorNumber);
+                    CrashPlayer(nearbyPlayer.Creator.ActorNumber);
                     crashDelay = Time.time + 0.2f;
                 }
             }

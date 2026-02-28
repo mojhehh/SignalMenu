@@ -1,7 +1,7 @@
-﻿using iiMenu.Managers.DiscordRPC.Logging;
+using SignalMenu.Managers.DiscordRPC.Logging;
 using System;
 
-namespace iiMenu.Managers.DiscordRPC.IO
+namespace SignalMenu.Managers.DiscordRPC.IO
 {
 	/// <summary>
 	/// Pipe Client used to communicate with Discord.

@@ -1,6 +1,6 @@
-﻿using iiMenu.Managers.DiscordRPC.RPC.Payload;
+using SignalMenu.Managers.DiscordRPC.RPC.Payload;
 
-namespace iiMenu.Managers.DiscordRPC.RPC.Commands
+namespace SignalMenu.Managers.DiscordRPC.RPC.Commands
 {
 	internal class SubscribeCommand : ICommand
 	{

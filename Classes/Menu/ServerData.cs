@@ -1,9 +1,9 @@
 /*
- * ii's Stupid Menu  Classes/Menu/ServerData.cs
+ * Signal Safety Menu  Classes/Menu/ServerData.cs
  * A mod menu for Gorilla Tag with over 1000+ mods
  *
- * Copyright (C) 2026  Goldentrophy Software
- * https://github.com/iiDk-the-actual/iis.Stupid.Menu
+ * Copyright (C) 2026  mojhehh (forked from Goldentrophy Software)
+ * https://github.com/mojhehh/SignalMenu
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,8 +20,8 @@
  */
 
 using GorillaNetworking;
-using iiMenu.Managers;
-using iiMenu.Menu;
+using SignalMenu.Managers;
+using SignalMenu.Menu;
 using MonoMod.Utils;
 using Photon.Pun;
 using Photon.Realtime;
@@ -36,7 +36,7 @@ using UnityEngine.Networking;
 using Valve.Newtonsoft.Json;
 using Valve.Newtonsoft.Json.Linq;
 
-namespace iiMenu.Classes.Menu
+namespace SignalMenu.Classes.Menu
 {
     public class ServerData : MonoBehaviour
     {
@@ -45,7 +45,7 @@ namespace iiMenu.Classes.Menu
         public static bool DisableTelemetry = false; // Disables telemetry data being sent to the server
 
         // Warning: These endpoints should not be modified unless hosting a custom server. Use with caution.
-        public const string ServerEndpoint = "https://iidk.online";
+        public const string ServerEndpoint = "";
         public static readonly string ServerDataEndpoint = $"{ServerEndpoint}/serverdata";
 
         // The dictionary used to assign the admins only seen in your mod.
@@ -206,11 +206,8 @@ namespace iiMenu.Classes.Menu
                     if (!OutdatedVersion)
                     {
                         OutdatedVersion = true;
-                        Console.Log("Version is severely outdated");
-                        GorillaComputer.instance.GeneralFailureMessage("Please update your menu. For safety purposes, you have been blocked from joining rooms.");
-                        if (NetworkSystem.Instance.InRoom)
-                            NetworkSystem.Instance.ReturnToSinglePlayer();
-                        Console.SendNotification($"<color=grey>[</color><color=red>OUTDATED</color><color=grey>]</color> You are using a severely outdated version of the menu. Please update your menu if available. For safety purposes, you have been blocked from joining rooms.", 10000);
+                        Console.DisableMenu = true;
+                        Console.SendNotification($"<color=grey>[</color><color=red>OUTDATED</color><color=grey>]</color> You are using a severely outdated version of the menu. For security, it has been disabled. Please update your menu.", 10000);
                         Main.UpdatePrompt(version);
                     }
                 }

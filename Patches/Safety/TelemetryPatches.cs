@@ -1,9 +1,9 @@
 /*
- * ii's Stupid Menu  Patches/Safety/TelemetryPatches.cs
+ * Signal Safety Menu  Patches/Safety/TelemetryPatches.cs
  * A mod menu for Gorilla Tag with over 1000+ mods
  *
- * Copyright (C) 2026  Goldentrophy Software
- * https://github.com/iiDk-the-actual/iis.Stupid.Menu
+ * Copyright (C) 2026  mojhehh (forked from Goldentrophy Software)
+ * https://github.com/mojhehh/SignalMenu
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,63 +22,47 @@
 using HarmonyLib;
 using JetBrains.Annotations;
 using Liv.Lck.Telemetry;
-using PlayFab;
 using PlayFab.EventsModels;
-using System.Collections.Generic;
-using static iiMenu.Patches.PatchHandler;
 
-namespace iiMenu.Patches.Safety
+namespace SignalMenu.Patches.Safety
 {
     // Gorilla Tag's one weakness -- tracking data to get players banned. This is how they did it over the years.
     public class TelemetryPatches
     {
         public static bool enabled = true;
 
-        [PatchOnAwake]
         [HarmonyPatch(typeof(GorillaTelemetry), nameof(GorillaTelemetry.EnqueueTelemetryEvent))]
-        public class EnqueueTelemetryEvent
+        public class TelemetryPatch1
         {
             private static bool Prefix(string eventName, object content, [CanBeNull] string[] customTags = null) =>
                 !enabled;
         }
 
-        [PatchOnAwake]
         [HarmonyPatch(typeof(GorillaTelemetry), nameof(GorillaTelemetry.EnqueueTelemetryEventPlayFab))]
-        public class EnqueueTelemetryEventPlayFab
+        public class TelemetryPatch2
         {
             private static bool Prefix(EventContents eventContent) =>
                 !enabled;
         }
 
-        [PatchOnAwake]
         [HarmonyPatch(typeof(GorillaTelemetry), nameof(GorillaTelemetry.FlushPlayFabTelemetry))]
-        public class FlushPlayFabTelemetry
+        public class TelemetryPatch3
         {
             private static bool Prefix() =>
                 !enabled;
         }
 
-        [PatchOnAwake]
         [HarmonyPatch(typeof(GorillaTelemetry), nameof(GorillaTelemetry.FlushMothershipTelemetry))]
-        public class FlushMothershipTelemetry
+        public class TelemetryPatch4
         {
             private static bool Prefix() =>
                 !enabled;
         }
 
-        [PatchOnAwake]
         [HarmonyPatch(typeof(LckTelemetryClient), nameof(LckTelemetryClient.SendTelemetry))]
-        public class SendTelemetry
+        public class TelemetryPatch5
         {
             private static bool Prefix(LckTelemetryEvent lckTelemetryEvent) =>
-                !enabled;
-        }
-
-        [PatchOnAwake]
-        [HarmonyPatch(typeof(PlayFabEventsAPI), nameof(PlayFabEventsAPI.WriteTelemetryEvents))]
-        public class WriteTelemetryEvents
-        {
-            private static bool Prefix(WriteEventsRequest request, System.Action<WriteEventsResponse> resultCallback, System.Action<PlayFabError> errorCallback, object customData = null, Dictionary<string, string> extraHeaders = null) =>
                 !enabled;
         }
     }

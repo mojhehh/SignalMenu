@@ -1,9 +1,9 @@
 /*
- * ii's Stupid Menu  Patches/Menu/RopePatch.cs
+ * Signal Safety Menu  Patches/Menu/RopePatch.cs
  * A mod menu for Gorilla Tag with over 1000+ mods
  *
- * Copyright (C) 2026  Goldentrophy Software
- * https://github.com/iiDk-the-actual/iis.Stupid.Menu
+ * Copyright (C) 2026  mojhehh (forked from Goldentrophy Software)
+ * https://github.com/mojhehh/SignalMenu
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,13 +24,13 @@ using HarmonyLib;
 using UnityEngine;
 using UnityEngine.XR;
 
-namespace iiMenu.Patches.Menu
+namespace SignalMenu.Patches.Menu
 {
     [HarmonyPatch(typeof(GorillaRopeSwing), nameof(GorillaRopeSwing.AttachLocalPlayer))]
     public class RopePatch
     {
         public static bool enabled;
-        public static float amplifier = 5f;
+        public static readonly float amplifier = 5f;
 
         public static void Prefix(XRNode xrNode, Transform grabbedBone, Vector3 offset, ref Vector3 velocity)
         {

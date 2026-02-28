@@ -1,9 +1,9 @@
-﻿/*
- * ii's Stupid Menu  Classes/Mods/VirtualStumpAd.cs
+/*
+ * Signal Safety Menu  Classes/Mods/VirtualStumpAd.cs
  * A mod menu for Gorilla Tag with over 1000+ mods
  *
- * Copyright (C) 2026  Goldentrophy Software
- * https://github.com/iiDk-the-actual/iis.Stupid.Menu
+ * Copyright (C) 2026  mojhehh (forked from Goldentrophy Software)
+ * https://github.com/mojhehh/SignalMenu
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,9 +23,9 @@ using GorillaExtensions;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Video;
-using static iiMenu.Menu.Main;
+using static SignalMenu.Menu.Main;
 
-namespace iiMenu.Classes.Mods
+namespace SignalMenu.Classes.Mods
 {
     public class VirtualStumpAd : MonoBehaviour
     {
@@ -107,7 +107,7 @@ namespace iiMenu.Classes.Mods
                 if (featuredMapText != null)
                 {
                     oldText              = featuredMapText.text;
-                    featuredMapText.text = "<b><color=#FF8000>ii's Stupid Menu</color></b>";
+                    featuredMapText.text = ObfStr.MenuNameOrange;
                     MapInfoText.SetActive(true);
                 }
 

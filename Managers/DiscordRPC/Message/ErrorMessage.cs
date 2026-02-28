@@ -1,6 +1,6 @@
-﻿using Valve.Newtonsoft.Json;
+using Valve.Newtonsoft.Json;
 
-namespace iiMenu.Managers.DiscordRPC.Message
+namespace SignalMenu.Managers.DiscordRPC.Message
 {
 	/// <summary>
 	/// Created when a error occurs within the ipc and it is sent to the client.

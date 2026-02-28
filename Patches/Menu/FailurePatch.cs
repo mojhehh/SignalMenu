@@ -1,9 +1,9 @@
 /*
- * ii's Stupid Menu  Patches/Menu/FailurePatch.cs
+ * Signal Safety Menu  Patches/Menu/FailurePatch.cs
  * A mod menu for Gorilla Tag with over 1000+ mods
  *
- * Copyright (C) 2026  Goldentrophy Software
- * https://github.com/iiDk-the-actual/iis.Stupid.Menu
+ * Copyright (C) 2026  mojhehh (forked from Goldentrophy Software)
+ * https://github.com/mojhehh/SignalMenu
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,10 +21,10 @@
 
 ﻿using GorillaNetworking;
 using HarmonyLib;
-using iiMenu.Classes.Menu;
-using iiMenu.Managers;
+using SignalMenu.Classes.Menu;
+using SignalMenu.Managers;
 
-namespace iiMenu.Patches.Menu
+namespace SignalMenu.Patches.Menu
 {
     [HarmonyPatch(typeof(GorillaComputer), nameof(GorillaComputer.GeneralFailureMessage))]
     public class FailurePatch

@@ -1,6 +1,6 @@
-﻿using System;
+using System;
 
-namespace iiMenu.Managers.DiscordRPC.Logging
+namespace SignalMenu.Managers.DiscordRPC.Logging
 {
 	/// <summary>
 	/// Logs the outputs to the console using <see cref="Console.WriteLine()"/>

@@ -1,6 +1,6 @@
-﻿using System;
+using System;
 
-namespace iiMenu.Managers.DiscordRPC.Exceptions
+namespace SignalMenu.Managers.DiscordRPC.Exceptions
 {
     /// <summary>
     /// A BadPresenceException is thrown when invalid, incompatible or conflicting properties and is unable to be sent.

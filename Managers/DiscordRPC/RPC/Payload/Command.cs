@@ -1,7 +1,7 @@
-﻿using iiMenu.Managers.DiscordRPC.Converters;
+using SignalMenu.Managers.DiscordRPC.Converters;
 using System;
 
-namespace iiMenu.Managers.DiscordRPC.RPC.Payload
+namespace SignalMenu.Managers.DiscordRPC.RPC.Payload
 {
 	/// <summary>
 	/// The possible commands that can be sent and received by the server.

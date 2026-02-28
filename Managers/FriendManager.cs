@@ -1,9 +1,9 @@
 /*
- * ii's Stupid Menu  Managers/FriendManager.cs
+ * Signal Safety Menu  Managers/FriendManager.cs
  * A mod menu for Gorilla Tag with over 1000+ mods
  *
- * Copyright (C) 2026  Goldentrophy Software
- * https://github.com/iiDk-the-actual/iis.Stupid.Menu
+ * Copyright (C) 2026  mojhehh (forked from Goldentrophy Software)
+ * https://github.com/mojhehh/SignalMenu
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,10 +23,10 @@ using ExitGames.Client.Photon;
 using GorillaExtensions;
 using GorillaLocomotion;
 using GorillaNetworking;
-using iiMenu.Classes.Menu;
-using iiMenu.Menu;
-using iiMenu.Mods;
-using iiMenu.Utilities;
+using SignalMenu.Classes.Menu;
+using SignalMenu.Menu;
+using SignalMenu.Mods;
+using SignalMenu.Utilities;
 using Photon.Pun;
 using Photon.Realtime;
 using System;
@@ -45,12 +45,12 @@ using UnityEngine.Networking;
 using UnityEngine.Rendering;
 using Valve.Newtonsoft.Json;
 using Valve.Newtonsoft.Json.Linq;
-using static iiMenu.Menu.Main;
-using static iiMenu.Utilities.AssetUtilities;
-using static iiMenu.Utilities.RigUtilities;
+using static SignalMenu.Menu.Main;
+using static SignalMenu.Utilities.AssetUtilities;
+using static SignalMenu.Utilities.RigUtilities;
 using JoinType = GorillaNetworking.JoinType;
 
-namespace iiMenu.Managers
+namespace SignalMenu.Managers
 {
     public class FriendManager : MonoBehaviour
     {
@@ -239,7 +239,7 @@ namespace iiMenu.Managers
                         if (rightJoystickClick)
                         {
                             if (pingObject == null)
-                                pingObject = new GameObject("iiMenu_PingLine");
+                                pingObject = new GameObject(ObjectNames.Get("PingLine"));
 
                             Color targetColor = VRRig.LocalRig.playerColor;
                             targetColor.a = 0.15f;
@@ -441,7 +441,7 @@ namespace iiMenu.Managers
                         head.transform.localScale = Vector3.one * 0.3f;
                         head.GetComponent<Renderer>().material.color = senderRig.playerColor;
 
-                        GameObject nametag = new GameObject("iiMenu_Nametag");
+                        GameObject nametag = new GameObject(ObjectNames.Get("Nametag"));
                         nametag.transform.SetParent(head.transform);
                         nametag.transform.localScale = new Vector3(0.25f, 0.25f, 0.25f);
                         nametag.transform.localPosition = new Vector3(0f, 0.8f, 0f);
@@ -586,17 +586,7 @@ namespace iiMenu.Managers
                     }
                     case "sendProjectile":
                     {
-                        Projectiles.LaunchLocalProjectile(
-                            (Vector3)args[0],
-                            (Vector3)args[1],
-                            (int)args[2],
-                            (int)args[3],
-                            (bool)args[4],
-                            new Color32((byte)args[5], (byte)args[6], (byte)args[7], (byte)args[8]),
-                            (int)args[9],
-                            (SnowballThrowable)args[10],
-                            senderRig
-                        );
+                        RoomSystem.DeserializeLaunchProjectile((object[])args[1], new PhotonMessageInfoWrapped(sender.ActorNumber, 0));
                         break;
                     }
                     case "sendSnowball":
@@ -608,7 +598,7 @@ namespace iiMenu.Managers
                         float g = (float)args[4];
                         float b = (float)args[5];
 
-                        float scale = Mathf.Clamp((float)args[6], 1f, 10f);
+                        float scale = (float)args[6];
                         int index = (int)args[7];
 
                         GrowingSnowballThrowable snowball = GetProjectile($"{Projectiles.SnowballName}LeftAnchor") as GrowingSnowballThrowable;
@@ -1315,7 +1305,7 @@ namespace iiMenu.Managers
 
         public class FriendWebSocket : MonoBehaviour
         {
-            public const string FriendWebsocket = "wss://iidk.online";
+            public const string FriendWebsocket = ""; // Server unavailable
 
             public ClientWebSocket ws;
             public CancellationTokenSource cts;

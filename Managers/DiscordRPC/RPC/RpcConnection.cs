@@ -1,16 +1,16 @@
-﻿using iiMenu.Managers.DiscordRPC.Events;
-using iiMenu.Managers.DiscordRPC.Helper;
-using iiMenu.Managers.DiscordRPC.IO;
-using iiMenu.Managers.DiscordRPC.Logging;
-using iiMenu.Managers.DiscordRPC.Message;
-using iiMenu.Managers.DiscordRPC.RPC.Commands;
-using iiMenu.Managers.DiscordRPC.RPC.Payload;
+using SignalMenu.Managers.DiscordRPC.Events;
+using SignalMenu.Managers.DiscordRPC.Helper;
+using SignalMenu.Managers.DiscordRPC.IO;
+using SignalMenu.Managers.DiscordRPC.Logging;
+using SignalMenu.Managers.DiscordRPC.Message;
+using SignalMenu.Managers.DiscordRPC.RPC.Commands;
+using SignalMenu.Managers.DiscordRPC.RPC.Payload;
 using System;
 using System.Collections.Generic;
 using System.Threading;
 using Valve.Newtonsoft.Json;
 
-namespace iiMenu.Managers.DiscordRPC.RPC
+namespace SignalMenu.Managers.DiscordRPC.RPC
 {
 	/// <summary>
 	/// Communicates between the client and discord through RPC

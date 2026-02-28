@@ -1,9 +1,9 @@
 /*
- * ii's Stupid Menu  Mods/Safety.cs
+ * Signal Safety Menu  Mods/Safety.cs
  * A mod menu for Gorilla Tag with over 1000+ mods
  *
- * Copyright (C) 2026  Goldentrophy Software
- * https://github.com/iiDk-the-actual/iis.Stupid.Menu
+ * Copyright (C) 2026  mojhehh (forked from Goldentrophy Software)
+ * https://github.com/mojhehh/SignalMenu
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,25 +23,27 @@ using ExitGames.Client.Photon;
 using GorillaLocomotion;
 using GorillaNetworking;
 using GorillaTagScripts;
-using iiMenu.Extensions;
-using iiMenu.Managers;
-using iiMenu.Menu;
-using iiMenu.Patches.Menu;
-using iiMenu.Patches.Safety;
-using iiMenu.Utilities;
+using SignalMenu.Classes;
+using SignalMenu.Extensions;
+using SignalMenu.Managers;
+using SignalMenu.Menu;
+using SignalMenu.Patches.Menu;
+using SignalMenu.Patches.Safety;
+using SignalMenu.Utilities;
 using Photon.Pun;
 using Photon.Realtime;
+using SignalMenu.SignalSafety;
 using Photon.Voice.Unity;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEngine;
-using static iiMenu.Menu.Main;
-using static iiMenu.Utilities.RigUtilities;
+using static SignalMenu.Menu.Main;
+using static SignalMenu.Utilities.RigUtilities;
 using Random = UnityEngine.Random;
 
-namespace iiMenu.Mods
+namespace SignalMenu.Mods
 {
     public static class Safety
     {
@@ -200,28 +202,18 @@ namespace iiMenu.Mods
 
         public static void ChangeAntiReportRange(bool positive = true)
         {
-            string[] rangeNames = {
-                "Default", // The report button
-                "Large", // The report button within the range of 3 people
-                "Massive" // The entire fucking board
-            };
-            float[] distances = {
-                0.35f,
-                0.7f,
-                1.5f
-            };
-
             if (positive)
-                antiReportRangeIndex++;
+                SignalSafety.AntiReport.RangeIndex++;
             else
-                antiReportRangeIndex--;
+                SignalSafety.AntiReport.RangeIndex--;
 
-            antiReportRangeIndex %= rangeNames.Length;
-            if (antiReportRangeIndex < 0)
-                antiReportRangeIndex = rangeNames.Length - 1;
+            if (SignalSafety.AntiReport.RangeIndex >= 3) SignalSafety.AntiReport.RangeIndex = 0;
+            if (SignalSafety.AntiReport.RangeIndex < 0) SignalSafety.AntiReport.RangeIndex = 2;
 
-            threshold = distances[antiReportRangeIndex];
-            Buttons.GetIndex("Change Anti Report Distance").overlapText = "Change Anti Report Distance <color=grey>[</color><color=green>" + rangeNames[antiReportRangeIndex] + "</color><color=grey>]</color>";
+            antiReportRangeIndex = SignalSafety.AntiReport.RangeIndex;
+            threshold = SignalSafety.AntiReport.Threshold;
+
+            Buttons.GetIndex("Change Anti Report Distance").overlapText = "Change Anti Report Distance <color=grey>[</color><color=green>" + SignalSafety.AntiReport.RangeName + "</color><color=grey>]</color>";
         }
 
         public static bool smartAntiReport;
@@ -229,206 +221,96 @@ namespace iiMenu.Mods
         public static string buttonClickPlayer;
 
         public static bool SmartAntiReport(NetPlayer linePlayer) =>
-            smartAntiReport && linePlayer.UserId == buttonClickPlayer && Time.frameCount == buttonClickTime && PhotonNetwork.CurrentRoom.IsVisible && !PhotonNetwork.CurrentRoom.CustomProperties.ToString().Contains("MODDED");
+            SignalSafety.AntiReport.SmartMode && PhotonNetwork.CurrentRoom.IsVisible && !PhotonNetwork.CurrentRoom.CustomProperties.ToString().Contains("MODDED");
 
-        public static void EventReceived_SmartAntiReport(EventData data)
-        {
-            try
-            {
-                if (data.Code == 200)
-                {
-                    string rpcName = PhotonNetwork.PhotonServerSettings.RpcList[int.Parse(((Hashtable)data.CustomData)[5].ToString())];
-                    object[] args = (object[])((Hashtable)data.CustomData)[4];
-                    if (rpcName == "RPC_PlayHandTap" && (int)args[0] == 67)
-                    {
-                        buttonClickTime = Time.frameCount;
-                        buttonClickPlayer = PhotonNetwork.NetworkingClient.CurrentRoom.GetPlayer(data.Sender).UserId;
-                    }
-                }
-            }
-            catch { }
-        }
+        public static void EventReceived_SmartAntiReport(EventData data) { }
 
         public static void EnableSmartAntiReport()
         {
-            PhotonNetwork.NetworkingClient.EventReceived += EventReceived_SmartAntiReport;
+            SignalSafety.AntiReport.SmartMode = true;
+            SignalSafety.AntiReport.EnableSmartAntiReport();
             smartAntiReport = true;
         }
 
         public static void DisableSmartAntiReport()
         {
-            PhotonNetwork.NetworkingClient.EventReceived -= EventReceived_SmartAntiReport;
+            SignalSafety.AntiReport.SmartMode = false;
+            SignalSafety.AntiReport.DisableSmartAntiReport();
             smartAntiReport = false;
         }
 
         public static void VisualizeAntiReport()
         {
-            foreach (GorillaPlayerScoreboardLine line in GorillaScoreboardTotalUpdater.allScoreboardLines)
-            {
-                if (line.linePlayer != NetworkSystem.Instance.LocalPlayer) continue;
-                Transform report = line.reportButton.gameObject.transform;
-
-                Visuals.VisualizeAura(report.position, threshold, Color.red);
-
-                if (antiMute)
-                    Visuals.VisualizeAura(line.muteButton.gameObject.transform.position, threshold, Color.red);
-            }
+            SignalSafety.AntiReport.VisualizeAntiReport();
         }
 
         private static bool OverlappingButton(VRRig vrrig, Vector3 position) =>
-            new[] {
-                vrrig.rightHandTransform.position,
-                vrrig.leftHandTransform.position,
-                vrrig.rightHand.syncPos,
-                vrrig.leftHand.syncPos
-            }.Any(handPos => Vector3.Distance(handPos, position) < threshold);
+            SignalSafety.AntiReport.IsNearButton(vrrig, position);
 
-        public static bool antiMute;
+        public static bool antiMute
+        {
+            get => SignalSafety.AntiReport.AntiMute;
+            set => SignalSafety.AntiReport.AntiMute = value;
+        }
 
 		public static VRRig reportRig;
         public static void AntiReport(Action<VRRig, Vector3> onReport)
         {
-            if (!NetworkSystem.Instance.InRoom) return;
-
-            if (reportRig != null)
-            {
-                onReport?.Invoke(reportRig, reportRig.transform.position);
-                reportRig = null;
-                AchievementManager.UnlockAchievement(new AchievementManager.Achievement
-                {
-                    name = "Troublemaker",
-                    description = "Evade a player report.",
-                    icon = "Images/Achievements/troublemaker.png"
-                });
-                return;
-			}
-            
-            foreach (GorillaPlayerScoreboardLine line in GorillaScoreboardTotalUpdater.allScoreboardLines)
-            {
-                if (line.linePlayer != NetworkSystem.Instance.LocalPlayer) continue;
-                Transform report = line.reportButton.gameObject.transform;
-
-                foreach (var vrrig in from vrrig in GorillaParent.instance.vrrigs where !vrrig.isLocal where OverlappingButton(vrrig, report.position) || (antiMute && OverlappingButton(vrrig, line.muteButton.gameObject.transform.position)) where !smartAntiReport || SmartAntiReport(line.linePlayer) select vrrig)
-                    onReport?.Invoke(vrrig, report.transform.position);
-            }
+            SignalSafety.AntiReport.CheckAntiReport((vrrig, position) => onReport?.Invoke(vrrig, position));
         }
 
         public static float antiReportDelay;
         public static void AntiReportDisconnect()
         {
-            AntiReport((vrrig, position) =>
-            {
-                NetworkSystem.Instance.ReturnToSinglePlayer();
-                RPCProtection();
-
-                if (!(Time.time > antiReportDelay)) return;
-                antiReportDelay = Time.time + 1f;
-                NotificationManager.SendNotification("<color=grey>[</color><color=purple>ANTI-REPORT</color><color=grey>]</color> " + GetPlayerFromVRRig(vrrig).NickName + " attempted to report you, you have been disconnected.");
-            });
+            SafetyConfig.AntiReportMode = 0;
+            SafetyConfig.AntiReportEnabled = true;
+            SignalSafety.AntiReport.AntiReportDisconnect();
         }
 
         public static void AntiReportReconnect()
         {
-            AntiReport((vrrig, position) =>
-            {
-                if (!(Time.time > antiReportDelay)) return;
-                Important.Reconnect();
-                RPCProtection();
-
-                antiReportDelay = Time.time + 1f;
-                NotificationManager.SendNotification("<color=grey>[</color><color=purple>ANTI-REPORT</color><color=grey>]</color> " + GetPlayerFromVRRig(vrrig).NickName + " attempted to report you, you have been disconnected and will be reconnected shortly.");
-            });
+            SafetyConfig.AntiReportMode = 1;
+            SafetyConfig.AntiReportEnabled = true;
+            SignalSafety.AntiReport.AntiReportReconnect();
         }
 
         public static void AntiReportJoinRandom()
         {
-            AntiReport((vrrig, position) =>
-            {
-                if (!(Time.time > antiReportDelay)) return;
-                
-                Important.JoinRandom();
-                RPCProtection();
-
-                antiReportDelay = Time.time + 1f;
-                NotificationManager.SendNotification("<color=grey>[</color><color=purple>ANTI-REPORT</color><color=grey>]</color> " + GetPlayerFromVRRig(vrrig).NickName + " attempted to report you, you have been disconnected and will be reconnected shortly.");
-            });
+            SafetyConfig.AntiReportMode = 1;
+            SafetyConfig.AntiReportEnabled = true;
+            SignalSafety.AntiReport.AntiReportReconnect();
         }
 
-        public static void EventReceived_AntiOculusReport(EventData data)
-        {
-            try
-            {
-                if (data.Code == 200)
-                {
-                    string rpcName = PhotonNetwork.PhotonServerSettings.RpcList[int.Parse(((Hashtable)data.CustomData)[5].ToString())];
-                    object[] args = (object[])((Hashtable)data.CustomData)[4];
-                    if (rpcName == "RPC_PlayHandTap" && (int)args[0] == 67)
-                    {
-                        VRRig target = GetVRRigFromPlayer(PhotonNetwork.NetworkingClient.CurrentRoom.GetPlayer(data.Sender));
-                        if (Vector3.Distance(target.leftHandTransform.position, target.rightHandTransform.position) < 0.1f)
-                            AntiReportFRT(PhotonNetwork.NetworkingClient.CurrentRoom.GetPlayer(data.Sender));
-                    }
-                }
-            }
-            catch { }
-        }
+        public static void EventReceived_AntiOculusReport(EventData data) { }
 
         public static void EnableAntiOculusReport() =>
-            PhotonNetwork.NetworkingClient.EventReceived += EventReceived_AntiOculusReport;
+            SignalSafety.AntiReport.EnableAntiOculusReport();
 
         public static void DisableAntiOculusReport() =>
-            PhotonNetwork.NetworkingClient.EventReceived -= EventReceived_AntiOculusReport;
+            SignalSafety.AntiReport.DisableAntiOculusReport();
 
         public static float antiReportNotifyDelay;
         public static void AntiReportNotify()
         {
-            if (!(Time.time > antiReportNotifyDelay)) return;
-            
-            string notifyText = "";
-            AntiReport((vrrig, position) =>
-            {
-                antiReportNotifyDelay = Time.time + 0.1f;
-
-                if (notifyText == "")
-                    notifyText = GetPlayerFromVRRig(vrrig).NickName;
-                else
-                {
-                    if (notifyText.Contains("&"))
-                        notifyText = GetPlayerFromVRRig(vrrig).NickName + ", " + notifyText;
-                    else
-                        notifyText += " & " + GetPlayerFromVRRig(vrrig).NickName;
-                }
-            });
-
-            if (notifyText != "")
-                NotificationManager.SendNotification($"<color=grey>[</color><color=purple>ANTI-REPORT</color><color=grey>]</color> {notifyText} {(notifyText.Contains("&") || notifyText.Contains(",") ? "are" : "is")} reporting you.");
+            SafetyConfig.AntiReportMode = 2;
+            SafetyConfig.AntiReportEnabled = true;
+            SignalSafety.AntiReport.AntiReportNotify();
         }
 
         public static void AntiReportOverlay()
         {
-            if (!(Time.time > antiReportNotifyDelay)) return;
-            string notifyText = null;
-            AntiReport((vrrig, position) =>
-            {
-                if (notifyText == null)
-                    notifyText = GetPlayerFromVRRig(vrrig).NickName;
-                else
-                {
-                    if (notifyText.Contains("&"))
-                        notifyText = GetPlayerFromVRRig(vrrig).NickName + ", " + notifyText;
-                    else
-                        notifyText += " & " + GetPlayerFromVRRig(vrrig).NickName;
-                }
-            });
+            SafetyConfig.AntiReportMode = 2;
+            SafetyConfig.AntiReportEnabled = true;
+            SignalSafety.AntiReport.AntiReportNotify();
 
-            if (notifyText.IsNullOrEmpty())
+            if (SignalSafety.AntiReport.NearbyCount == 0)
                 NotificationManager.information.Remove("Anti-Report");
             else
-                NotificationManager.information["Anti-Report"] = notifyText;
+                NotificationManager.information["Anti-Report"] = SignalSafety.AntiReport.LastReporter;
         }
 
         public static void AntiReportFRT(Player subject) =>
-            reportRig = subject.VRRig();
+            SignalSafety.AntiReport.SetReportRig(subject.VRRig());
 
 		public static void AntiModerator()
         {
@@ -462,7 +344,7 @@ namespace iiMenu.Mods
                         catch { LogManager.Log("Failed to log player"); }
 
                         text += "\n====================================\n";
-                        text += "Text file generated with ii's Stupid Menu";
+                        text += ObfStr.FileTag;
                         string fileName = $"{PluginInfo.BaseDirectory}/" + player.NickName + " - Anti Moderator.txt";
 
                         File.WriteAllText(fileName, text);
@@ -506,7 +388,7 @@ namespace iiMenu.Mods
                         catch { LogManager.Log("Failed to log player"); }
 
                         text += "\n====================================\n";
-                        text += "Text file generated with ii's Stupid Menu";
+                        text += ObfStr.FileTag;
                         string fileName = $"{PluginInfo.BaseDirectory}/" + player.NickName + " - Anti Content Creator.txt";
 
                         File.WriteAllText(fileName, text);

@@ -1,9 +1,9 @@
-﻿/*
- * ii's Stupid Menu  Extensions/VectorExtensions.cs
+/*
+ * Signal Safety Menu  Extensions/VectorExtensions.cs
  * A mod menu for Gorilla Tag with over 1000+ mods
  *
- * Copyright (C) 2026  Goldentrophy Software
- * https://github.com/iiDk-the-actual/iis.Stupid.Menu
+ * Copyright (C) 2026  mojhehh (forked from Goldentrophy Software)
+ * https://github.com/mojhehh/SignalMenu
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,9 +21,9 @@
 
 using System;
 using UnityEngine;
-using static iiMenu.Utilities.RandomUtilities;
+using static SignalMenu.Utilities.RandomUtilities;
 
-namespace iiMenu.Extensions
+namespace SignalMenu.Extensions
 {
     public static class VectorExtensions
     {

@@ -1,9 +1,9 @@
 /*
- * ii's Stupid Menu  Patches/Safety/IncrementRPCPatches.cs
+ * Signal Safety Menu  Patches/Safety/IncrementRPCPatches.cs
  * A mod menu for Gorilla Tag with over 1000+ mods
  *
- * Copyright (C) 2026  Goldentrophy Software
- * https://github.com/iiDk-the-actual/iis.Stupid.Menu
+ * Copyright (C) 2026  mojhehh (forked from Goldentrophy Software)
+ * https://github.com/mojhehh/SignalMenu
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,7 +22,7 @@
 using HarmonyLib;
 using Photon.Pun;
 
-namespace iiMenu.Patches.Safety
+namespace SignalMenu.Patches.Safety
 {
     public class IncrementRPCPatches
     {

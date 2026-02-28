@@ -1,4 +1,4 @@
-﻿namespace iiMenu.Managers.DiscordRPC.Message
+namespace SignalMenu.Managers.DiscordRPC.Message
 {
 	/// <summary>
 	/// Called when the IPC has closed.

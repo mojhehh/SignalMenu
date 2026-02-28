@@ -1,9 +1,9 @@
-﻿/*
- * ii's Stupid Menu  Managers/AchievementManager.cs
+/*
+ * Signal Safety Menu  Managers/AchievementManager.cs
  * A mod menu for Gorilla Tag with over 1000+ mods
  *
- * Copyright (C) 2026  Goldentrophy Software
- * https://github.com/iiDk-the-actual/iis.Stupid.Menu
+ * Copyright (C) 2026  mojhehh (forked from Goldentrophy Software)
+ * https://github.com/mojhehh/SignalMenu
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,17 +19,17 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-using iiMenu.Classes.Menu;
-using iiMenu.Extensions;
-using iiMenu.Menu;
+using SignalMenu.Classes.Menu;
+using SignalMenu.Extensions;
+using SignalMenu.Menu;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Valve.Newtonsoft.Json.Linq;
-using static iiMenu.Menu.Main;
-using static iiMenu.Utilities.AssetUtilities;
+using static SignalMenu.Menu.Main;
+using static SignalMenu.Utilities.AssetUtilities;
 
-namespace iiMenu.Managers
+namespace SignalMenu.Managers
 {
     public static class AchievementManager
     {

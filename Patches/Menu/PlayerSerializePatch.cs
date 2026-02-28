@@ -1,9 +1,9 @@
 /*
- * ii's Stupid Menu  Patches/Menu/PlayerSerializePatch.cs
+ * Signal Safety Menu  Patches/Menu/PlayerSerializePatch.cs
  * A mod menu for Gorilla Tag with over 1000+ mods
  *
- * Copyright (C) 2026  Goldentrophy Software
- * https://github.com/iiDk-the-actual/iis.Stupid.Menu
+ * Copyright (C) 2026  mojhehh (forked from Goldentrophy Software)
+ * https://github.com/mojhehh/SignalMenu
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,10 +20,10 @@
  */
 
 using HarmonyLib;
-using iiMenu.Managers;
+using SignalMenu.Managers;
 using System;
 
-namespace iiMenu.Patches.Menu
+namespace SignalMenu.Patches.Menu
 {
     [HarmonyPatch(typeof(VRRig), nameof(VRRig.SerializeReadShared))]
     public class PlayerSerializePatch
@@ -40,7 +40,7 @@ namespace iiMenu.Patches.Menu
             if (delay != null)
             {
                 CoroutineManager.instance.StartCoroutine(
-                    iiMenu.Menu.Main.SerializationDelay(() =>
+                    SignalMenu.Menu.Main.SerializationDelay(() =>
                     {
                         float oldDelay = delay.Value;
                         delay = null;

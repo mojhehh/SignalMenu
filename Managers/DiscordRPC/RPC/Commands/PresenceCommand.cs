@@ -1,7 +1,7 @@
-﻿using iiMenu.Managers.DiscordRPC.RPC.Payload;
+using SignalMenu.Managers.DiscordRPC.RPC.Payload;
 using Valve.Newtonsoft.Json;
 
-namespace iiMenu.Managers.DiscordRPC.RPC.Commands
+namespace SignalMenu.Managers.DiscordRPC.RPC.Commands
 {
 	internal class PresenceCommand : ICommand
 	{

@@ -1,9 +1,9 @@
 /*
- * ii's Stupid Menu  Patches/Safety/AntiCheatPatches.cs
+ * Signal Safety Menu  Patches/Safety/AntiCheatPatches.cs
  * A mod menu for Gorilla Tag with over 1000+ mods
  *
- * Copyright (C) 2026  Goldentrophy Software
- * https://github.com/iiDk-the-actual/iis.Stupid.Menu
+ * Copyright (C) 2026  mojhehh (forked from Goldentrophy Software)
+ * https://github.com/mojhehh/SignalMenu
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,16 +20,14 @@
  */
 
 using HarmonyLib;
-using iiMenu.Managers;
+using SignalMenu.Managers;
 using Photon.Pun;
 using UnityEngine;
-using static iiMenu.Patches.PatchHandler;
 
-namespace iiMenu.Patches.Safety
+namespace SignalMenu.Patches.Safety
 {
     public class AntiCheatPatches
     {
-        [SecurityPatch]
         [HarmonyPatch(typeof(MonkeAgent), nameof(MonkeAgent.SendReport))]
         public class SendReportPatch
         {
@@ -40,23 +38,25 @@ namespace iiMenu.Patches.Safety
 
             private static bool Prefix(string susReason, string susId, string susNick)
             {
-                if (susReason.ToLower() == "empty rig")
+                if ((susReason ?? "").ToLower() == "empty rig")
                     return false;
 
                 if (AntiCheatSelf || AntiCheatAll)
                 {
-                    if (susId == PhotonNetwork.LocalPlayer.UserId)
-                        NotificationManager.SendNotification($"<color=grey>[</color><color=green>ANTI-CHEAT</color><color=grey>]</color> You have been reported for {(AntiCheatReasonHide ? "hidden reason" : susReason)}.");
+                    string localUserId = PhotonNetwork.LocalPlayer?.UserId;
+                    if (localUserId != null && susId == localUserId)
+                        NotificationManager.SendNotification($"<color=grey>[</color><color=green>ANTI-CHEAT</color><color=grey>]</color> You have been reported for {(AntiCheatReasonHide ? "hidden reason" : susReason ?? "unknown")}.");
                     else
                     {
                         if (AntiCheatAll)
-                            NotificationManager.SendNotification($"<color=grey>[</color><color=green>ANTI-CHEAT</color><color=grey>]</color> {susNick} was reported for {(AntiCheatReasonHide ? "hidden reason" : susReason)}.");
+                            NotificationManager.SendNotification($"<color=grey>[</color><color=green>ANTI-CHEAT</color><color=grey>]</color> {susNick} was reported for {(AntiCheatReasonHide ? "hidden reason" : susReason ?? "unknown")}.");
                     }
                 }
 
                 if (AntiACReport)
                 {
-                    Mods.Safety.AntiReportFRT(PhotonNetwork.LocalPlayer);
+                    if (PhotonNetwork.LocalPlayer != null)
+                        Mods.Safety.AntiReportFRT(PhotonNetwork.LocalPlayer);
                     NotificationManager.ClearAllNotifications();
                     NotificationManager.SendNotification("<color=grey>[</color><color=purple>ANTI-REPORT</color><color=grey>]</color> The anti cheat attempted to report you, you have been disconnected.");
                 }
@@ -65,7 +65,6 @@ namespace iiMenu.Patches.Safety
             }
         }
 
-        [SecurityPatch]
         [HarmonyPatch(typeof(MonkeAgent), nameof(MonkeAgent.CloseInvalidRoom))]
         public class NoCloseInvalidRoom
         {
@@ -73,7 +72,6 @@ namespace iiMenu.Patches.Safety
                 false;
         }
 
-        [SecurityPatch]
         [HarmonyPatch(typeof(MonkeAgent), nameof(MonkeAgent.CheckReports))]
         public class NoCheckReports
         {
@@ -81,7 +79,6 @@ namespace iiMenu.Patches.Safety
                 false;
         }
 
-        [SecurityPatch]
         [HarmonyPatch(typeof(MonkeAgent), nameof(MonkeAgent.DispatchReport))]
         public class NoDispatchReport
         {
@@ -89,7 +86,6 @@ namespace iiMenu.Patches.Safety
                 false;
         }
 
-        [SecurityPatch]
         [HarmonyPatch(typeof(MonkeAgent), nameof(MonkeAgent.GetRPCCallTracker))]
         internal class NoGetRPCCallTracker
         {
@@ -97,7 +93,6 @@ namespace iiMenu.Patches.Safety
                 false;
         }
 
-        [SecurityPatch]
         [HarmonyPatch(typeof(MonkeAgent), nameof(MonkeAgent.LogErrorCount))]
         public class NoLogErrorCount
         {
@@ -105,7 +100,6 @@ namespace iiMenu.Patches.Safety
                 false;
         }
 
-        [SecurityPatch]
         [HarmonyPatch(typeof(MonkeAgent), nameof(MonkeAgent.QuitDelay), MethodType.Enumerator)]
         public class NoQuitDelay
         {
@@ -113,7 +107,6 @@ namespace iiMenu.Patches.Safety
                 false;
         }
 
-        [SecurityPatch]
         [HarmonyPatch(typeof(GorillaGameManager), nameof(GorillaGameManager.ForceStopGame_DisconnectAndDestroy))]
         public class NoQuitOnBan
         {
@@ -121,7 +114,6 @@ namespace iiMenu.Patches.Safety
                 false;
         }
 
-        [SecurityPatch]
         [HarmonyPatch(typeof(MonkeAgent), nameof(MonkeAgent.ShouldDisconnectFromRoom))]
         public class NoShouldDisconnectFromRoom                                                                         
         {
@@ -129,7 +121,6 @@ namespace iiMenu.Patches.Safety
                 false;
         }
 
-        [SecurityPatch]
         [HarmonyPatch(typeof(GorillaNetworkPublicTestsJoin), nameof(GorillaNetworkPublicTestsJoin.GracePeriod))]
         public class GracePeriodPatch1
         {
@@ -137,7 +128,6 @@ namespace iiMenu.Patches.Safety
                 false;
         }
 
-        [SecurityPatch]
         [HarmonyPatch(typeof(GorillaNetworkPublicTestJoin2), nameof(GorillaNetworkPublicTestJoin2.GracePeriod))]
         public class GracePeriodPatch2
         {

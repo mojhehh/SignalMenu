@@ -1,9 +1,9 @@
-﻿/*
- * ii's Stupid Menu  Extensions/VRRigExtensions.cs
+/*
+ * Signal Safety Menu  Extensions/VRRigExtensions.cs
  * A mod menu for Gorilla Tag with over 1000+ mods
  *
- * Copyright (C) 2026  Goldentrophy Software
- * https://github.com/iiDk-the-actual/iis.Stupid.Menu
+ * Copyright (C) 2026  mojhehh (forked from Goldentrophy Software)
+ * https://github.com/mojhehh/SignalMenu
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,17 +20,17 @@
  */
 
 using GorillaGameModes;
-using iiMenu.Menu;
-using iiMenu.Utilities;
+using SignalMenu.Menu;
+using SignalMenu.Utilities;
 using Photon.Pun;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using static iiMenu.Menu.Main;
-using static iiMenu.Utilities.GameModeUtilities;
+using static SignalMenu.Menu.Main;
+using static SignalMenu.Utilities.GameModeUtilities;
 
-namespace iiMenu.Extensions
+namespace SignalMenu.Extensions
 {
     public static class VRRigExtensions
     {
@@ -54,26 +54,12 @@ namespace iiMenu.Extensions
 
         public static string GetPlatform(this VRRig rig)
         {
-            int suspiciouslySteam = 0;
-            int suspiciouslyPC = 0;
-            int suspiciouslyQuest = 0;
             string concatStringOfCosmeticsAllowed = rig.rawCosmeticString;
 
             if (concatStringOfCosmeticsAllowed.Contains("S. FIRST LOGIN"))
-                suspiciouslySteam++;
-
-            if (concatStringOfCosmeticsAllowed.Contains("FIRST LOGIN") || rig.GetPhotonPlayer().CustomProperties.Count >= 2)
-                suspiciouslyPC++;
-
-            if (rig.currentRankedSubTierPC > 0)
-                suspiciouslySteam++;
-            else if (rig.currentRankedSubTierQuest > 0)
-                suspiciouslyQuest++;
-
-
-            if (suspiciouslySteam > suspiciouslyPC && suspiciouslySteam > suspiciouslyQuest) return "Steam";
-            if (suspiciouslyPC > suspiciouslySteam && suspiciouslyPC > suspiciouslyQuest) return "PC";
-            if (suspiciouslyQuest > suspiciouslySteam && suspiciouslyQuest > suspiciouslyPC) return "Standalone";
+                return "Steam";
+            else if (concatStringOfCosmeticsAllowed.Contains("FIRST LOGIN") || rig.Creator.GetPlayerRef().CustomProperties.Count >= 2)
+                return "PC";
 
             return "Standalone";
         }

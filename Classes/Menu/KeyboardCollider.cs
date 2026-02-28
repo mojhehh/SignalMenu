@@ -1,9 +1,9 @@
 /*
- * ii's Stupid Menu  Classes/Menu/KeyboardCollider.cs
+ * Signal Safety Menu  Classes/Menu/KeyboardCollider.cs
  * A mod menu for Gorilla Tag with over 1000+ mods
  *
- * Copyright (C) 2026  Goldentrophy Software
- * https://github.com/iiDk-the-actual/iis.Stupid.Menu
+ * Copyright (C) 2026  mojhehh (forked from Goldentrophy Software)
+ * https://github.com/mojhehh/SignalMenu
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,9 +21,9 @@
 
 using System.Collections.Generic;
 using UnityEngine;
-using static iiMenu.Menu.Main;
+using static SignalMenu.Menu.Main;
 
-namespace iiMenu.Classes.Menu
+namespace SignalMenu.Classes.Menu
 {
     public class KeyboardKey : MonoBehaviour
 	{
@@ -37,7 +37,7 @@ namespace iiMenu.Classes.Menu
 		public void OnTriggerEnter(Collider collider)
 		{
 			if ((collider != lKeyCollider && collider != rKeyCollider) || menu == null || !(Time.time > delay)) return;
-			if (!iiMenu.Menu.Buttons.GetIndex("Disable Keyboard Delay").enabled)
+			if (!SignalMenu.Menu.Buttons.GetIndex("Disable Keyboard Delay").enabled)
 				delay = Time.time + 0.1f;
 
 			if (doButtonsVibrate)

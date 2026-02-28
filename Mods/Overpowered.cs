@@ -1,9 +1,9 @@
 /*
- * ii's Stupid Menu  Mods/Overpowered.cs
+ * Signal Safety Menu  Mods/Overpowered.cs
  * A mod menu for Gorilla Tag with over 1000+ mods
  *
- * Copyright (C) 2026  Goldentrophy Software
- * https://github.com/iiDk-the-actual/iis.Stupid.Menu
+ * Copyright (C) 2026  mojhehh (forked from Goldentrophy Software)
+ * https://github.com/mojhehh/SignalMenu
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,12 +27,12 @@ using GorillaLocomotion.Gameplay;
 using GorillaNetworking;
 using GorillaTagScripts;
 using GorillaTagScripts.VirtualStumpCustomMaps;
-using iiMenu.Classes.Menu;
-using iiMenu.Extensions;
-using iiMenu.Managers;
-using iiMenu.Menu;
-using iiMenu.Patches.Menu;
-using iiMenu.Utilities;
+using SignalMenu.Classes.Menu;
+using SignalMenu.Extensions;
+using SignalMenu.Managers;
+using SignalMenu.Menu;
+using SignalMenu.Patches.Menu;
+using SignalMenu.Utilities;
 using Ionic.Zlib;
 using Photon.Pun;
 using Photon.Realtime;
@@ -45,17 +45,17 @@ using System.IO;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using static iiMenu.Menu.Main;
-using static iiMenu.Utilities.AssetUtilities;
-using static iiMenu.Utilities.GameModeUtilities;
-using static iiMenu.Utilities.RandomUtilities;
-using static iiMenu.Utilities.RigUtilities;
+using static SignalMenu.Menu.Main;
+using static SignalMenu.Utilities.AssetUtilities;
+using static SignalMenu.Utilities.GameModeUtilities;
+using static SignalMenu.Utilities.RandomUtilities;
+using static SignalMenu.Utilities.RigUtilities;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 using JoinType = GorillaNetworking.JoinType;
 using Object = UnityEngine.Object;
 using Random = UnityEngine.Random;
 
-namespace iiMenu.Mods
+namespace SignalMenu.Mods
 {
     public static class Overpowered
     {
@@ -4106,7 +4106,7 @@ namespace iiMenu.Mods
                     if (Vector3.Distance(rig2.leftHandTransform.position, rig1.headMesh.transform.position) < 0.25f || Vector3.Distance(rig2.rightHandTransform.position, rig1.headMesh.transform.position) < 0.25f)
                     {
                         Vector3 targetDirection = rig2.headMesh.transform.position - rig1.headMesh.transform.position;
-                        BetaSpawnSnowball(rig1.headMesh.transform.position + new Vector3(0f, 0.5f, 0f) + new Vector3(targetDirection.x, 0f, targetDirection.z).normalized / 1.7f, new Vector3(0f, -500f, 0f), 2, rig1.GetPhotonPlayer());
+                        BetaSpawnSnowball(rig1.headMesh.transform.position + new Vector3(0f, 0.5f, 0f) + new Vector3(targetDirection.x, 0f, targetDirection.z).normalized / 1.7f, new Vector3(0f, -500f, 0f), 2, rig1.Creator.GetPlayerRef());
                         SetBoxingDelay(rig1);
                     }
                 }
@@ -4122,7 +4122,7 @@ namespace iiMenu.Mods
 
                 if (!rig.isOfflineVRRig && rig.rightThumb.calcT > 0.5f)
                 {
-                    BetaSpawnSnowball(rig.headMesh.transform.position + new Vector3(0f, 0.5f, 0f) + new Vector3(-rig.headMesh.transform.forward.x, 0f, -rig.headMesh.transform.forward.z) * 1.5f, new Vector3(0f, -300f, 0f), 2, rig.GetPhotonPlayer());
+                    BetaSpawnSnowball(rig.headMesh.transform.position + new Vector3(0f, 0.5f, 0f) + new Vector3(-rig.headMesh.transform.forward.x, 0f, -rig.headMesh.transform.forward.z) * 1.5f, new Vector3(0f, -300f, 0f), 2, rig.Creator.GetPlayerRef());
                     SetBoxingDelay(rig);
                 }
             }
@@ -4138,7 +4138,7 @@ namespace iiMenu.Mods
 
                 if (!rig.isOfflineVRRig && (Ray.distance > 0.12f && Ray.distance < 0.2f))
                 {
-                    BetaSpawnSnowball(rig.headMesh.transform.position + new Vector3(0f, -0.7f, 0f), new Vector3(0f, -500f, 0f), 2, rig.GetPhotonPlayer());
+                    BetaSpawnSnowball(rig.headMesh.transform.position + new Vector3(0f, -0.7f, 0f), new Vector3(0f, -500f, 0f), 2, rig.Creator.GetPlayerRef());
                     SetBoxingDelay(rig);
                 }
             }
@@ -5599,8 +5599,8 @@ namespace iiMenu.Mods
 
             foreach (VRRig rig in GorillaParent.instance.vrrigs.Where(rig => !rig.IsLocal()))
             {
-                if (Vector3.Distance(rig.transform.position, VRRig.LocalRig.rightHandTransform.position) <= 0.35f ||
-                    Vector3.Distance(rig.transform.position, VRRig.LocalRig.leftHandTransform.position) <= 0.35f)
+                if (Vector3.Distance(rig.transform.position, GorillaTagger.Instance.offlineVRRig.rightHandTransform.position) <= 0.35f ||
+                    Vector3.Distance(rig.transform.position, GorillaTagger.Instance.offlineVRRig.leftHandTransform.position) <= 0.35f)
                     touchedPlayers.Add(GetPlayerFromVRRig(rig).ActorNumber);
             }
 
@@ -6261,8 +6261,8 @@ namespace iiMenu.Mods
             {
                 if (!rig.IsLocal())
                 {
-                    if (Vector3.Distance(rig.transform.position, VRRig.LocalRig.rightHandTransform.position) <= 0.35f ||
-                        Vector3.Distance(rig.transform.position, VRRig.LocalRig.leftHandTransform.position) <= 0.35f)
+                    if (Vector3.Distance(rig.transform.position, GorillaTagger.Instance.offlineVRRig.rightHandTransform.position) <= 0.35f ||
+                        Vector3.Distance(rig.transform.position, GorillaTagger.Instance.offlineVRRig.leftHandTransform.position) <= 0.35f)
                     {
                         touchedPlayers.Add(rig);
                     }
@@ -6283,6 +6283,7 @@ namespace iiMenu.Mods
             }
         }
 
+        // i've been told to release this by iiDk - kingofnetflix
         public static Coroutine kickCoroutine;
         public static IEnumerator KickMasterClient()
         {
@@ -6296,8 +6297,7 @@ namespace iiMenu.Mods
 
             if (NetworkSystem.Instance.IsMasterClient)
             {
-				NotificationManager.SendNotification("<color=grey>[</color><color=red>ERROR</color><color=grey>]</color> You are master client! You have no one to kick.");
-				kickCoroutine = null;
+                kickCoroutine = null;
                 yield break;
             }
 
@@ -6425,11 +6425,16 @@ namespace iiMenu.Mods
             kickCoroutine = null;
         }
 
+        /*
+         * Be rexon
+         * Make mod that only works on master client
+         * Turn it into a gun
+         */
+
         public static void KickGun()
         {
-            if (NetworkSystem.Instance.InRoom)
-                VisualizeMasterClient();
-
+            if (NetworkSystem.Instance.InRoom || !NetworkSystem.Instance.IsMasterClient)
+                Visuals.VisualizeAura(NetworkSystem.Instance.MasterClient.VRRig().transform.position, 0.15f, Color.blue, 2017928);
             if (GetGunInput(false))
             {
                 var GunData = RenderGun();
@@ -6455,6 +6460,8 @@ namespace iiMenu.Mods
             }
         }
 
+        // Euphoria I see you eat shit
+        // Malachi I see you, I'm sorry
         public static void CacheKickGun()
         {
             if (GetGunInput(false))
@@ -6527,7 +6534,7 @@ namespace iiMenu.Mods
             if (Time.time > lagMasterDelay)
             {
                 int view = PhotonNetwork.AllocateViewID(0);
-                for (int i = 0; i < lagAmount; i++)
+                for (int i = 0; i < 150; i++)
                 {
                     PhotonNetwork.NetworkingClient.OpRaiseEvent(202, new Hashtable
                     {
@@ -6539,37 +6546,7 @@ namespace iiMenu.Mods
                         Receivers = ReceiverGroup.MasterClient
                     }, SendOptions.SendReliable);
                 }
-                lagMasterDelay = Time.time + lagDelay;
-            }
-        }
-
-        public static void LagMasterClientGun()
-        {
-            if (NetworkSystem.Instance.InRoom || !NetworkSystem.Instance.IsMasterClient)
-                VisualizeMasterClient();
-			
-            if (GetGunInput(false))
-            {
-                var GunData = RenderGun();
-                RaycastHit Ray = GunData.Ray;
-
-                if (gunLocked && lockTarget != null && lockTarget.GetPlayer().IsMasterClient)
-                    LagMasterClient();
-
-                if (GetGunInput(true))
-                {
-                    VRRig gunTarget = Ray.collider.GetComponentInParent<VRRig>();
-                    if (gunTarget && !gunTarget.IsLocal())
-                    {
-                        gunLocked = true;
-                        lockTarget = gunTarget;
-                    }
-                }
-            }
-            else
-            {
-                if (gunLocked)
-                    gunLocked = false;
+                lagMasterDelay = Time.time + 1f;
             }
         }
 
@@ -6608,7 +6585,7 @@ namespace iiMenu.Mods
         }
 
         private static float greyZoneDelay;
-        public static void ActivateGreyZoneGun(bool status, bool zeroGravity = false)
+        public static void ActivateGreyZoneGun(bool status)
         {
             if (GetGunInput(false))
             {
@@ -6621,7 +6598,7 @@ namespace iiMenu.Mods
                     if (gunTarget && !gunTarget.IsLocal() && Time.time > greyZoneDelay)
                     {
                         greyZoneDelay = Time.time + 0.1f;
-                        ActivateGreyZone(status, gunTarget.GetPhotonPlayer(), zeroGravity);
+                        ActivateGreyZone(status, gunTarget.GetPhotonPlayer());
                     }
                 }
             }
@@ -6636,7 +6613,7 @@ namespace iiMenu.Mods
             wipeOverride = null;
         }
 
-        public static void ActivateGreyZone(bool status, Player target, bool zeroGravity = false)
+        public static void ActivateGreyZone(bool status, Player target)
         {
             if (!NetworkSystem.Instance.IsMasterClient)
             {
@@ -6656,13 +6633,10 @@ namespace iiMenu.Mods
             GreyZoneManager.Instance.photonConnectedDuringActivation = PhotonNetwork.InRoom;
             GreyZoneManager.Instance.greyZoneActivationTime = (GreyZoneManager.Instance.photonConnectedDuringActivation ? PhotonNetwork.Time : ((double)Time.time));
 
-            if (zeroGravity)
-                GreyZoneManager.Instance.gravityFactorOptionSelection = int.MaxValue;
-
             SendSerialize(GreyZoneManager.Instance.photonView, new RaiseEventOptions { TargetActors = new[] { target.ActorNumber } });
         }
 
-        public static void ActivateGreyZone(bool status, bool zeroGravity = false)
+        public static void ActivateGreyZone(bool status)
         {
             if (NetworkSystem.Instance.InRoom)
             {
@@ -6674,14 +6648,9 @@ namespace iiMenu.Mods
 
                 if (status)
                 {
-                    if (zeroGravity)
-                        GreyZoneManager.Instance.gravityFactorOptionSelection = int.MaxValue;
-                    else
-                        GreyZoneManager.Instance.gravityFactorOptionSelection = 0;
-
+                    GreyZoneManager.Instance.gravityFactorOptionSelection = 0;
                     GreyZoneManager.Instance.ActivateGreyZoneAuthority();
                 }
-				
                 else if (!status)
                     GreyZoneManager.Instance.DeactivateGreyZoneAuthority();
             }        
@@ -6933,8 +6902,8 @@ namespace iiMenu.Mods
             {
                 if (!rig.IsLocal())
                 {
-                    if (Vector3.Distance(rig.transform.position, VRRig.LocalRig.rightHandTransform.position) <= 0.35f ||
-                        Vector3.Distance(rig.transform.position, VRRig.LocalRig.leftHandTransform.position) <= 0.35f)
+                    if (Vector3.Distance(rig.transform.position, GorillaTagger.Instance.offlineVRRig.rightHandTransform.position) <= 0.35f ||
+                        Vector3.Distance(rig.transform.position, GorillaTagger.Instance.offlineVRRig.leftHandTransform.position) <= 0.35f)
                     {
                         touchedPlayers.Add(rig);
                     }
@@ -7050,8 +7019,8 @@ namespace iiMenu.Mods
             {
                 if (!rig.IsLocal())
                 {
-                    if (Vector3.Distance(rig.transform.position, VRRig.LocalRig.rightHandTransform.position) <= 0.35f ||
-                        Vector3.Distance(rig.transform.position, VRRig.LocalRig.leftHandTransform.position) <= 0.35f)
+                    if (Vector3.Distance(rig.transform.position, GorillaTagger.Instance.offlineVRRig.rightHandTransform.position) <= 0.35f ||
+                        Vector3.Distance(rig.transform.position, GorillaTagger.Instance.offlineVRRig.leftHandTransform.position) <= 0.35f)
                     {
                         touchedPlayers.Add(rig);
                     }
@@ -7180,8 +7149,8 @@ namespace iiMenu.Mods
             {
                 if (!rig.IsLocal())
                 {
-                    if (Vector3.Distance(rig.transform.position, VRRig.LocalRig.rightHandTransform.position) <= 0.35f ||
-                        Vector3.Distance(rig.transform.position, VRRig.LocalRig.leftHandTransform.position) <= 0.35f)
+                    if (Vector3.Distance(rig.transform.position, GorillaTagger.Instance.offlineVRRig.rightHandTransform.position) <= 0.35f ||
+                        Vector3.Distance(rig.transform.position, GorillaTagger.Instance.offlineVRRig.leftHandTransform.position) <= 0.35f)
                     {
                         touchedPlayers.Add(rig);
                     }
@@ -7295,8 +7264,8 @@ namespace iiMenu.Mods
             {
                 if (!rig.IsLocal())
                 {
-                    if (Vector3.Distance(rig.transform.position, VRRig.LocalRig.rightHandTransform.position) <= 0.35f ||
-                        Vector3.Distance(rig.transform.position, VRRig.LocalRig.leftHandTransform.position) <= 0.35f)
+                    if (Vector3.Distance(rig.transform.position, GorillaTagger.Instance.offlineVRRig.rightHandTransform.position) <= 0.35f ||
+                        Vector3.Distance(rig.transform.position, GorillaTagger.Instance.offlineVRRig.leftHandTransform.position) <= 0.35f)
                     {
                         touchedPlayers.Add(rig);
                     }
@@ -7387,8 +7356,8 @@ namespace iiMenu.Mods
             {
                 if (!rig.IsLocal())
                 {
-                    if (Vector3.Distance(rig.transform.position, VRRig.LocalRig.rightHandTransform.position) <= 0.35f ||
-                        Vector3.Distance(rig.transform.position, VRRig.LocalRig.leftHandTransform.position) <= 0.35f)
+                    if (Vector3.Distance(rig.transform.position, GorillaTagger.Instance.offlineVRRig.rightHandTransform.position) <= 0.35f ||
+                        Vector3.Distance(rig.transform.position, GorillaTagger.Instance.offlineVRRig.leftHandTransform.position) <= 0.35f)
                     {
                         touchedPlayers.Add(rig);
                     }

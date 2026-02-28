@@ -1,9 +1,9 @@
 /*
- * ii's Stupid Menu  Classes/Mods/CustomParticle.cs
+ * Signal Safety Menu  Classes/Mods/CustomParticle.cs
  * A mod menu for Gorilla Tag with over 1000+ mods
  *
- * Copyright (C) 2026  Goldentrophy Software
- * https://github.com/iiDk-the-actual/iis.Stupid.Menu
+ * Copyright (C) 2026  mojhehh (forked from Goldentrophy Software)
+ * https://github.com/mojhehh/SignalMenu
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,10 +21,10 @@
 
 using GorillaLocomotion;
 using UnityEngine;
-using static iiMenu.Menu.Main;
-using static iiMenu.Utilities.RandomUtilities;
+using static SignalMenu.Menu.Main;
+using static SignalMenu.Utilities.RandomUtilities;
 
-namespace iiMenu.Classes.Mods
+namespace SignalMenu.Classes.Mods
 {
     public class CustomParticle : MonoBehaviour
 	{

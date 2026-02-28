@@ -1,6 +1,6 @@
-﻿using Valve.Newtonsoft.Json;
+using Valve.Newtonsoft.Json;
 
-namespace iiMenu.Managers.DiscordRPC
+namespace SignalMenu.Managers.DiscordRPC
 {
 	/// <summary>
 	/// Configuration of the current RPC connection

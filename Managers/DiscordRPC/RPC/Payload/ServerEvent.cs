@@ -1,6 +1,6 @@
-﻿using iiMenu.Managers.DiscordRPC.Converters;
+using SignalMenu.Managers.DiscordRPC.Converters;
 
-namespace iiMenu.Managers.DiscordRPC.RPC.Payload
+namespace SignalMenu.Managers.DiscordRPC.RPC.Payload
 {
     /// <summary>
     /// See https://discordapp.com/developers/docs/topics/rpc#rpc-server-payloads-rpc-events for documentation

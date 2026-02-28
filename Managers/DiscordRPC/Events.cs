@@ -1,6 +1,6 @@
-﻿using iiMenu.Managers.DiscordRPC.Message;
+using SignalMenu.Managers.DiscordRPC.Message;
 
-namespace iiMenu.Managers.DiscordRPC.Events
+namespace SignalMenu.Managers.DiscordRPC.Events
 {
     /// <summary>
     /// Called when the Discord Client is ready to send and receive messages.

@@ -1,9 +1,9 @@
 /*
- * ii's Stupid Menu  LegacyInjectCompatibility.cs
+ * Signal Safety Menu  LegacyInjectCompatibility.cs
  * A mod menu for Gorilla Tag with over 1000+ mods
  *
- * Copyright (C) 2026  Goldentrophy Software
- * https://github.com/iiDk-the-actual/iis.Stupid.Menu
+ * Copyright (C) 2026  mojhehh (forked from Goldentrophy Software)
+ * https://github.com/mojhehh/SignalMenu
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,7 +19,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-using iiMenu;
+using SignalMenu;
 
 #pragma warning disable IDE0130 // Namespace does not match folder structure [for legacy compatibility with default SMI settings]
 // ReSharper disable once CheckNamespace

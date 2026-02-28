@@ -1,4 +1,4 @@
-﻿namespace iiMenu.Managers.DiscordRPC.Logging
+namespace SignalMenu.Managers.DiscordRPC.Logging
 {
 	/// <summary>
 	/// Level of logging to use.

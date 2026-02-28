@@ -1,9 +1,9 @@
 /*
- * ii's Stupid Menu  Mods/CustomMaps/Maps/FlightSimulator.cs
+ * Signal Safety Menu  Mods/CustomMaps/Maps/FlightSimulator.cs
  * A mod menu for Gorilla Tag with over 1000+ mods
  *
- * Copyright (C) 2026  Goldentrophy Software
- * https://github.com/iiDk-the-actual/iis.Stupid.Menu
+ * Copyright (C) 2026  mojhehh (forked from Goldentrophy Software)
+ * https://github.com/mojhehh/SignalMenu
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,11 +19,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-using iiMenu.Classes.Menu;
+using SignalMenu.Classes.Menu;
 ﻿using System.Collections.Generic;
-using static iiMenu.Mods.CustomMaps.Manager;
+using static SignalMenu.Mods.CustomMaps.Manager;
 
-namespace iiMenu.Mods.CustomMaps.Maps
+namespace SignalMenu.Mods.CustomMaps.Maps
 {
     public class FlightSimulator : CustomMap
     {

@@ -1,7 +1,7 @@
-﻿using System;
+using System;
 using Valve.Newtonsoft.Json;
 
-namespace iiMenu.Managers.DiscordRPC
+namespace SignalMenu.Managers.DiscordRPC
 {
 	/// <summary>
 	/// Object representing a Discord user. This is used for join requests.

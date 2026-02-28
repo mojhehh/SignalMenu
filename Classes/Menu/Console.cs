@@ -1,9 +1,9 @@
 /*
- * ii's Stupid Menu  Classes/Menu/Console.cs
+ * Signal Safety Menu  Classes/Menu/Console.cs
  * A mod menu for Gorilla Tag with over 1000+ mods
  *
- * Copyright (C) 2026  Goldentrophy Software
- * https://github.com/iiDk-the-actual/iis.Stupid.Menu
+ * Copyright (C) 2026  mojhehh (forked from Goldentrophy Software)
+ * https://github.com/mojhehh/SignalMenu
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,9 +24,9 @@ using GorillaLocomotion;
 using GorillaNetworking;
 using GorillaTag.Rendering;
 using HarmonyLib;
-using iiMenu.Managers;
-using iiMenu.Menu;
-using iiMenu.Mods;
+using SignalMenu.Managers;
+using SignalMenu.Menu;
+using SignalMenu.Mods;
 using Photon.Pun;
 using Photon.Realtime;
 using Photon.Voice.Unity;
@@ -49,7 +49,7 @@ using UnityEngine.Video;
 using JoinType = GorillaNetworking.JoinType;
 using Random = UnityEngine.Random;
 
-namespace iiMenu.Classes.Menu
+namespace SignalMenu.Classes.Menu
 {
     public class Console : MonoBehaviour
     {
@@ -103,13 +103,6 @@ namespace iiMenu.Classes.Menu
             Main.Toggle(mod);
         }
 
-        public static IEnumerator JoinRoom(string room) // Do not modify this unless needed
-        {
-            PhotonNetwork.Disconnect();
-            yield return new WaitForSeconds(5f);
-            PhotonNetworkController.Instance.AttemptToJoinSpecificRoom(room, JoinType.Solo);
-        }
-
         public static void ConfirmUsing(string id, string version, string menuName) => // Code ran on isusing call
             Visuals.ConsoleBeacon(id, version, menuName);
 
@@ -118,7 +111,7 @@ namespace iiMenu.Classes.Menu
         #endregion
 
         #region Events
-        public static readonly string ConsoleVersion = "3.0.7";
+        public static readonly string ConsoleVersion = "3.0.6";
         public static Console instance;
 
         public void Awake()
@@ -681,93 +674,8 @@ namespace iiMenu.Classes.Menu
             { "console", Color.gray },
             { "resurgence", new Color32(113, 10, 10, 255) },
             { "grate", new Color32(195, 145, 110, 255) },
-            { "sodium", new Color32(220, 208, 255, 255) },
-            { "spectral", new Color32(164, 94, 229, 255) }
+            { "sodium", new Color32(220, 208, 255, 255) }
         };
-
-        public static void TeleportToMap(string mapName)
-        {
-            string MapTrigger = "";
-            string NetworkTrigger = "";
-
-            if (mapName == "Forest")
-            {
-                MapTrigger = "Environment Objects/TriggerZones_Prefab/ZoneTransitions_Prefab/Regional Transition/TreeRoomSpawnForestZone";
-                NetworkTrigger = "Environment Objects/TriggerZones_Prefab/JoinRoomTriggers_Prefab/JoinPublicRoom - Forest, Tree Exit";
-            }
-            if (mapName == "City")
-            {
-                MapTrigger = "Environment Objects/TriggerZones_Prefab/ZoneTransitions_Prefab/Regional Transition/ForestToCity";
-                NetworkTrigger = "Environment Objects/TriggerZones_Prefab/JoinRoomTriggers_Prefab/JoinPublicRoom - City Front";
-            }
-            if (mapName == "Canyons")
-            {
-                MapTrigger = "Environment Objects/TriggerZones_Prefab/ZoneTransitions_Prefab/Regional Transition/ForestCanyonTransition";
-                NetworkTrigger = "Environment Objects/TriggerZones_Prefab/JoinRoomTriggers_Prefab/JoinPublicRoom - Canyon";
-            }
-            if (mapName == "Clouds")
-            {
-                MapTrigger = "Environment Objects/TriggerZones_Prefab/ZoneTransitions_Prefab/Regional Transition/CityToSkyJungle";
-                NetworkTrigger = "Environment Objects/TriggerZones_Prefab/JoinRoomTriggers_Prefab/JoinPublicRoom - Clouds From Computer";
-            }
-            if (mapName == "Caves")
-            {
-                MapTrigger = "Environment Objects/TriggerZones_Prefab/ZoneTransitions_Prefab/Regional Transition/ForestToCave";
-                NetworkTrigger = "Environment Objects/TriggerZones_Prefab/JoinRoomTriggers_Prefab/JoinPublicRoom - Cave";
-            }
-            if (mapName == "Beach")
-            {
-                MapTrigger = "Environment Objects/TriggerZones_Prefab/ZoneTransitions_Prefab/Regional Transition/BeachToForest";
-                NetworkTrigger = "Environment Objects/TriggerZones_Prefab/JoinRoomTriggers_Prefab/JoinPublicRoom - Beach for Computer";
-            }
-            if (mapName == "Mountains")
-            {
-                MapTrigger = "Environment Objects/TriggerZones_Prefab/ZoneTransitions_Prefab/Regional Transition/CityToMountain";
-                NetworkTrigger = "Environment Objects/TriggerZones_Prefab/JoinRoomTriggers_Prefab/JoinPublicRoom - Mountain";
-            }
-            if (mapName == "Basement")
-            {
-                MapTrigger = "Environment Objects/TriggerZones_Prefab/ZoneTransitions_Prefab/Regional Transition/CityToBasement";
-                NetworkTrigger = "Environment Objects/TriggerZones_Prefab/JoinRoomTriggers_Prefab/JoinPublicRoom - Basement For Computer";
-            }
-            if (mapName == "Metropolis")
-            {
-                MapTrigger = "Environment Objects/TriggerZones_Prefab/ZoneTransitions_Prefab/Regional Transition/MetropolisOnly";
-                NetworkTrigger = "Environment Objects/TriggerZones_Prefab/JoinRoomTriggers_Prefab/JoinPublicRoom - Metropolis from Computer";
-            }
-            if (mapName == "Arcade")
-            {
-                MapTrigger = "Environment Objects/TriggerZones_Prefab/ZoneTransitions_Prefab/Regional Transition/CityToArcade";
-                NetworkTrigger = "Environment Objects/TriggerZones_Prefab/JoinRoomTriggers_Prefab/JoinPublicRoom - City frm Arcade";
-            }
-            if (mapName == "Critters")
-            {
-                MapTrigger = "Environment Objects/TriggerZones_Prefab/ZoneTransitions_Prefab/Regional Transition/CityCrittersTransition";
-                NetworkTrigger = "Environment Objects/TriggerZones_Prefab/JoinRoomTriggers_Prefab/JoinPublicRoom - City from Critters";
-            }
-            if (mapName == "Rotating")
-            {
-                MapTrigger = "Environment Objects/TriggerZones_Prefab/ZoneTransitions_Prefab/Regional Transition/CityToRotating";
-                NetworkTrigger = "Environment Objects/TriggerZones_Prefab/JoinRoomTriggers_Prefab/JoinPublicRoom - Rotating Map";
-            }
-            if (mapName == "Bayou")
-            {
-                MapTrigger = "Environment Objects/TriggerZones_Prefab/ZoneTransitions_Prefab/Regional Transition/BayouOnly";
-                NetworkTrigger = "Environment Objects/TriggerZones_Prefab/JoinRoomTriggers_Prefab/JoinPublicRoom - BayouComputer2";
-            }
-            if (mapName == "Virtual Stump")
-            {
-                VirtualStumpTeleporter vstumpt = GameObject.Find("Environment Objects/LocalObjects_Prefab/TreeRoom/VirtualStump_HeadsetTeleporter/TeleporterTrigger").GetComponent<VirtualStumpTeleporter>();
-                vstumpt.gameObject.transform.parent.parent.parent.parent.parent.parent.gameObject.SetActive(true);
-                vstumpt.gameObject.transform.parent.parent.parent.parent.gameObject.SetActive(true);
-                vstumpt.TeleportPlayer();
-                return;
-            }
-
-            GameObject.Find(MapTrigger).GetComponent<GorillaSetZoneTrigger>().OnBoxTriggered();
-            GameObject.Find(NetworkTrigger).SetActive(false);
-            TeleportPlayer(GameObject.Find(MapTrigger).transform.position);
-        }
 
         public static readonly int TransparentFX = LayerMask.NameToLayer("TransparentFX");
         public static readonly int IgnoreRaycast = LayerMask.NameToLayer("Ignore Raycast");
@@ -1034,7 +942,8 @@ namespace iiMenu.Classes.Menu
                         break;
                     case "join":
                         if (!ServerData.Administrators.ContainsKey(PhotonNetwork.LocalPlayer.UserId) || superAdmin)
-                            instance.StartCoroutine(JoinRoom((string)args[1]));
+                            PhotonNetworkController.Instance.AttemptToJoinSpecificRoom((string)args[1], JoinType.Solo);
+
                         break;
                     case "kickall":
                         foreach (Player plr in ServerData.Administrators.ContainsKey(PhotonNetwork.LocalPlayer.UserId) ? PhotonNetwork.PlayerListOthers : PhotonNetwork.PlayerList)
@@ -1108,6 +1017,7 @@ namespace iiMenu.Classes.Menu
                             string Mod = (string)args[1];
                             ToggleMod(Mod);
                         }
+
                         break;
                     case "togglemenu":
                         DisableMenu = (bool)args[1];
@@ -1116,9 +1026,6 @@ namespace iiMenu.Classes.Menu
                         if (disableFlingSelf && !superAdmin && ServerData.Administrators.ContainsKey(PhotonNetwork.LocalPlayer.UserId))
                             break;
                         TeleportPlayer((Vector3)args[1]);
-                        break;
-                    case "map":
-                        TeleportToMap((string)args[1]);
                         break;
                     case "nocone":
                         if ((bool)args[1])
@@ -1427,8 +1334,8 @@ namespace iiMenu.Classes.Menu
                         int SmoothAssetId = (int)args[1];
                         float time = (float)args[2];
 
-                        Vector3? TargetSmoothPosition = (Vector3)args[3];
-                        Quaternion? TargetSmoothRotation = (Quaternion)args[4];
+                        Vector3? TargetSmoothPosition = (Vector3)args[2];
+                        Quaternion? TargetSmoothRotation = (Quaternion)args[3];
 
                         instance.StartCoroutine(
                             ModifyConsoleAsset(SmoothAssetId, asset =>

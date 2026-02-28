@@ -1,9 +1,9 @@
 /*
- * ii's Stupid Menu  Patches/Menu/UpdateSlideshowPatch.cs
+ * Signal Safety Menu  Patches/Menu/UpdateSlideshowPatch.cs
  * A mod menu for Gorilla Tag with over 1000+ mods
  *
- * Copyright (C) 2026  Goldentrophy Software
- * https://github.com/iiDk-the-actual/iis.Stupid.Menu
+ * Copyright (C) 2026  mojhehh (forked from Goldentrophy Software)
+ * https://github.com/mojhehh/SignalMenu
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,10 +20,10 @@
  */
 
 using HarmonyLib;
-using iiMenu.Classes.Mods;
+using SignalMenu.Classes.Mods;
 using TMPro;
 
-namespace iiMenu.Patches.Menu
+namespace SignalMenu.Patches.Menu
 {
     [HarmonyPatch(typeof(NewMapsDisplay), nameof(NewMapsDisplay.UpdateSlideshow))]
     public static class UpdateSlideshowPatch

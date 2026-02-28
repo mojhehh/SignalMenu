@@ -1,6 +1,6 @@
-﻿using System;
+using System;
 
-namespace iiMenu.Managers.DiscordRPC.Message
+namespace SignalMenu.Managers.DiscordRPC.Message
 {
 	/// <summary>
 	/// Messages received from discord.

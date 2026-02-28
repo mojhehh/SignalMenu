@@ -1,4 +1,4 @@
-﻿namespace iiMenu.Managers.DiscordRPC.Logging
+namespace SignalMenu.Managers.DiscordRPC.Logging
 {
 	/// <summary>
 	/// Logs the outputs to a file

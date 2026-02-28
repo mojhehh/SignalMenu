@@ -1,9 +1,9 @@
 /*
- * ii's Stupid Menu  Menu/Main.cs
+ * Signal Safety Menu  Menu/Main.cs
  * A mod menu for Gorilla Tag with over 1000+ mods
  *
- * Copyright (C) 2026  Goldentrophy Software
- * https://github.com/iiDk-the-actual/iis.Stupid.Menu
+ * Copyright (C) 2026  mojhehh (forked from Goldentrophy Software)
+ * https://github.com/mojhehh/SignalMenu
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,14 +26,15 @@ using GorillaLocomotion;
 using GorillaNetworking;
 using GorillaTagScripts;
 using HarmonyLib;
-using iiMenu.Classes.Menu;
-using iiMenu.Classes.Mods;
-using iiMenu.Extensions;
-using iiMenu.Managers;
-using iiMenu.Mods;
-using iiMenu.Patches;
-using iiMenu.Patches.Menu;
-using iiMenu.Utilities;
+using SignalMenu.Classes;
+using SignalMenu.Classes.Menu;
+using SignalMenu.Classes.Mods;
+using SignalMenu.Extensions;
+using SignalMenu.Managers;
+using SignalMenu.Mods;
+using SignalMenu.Patches;
+using SignalMenu.Patches.Menu;
+using SignalMenu.Utilities;
 using Photon.Pun;
 using Photon.Realtime;
 using System;
@@ -58,30 +59,30 @@ using UnityEngine.XR;
 using Valve.Newtonsoft.Json;
 using Valve.VR;
 using WebSocketSharp;
-using static iiMenu.Utilities.AssetUtilities;
-using static iiMenu.Utilities.FileUtilities;
-using static iiMenu.Utilities.RandomUtilities;
-using ButtonCollider = iiMenu.Classes.Menu.ButtonCollider;
+using static SignalMenu.Utilities.AssetUtilities;
+using static SignalMenu.Utilities.FileUtilities;
+using static SignalMenu.Utilities.RandomUtilities;
+using ButtonCollider = SignalMenu.Classes.Menu.ButtonCollider;
 using CommonUsages = UnityEngine.XR.CommonUsages;
-using Console = iiMenu.Classes.Menu.Console;
+using Console = SignalMenu.Classes.Menu.Console;
 using JoinType = GorillaNetworking.JoinType;
 using Object = UnityEngine.Object;
 using Random = UnityEngine.Random;
 
 /*
- * ii's Stupid Menu, written by @goldentrophy
+ * Signal Safety Menu, written by @goldentrophy
  * Any comments are developer comments I wrote
  * Most comments are used to find certain parts of code faster with Ctrl + F
  * Feel free to read them if you want
  *
- * ii's Stupid Menu falls under the GPL-3.0 license
- * https://github.com/iiDk-the-actual/iis.Stupid.Menu
+ * Signal Safety Menu falls under the GPL-3.0 license
+ * https://github.com/mojhehh/SignalMenu
  *
- * If you want to support my, check out my Patreon: https://patreon.com/iiDk
- * Any support is appreciated, and it helps me make more free content for you all
+ * Forked from ii's Stupid Menu by iiDk
+ * Original: https://github.com/iiDk-the-actual/iis.Stupid.Menu
  */
 
-namespace iiMenu.Menu
+namespace SignalMenu.Menu
 {
     [HarmonyPatch(typeof(GTPlayer), nameof(GTPlayer.LateUpdate))]
     public class Main : MonoBehaviour // Do not get rid of this. I don't know why, the entire class kills itself.
@@ -95,7 +96,7 @@ namespace iiMenu.Menu
                 LogManager.LogError("CoroutineManager instance is null on menu launch. Features may not function properly.");
 
             if (NotificationManager.Instance == null)
-                LogManager.LogError("CoroutineManager instance is null on menu launch. Features may not function properly.");
+                LogManager.LogError("NotificationManager instance is null on menu launch. Features may not function properly.");
 
             timeMenuStarted = Time.time;
             IsSteam = PlayFabAuthenticator.instance.platform;
@@ -104,9 +105,12 @@ namespace iiMenu.Menu
             activeFont = AgencyFB;
 
             if (Plugin.FirstLaunch)
-                Prompt("It seems like this is your first time using the menu. Would you like to watch a quick tutorial to get to know how to use it?", Settings.ShowTutorial);
+            {
+                PromptSingle("Welcome to " + ObfStr.MenuName + "!\n\nThis menu is a fork of ii's Stupid Menu by iiDk.\nAll credit to the original creator and Goldentrophy Software.\n\nWe took everything that made ii's great and built on it.\nEnjoy!", null, "Got it!");
+                Prompt("Would you like to watch a quick tutorial to get to know how to use the menu?", Settings.ShowTutorial);
+            }
             else
-                acceptedDonations = File.Exists($"{PluginInfo.BaseDirectory}/iiMenu_HideDonationButton.txt");
+                acceptedDonations = File.Exists($"{PluginInfo.BaseDirectory}/hide_donate.dat");
 
             NetworkSystem.Instance.OnJoinedRoomEvent += OnJoinRoom;
             NetworkSystem.Instance.OnReturnedToSinglePlayer += OnLeaveRoom;
@@ -188,7 +192,7 @@ namespace iiMenu.Menu
             }
 
             loadPreferencesTime = Time.time;
-            if (File.Exists($"{PluginInfo.BaseDirectory}/iiMenu_Preferences.txt"))
+            if (File.Exists($"{PluginInfo.BaseDirectory}/prefs.dat"))
             {
                 try
                 {
@@ -213,7 +217,7 @@ namespace iiMenu.Menu
                 $"Error with Settings.LoadPCControls() at {exc.StackTrace}: {exc.Message}");
             }
 
-            if (new DirectoryInfo(Path.Combine(GetGamePath(), PluginInfo.ClientResourcePath)).CreationTime >= DateTime.Now.AddYears(1))
+            if (new DirectoryInfo(Path.Combine(GetGamePath(), PluginInfo.ClientResourcePath)).CreationTime <= DateTime.Now.AddYears(-1))
                 AchievementManager.UnlockAchievement(new AchievementManager.Achievement
                 {
                     name = "Veteran",
@@ -223,19 +227,12 @@ namespace iiMenu.Menu
 
 
             if (PatchHandler.PatchErrors > 0)
+                NotificationManager.SendNotification($"<color=grey>[</color><color=red>ERROR</color><color=grey>]</color> {PatchHandler.PatchErrors} patch{(PatchHandler.PatchErrors > 1 ? "es" : "")} failed to initialize. Please report this as an issue to the GitHub repository.", 10000);
+            else
             {
-                if (PatchHandler.CriticalPatchFailed)
-                {
-                    string message = "A critical patch has failed, and you have been blocked from joining rooms for safety reasons. Please report this as an issue to the GitHub repository."; 
-                    NotificationManager.SendNotification($"<color=grey>[</color><color=red>ERROR</color><color=grey>]</color> {message}", 10000);
-                    GorillaComputer.instance.GeneralFailureMessage(message);
-                    if (NetworkSystem.Instance.InRoom)
-                        NetworkSystem.Instance.ReturnToSinglePlayer();
-                }
-                else
-                    NotificationManager.SendNotification($"<color=grey>[</color><color=red>ERROR</color><color=grey>]</color> {PatchHandler.PatchErrors} patch{(PatchHandler.PatchErrors > 1 ? "es" : "")} failed to initialize. Please report this as an issue to the GitHub repository.", 10000);
+                NotificationManager.SendNotification("<color=grey>[</color><color=green>SIGNAL</color><color=grey>]</color> All protection systems online. You are safe.", 6000);
+                try { Play2DAudio(LoadSoundFromURL($"{PluginInfo.ServerResourcePath}/Audio/Menu/Notifications/win7-exc.ogg", "Audio/Menu/Notifications/win7-exc.ogg"), buttonClickVolume / 10f); } catch { }
             }
-                
         }
 
         public static void Prefix()
@@ -533,7 +530,7 @@ namespace iiMenu.Menu
 
                 if (animatedTitle && title != null)
                 {
-                    string targetString = doCustomName ? NoRichtextTags(customMenuName) : "ii's Stupid Menu";
+                    string targetString = doCustomName ? NoRichtextTags(customMenuName) : ObfStr.MenuName;
                     int length = (int)Mathf.PingPong(Time.time / 0.25f, targetString.Length + 1);
                     title.text = length > 0 ? targetString[..length] : "";
                 }
@@ -1687,10 +1684,9 @@ namespace iiMenu.Menu
                                                         || (v.detected && !allowDetected))
                                                         continue;
 
-                                                    List<string> texts = v.aliases == null ? new List<string>() : v.aliases.ToList();
-                                                    texts.Add(v.overlapText ?? v.buttonText);
+                                                    string buttonText = v.overlapText ?? v.buttonText;
 
-                                                    if (texts.Any(buttonText => buttonText.ClearTags().Replace(" ", "").ToLower().Contains(keyboardInput.Replace(" ", "").ToLower())))
+                                                    if (buttonText.Replace(" ", "").ToLower().Contains(keyboardInput.Replace(" ", "").ToLower()))
                                                         searchedMods.Add(v);
                                                 }
                                                 catch { }
@@ -2074,7 +2070,7 @@ namespace iiMenu.Menu
             {
                 if (buttonSpriteSheet != null) return buttonSpriteSheet;
                 buttonSpriteSheet = ScriptableObject.CreateInstance<TMP_SpriteAsset>();
-                buttonSpriteSheet.name = "iiMenu_SpriteSheet";
+                buttonSpriteSheet.name = ObjectNames.Get("SpriteSheet");
 
                 var textureList = new List<Texture2D>();
                 var spriteDataList = new List<(string name, int index)>();
@@ -2584,7 +2580,7 @@ namespace iiMenu.Menu
                         case 63:
                             if (videoPlayer == null)
                             {
-                                videoPlayer = new GameObject("iiMenu_VideoPlayer").AddComponent<VideoPlayer>();
+                                videoPlayer = new GameObject(ObjectNames.Get("VideoPlayer")).AddComponent<VideoPlayer>();
                                 videoPlayer.playOnAwake = true;
                                 videoPlayer.isLooping = true;
                                 videoPlayer.url = $"{PluginInfo.ServerResourcePath}/Videos/Themes/badapple.mp4";
@@ -2645,7 +2641,7 @@ namespace iiMenu.Menu
                     }
                 }.AddComponent<TextMeshPro>();
                 title.font = activeFont;
-                title.text = translate ? "ii's Stupid Menu" : "ii's <b>Stupid</b> Menu";
+                title.text = translate ? ObfStr.MenuName : "ii's <b>Stupid</b> Menu";
 
                 if (doCustomName)
                     title.text = customMenuName;
@@ -2687,7 +2683,7 @@ namespace iiMenu.Menu
 
                 if (animatedTitle)
                 {
-                    string targetString = doCustomName ? NoRichtextTags(customMenuName) : "ii's Stupid Menu";
+                    string targetString = doCustomName ? NoRichtextTags(customMenuName) : ObfStr.MenuName;
                     int length = (int)Mathf.PingPong(Time.time / 0.25f, targetString.Length);
                     title.text = length > 0 ? targetString[..length] : "";
                 }
@@ -2963,10 +2959,11 @@ namespace iiMenu.Menu
                                             || (v.detected && !allowDetected))
                                             continue;
 
-                                        List<string> texts = v.aliases == null ? new List<string>() : v.aliases.ToList();
-                                        texts.Add(v.overlapText ?? v.buttonText);
+                                        string buttonText = v.buttonText;
+                                        if (v.overlapText != null)
+                                            buttonText = v.overlapText;
 
-                                        if (texts.Any(buttonText => buttonText.ClearTags().Replace(" ", "").ToLower().Contains(keyboardInput.Replace(" ", "").ToLower())))
+                                        if (buttonText.Replace(" ", "").ToLower().Contains(keyboardInput.Replace(" ", "").ToLower()))
                                             searchedMods.Add(v);
                                     }
                                     catch { }
@@ -3631,7 +3628,7 @@ namespace iiMenu.Menu
                     case "webm":
                     case "mov":
                         {
-                            promptVideoPlayer = new GameObject("iiMenu_PromptVideoPlayer").AddComponent<VideoPlayer>();
+                            promptVideoPlayer = new GameObject(ObjectNames.Get("PromptVideoPlayer")).AddComponent<VideoPlayer>();
                             promptVideoPlayer.playOnAwake = true;
                             promptVideoPlayer.isLooping = true;
                             promptVideoPlayer.url = promptImageUrl;
@@ -4227,7 +4224,7 @@ namespace iiMenu.Menu
             {
                 for (int y = 0; y < 128; y++)
                 {
-                    Color rowColor = Color.Lerp(colorA, colorB, y / 128f);
+                    Color rowColor = Color.Lerp(colorA, colorB, y / 127f);
                     for (int x = 0; x < 128; x++)
                         pixels[y * 128 + x] = rowColor;
                 }
@@ -4235,7 +4232,7 @@ namespace iiMenu.Menu
             {
                 for (int i = 0; i < 128; i++)
                 {
-                    Color rowColor = Color.Lerp(colorA, colorB, i / 128f);
+                    Color rowColor = Color.Lerp(colorA, colorB, i / 127f);
                     for (int j = 0; j < 128; j++)
                         pixels[j * 128 + i] = rowColor;
                 }
@@ -4264,8 +4261,8 @@ namespace iiMenu.Menu
                 MonkeAgent.instance.rpcCallLimit = int.MaxValue;
                 MonkeAgent.instance.logErrorMax = int.MaxValue;
 
-                PhotonNetwork.MaxResendsBeforeDisconnect = int.MaxValue;
-                PhotonNetwork.QuickResends = int.MaxValue;
+                PhotonNetwork.MaxResendsBeforeDisconnect = 100;
+                PhotonNetwork.QuickResends = 5;
 
                 PhotonNetwork.SendAllOutgoingCommands();
             } catch { LogManager.Log("RPC protection failed, are you in a lobby?"); }
@@ -4279,8 +4276,8 @@ namespace iiMenu.Menu
         public static string GetHttp(string url)
         {
             WebRequest request = WebRequest.Create(url);
-            WebResponse response = request.GetResponse();
-            Stream data = response.GetResponseStream();
+            using WebResponse response = request.GetResponse();
+            using Stream data = response.GetResponseStream();
             string html = "";
 
             if (data == null) return html;
@@ -4402,7 +4399,7 @@ namespace iiMenu.Menu
             if (disableGunLine) return (Ray, GunPointer);
             if (GunLine == null)
             {
-                GameObject line = new GameObject("iiMenu_GunLine");
+                GameObject line = new GameObject(ObjectNames.Get("GunLine"));
                 GunLine = line.AddComponent<LineRenderer>();
             }
 
@@ -5026,7 +5023,6 @@ namespace iiMenu.Menu
         }
 
         public static Dictionary<string, SnowballThrowable> snowballDict;
-        private static bool allSnowballsInitialized;
 
         /// <summary>
         /// Retrieves a SnowballThrowable instance by its projectile name.
@@ -5040,47 +5036,24 @@ namespace iiMenu.Menu
                 if (!CosmeticsV2Spawner_Dirty.completed)
                     return null;
 
-                if (!GorillaComputer.instance.isConnectedToMaster)
-                    return null;
-
-                if (!allSnowballsInitialized &&
-                    (CosmeticsV2Spawner_Dirty.materialIndexToSnowballThrowablePlayfabIdStringLeft.Count >= 1 &&
-                     CosmeticsV2Spawner_Dirty.materialIndexToSnowballThrowablePlayfabIdStringRight.Count >= 1))
-                {
-                    allSnowballsInitialized = true;
-
-                    CosmeticsV2Spawner_Dirty.materialIndexToSnowballThrowablePlayfabIdStringLeft.ForEach(v => VRRig.LocalRig.cosmeticsObjectRegistry.Cosmetic(v.Value));
-                    CosmeticsV2Spawner_Dirty.materialIndexToSnowballThrowablePlayfabIdStringRight.ForEach(v => VRRig.LocalRig.cosmeticsObjectRegistry.Cosmetic(v.Value));
-
-                    return null;
-                }
-
                 snowballDict = new Dictionary<string, SnowballThrowable>();
+
                 foreach (SnowballMaker Maker in new[] { SnowballMaker.leftHandInstance, SnowballMaker.rightHandInstance })
                 {
                     foreach (SnowballThrowable Throwable in Maker.snowballs)
                     {
                         try
                         {
-                            string key = Throwable.transform.parent.gameObject.name;
-                            snowballDict.Add(key, Throwable);
+                            snowballDict.Add(Throwable.transform.parent.gameObject.name, Throwable);
                         }
-                        catch (Exception e)
-                        {
-                            LogManager.LogError($"Failed to add projectile to snowballDict: {e.Message}");
-                        }
+                        catch { }
                     }
                 }
             }
 
             projectileName += "(Clone)";
-            if (!snowballDict.TryGetValue(projectileName, out var projectile))
-            {
-                LogManager.LogWarning($"Projectile not found: {projectileName}");
-                return null;
-            }
 
-            return projectile;
+            return snowballDict != null && snowballDict.TryGetValue(projectileName, out var projectile) ? projectile : null;
         }
 
         public static readonly Dictionary<Type, object[]> typePool = new Dictionary<Type, object[]>();
@@ -5577,7 +5550,6 @@ namespace iiMenu.Menu
             if (!disableRoomNotifications)
                 NotificationManager.SendNotification($"<color=grey>[</color><color=blue>JOIN ROOM</color><color=grey>]</color> Room Code: {lastRoom}");
 
-            OnMasterClientSwitch(NetworkSystem.Instance.MasterClient);
             RPCProtection();
         }
 
@@ -5664,17 +5636,14 @@ namespace iiMenu.Menu
 
             foreach (PhotonView photonView in photonViewList.Values)
             {
-                if (!photonView.IsMine || photonView.Synchronization == ViewSynchronization.Off || !photonView.isActiveAndEnabled || PhotonNetwork.blockedSendingGroups.Contains(photonView.Group))
-                    continue;
-
                 if (exclude)
                 {
-                    if (!filteredViewIDs.Contains(photonView.ViewID))
+                    if (photonView.IsMine && !filteredViewIDs.Contains(photonView.ViewID))
                         viewsToSerialize.Add(photonView);
                 }
                 else
                 {
-                    if (filteredViewIDs.Contains(photonView.ViewID))
+                    if (photonView.IsMine && filteredViewIDs.Contains(photonView.ViewID))
                         viewsToSerialize.Add(photonView);
                 }
             }
@@ -6414,9 +6383,13 @@ namespace iiMenu.Menu
 
             NetworkSystem.Instance.OnJoinedRoomEvent -= OnJoinRoom;
             NetworkSystem.Instance.OnReturnedToSinglePlayer -= OnLeaveRoom;
+            NetworkSystem.Instance.OnMasterClientSwitchedEvent -= OnMasterClientSwitch;
 
             NetworkSystem.Instance.OnPlayerJoined -= OnPlayerJoin;
             NetworkSystem.Instance.OnPlayerLeft -= OnPlayerLeave;
+
+            SerializePatch.OnSerialize -= OnSerialize;
+            PlayerSerializePatch.OnPlayerSerialize -= OnPlayerSerialize;
 
             if (Console.instance != null)
                 Destroy(Console.instance.gameObject);
@@ -6516,7 +6489,10 @@ namespace iiMenu.Menu
             foreach (TMP_FontAsset font in new[] { AgencyFB, FreeSans, Candara, ComicSans, 
                 CascadiaMono, Anton, Minecraft, MSGothic, OpenDyslexic, SimSun, Taiko, 
                 Terminal, Utopium, DejaVuSans })
-                font.fallbackFontAssetTable.Add(LiberationSans);
+            {
+                if (font != null)
+                    font.fallbackFontAssetTable.Add(LiberationSans);
+            }
         }
 
         // ReSharper disable once StaticMemberInitializerReferesToMemberBelow
@@ -7007,7 +6983,7 @@ jgs \_   _/ |Oo\
         public static readonly List<string> skipButtons = new List<string> { };
         public static bool translate;
 
-        public static string serverLink = "https://discord.gg/iidk";
+        public static string serverLink = "https://discord.gg/BgKHPdB4e7";
 
         public static int arrowType;
         public static readonly string[][] arrowTypes = {

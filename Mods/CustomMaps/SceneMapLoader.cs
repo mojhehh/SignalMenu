@@ -1,9 +1,9 @@
 /*
- * ii's Stupid Menu  Mods/CustomMaps/SceneMapLoader.cs
+ * Signal Safety Menu  Mods/CustomMaps/SceneMapLoader.cs
  * A mod menu for Gorilla Tag with over 1000+ mods
  *
- * Copyright (C) 2026  Goldentrophy Software
- * https://github.com/iiDk-the-actual/iis.Stupid.Menu
+ * Copyright (C) 2026  mojhehh (forked from Goldentrophy Software)
+ * https://github.com/mojhehh/SignalMenu
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,7 +22,7 @@
 
 using UnityEngine.SceneManagement;
 
-namespace iiMenu.Mods.CustomMaps
+namespace SignalMenu.Mods.CustomMaps
 {
     public static class SceneMapLoader
     {

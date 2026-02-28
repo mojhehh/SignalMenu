@@ -1,6 +1,6 @@
-﻿using System;
+using System;
 
-namespace iiMenu.Managers.DiscordRPC.Converters
+namespace SignalMenu.Managers.DiscordRPC.Converters
 {
 	internal class EnumValueAttribute : Attribute
 	{

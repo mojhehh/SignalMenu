@@ -1,9 +1,9 @@
 /*
- * ii's Stupid Menu  Mods/Fun.cs
+ * Signal Safety Menu  Mods/Fun.cs
  * A mod menu for Gorilla Tag with over 1000+ mods
  *
- * Copyright (C) 2026  Goldentrophy Software
- * https://github.com/iiDk-the-actual/iis.Stupid.Menu
+ * Copyright (C) 2026  mojhehh (forked from Goldentrophy Software)
+ * https://github.com/mojhehh/SignalMenu
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,13 +30,14 @@ using GorillaTag.Cosmetics;
 using GorillaTag.Rendering;
 using GorillaTagScripts;
 using GorillaTagScripts.Builder;
-using iiMenu.Classes.Menu;
-using iiMenu.Classes.Mods;
-using iiMenu.Extensions;
-using iiMenu.Managers;
-using iiMenu.Menu;
-using iiMenu.Patches.Menu;
-using iiMenu.Utilities;
+using SignalMenu.Classes;
+using SignalMenu.Classes.Menu;
+using SignalMenu.Classes.Mods;
+using SignalMenu.Extensions;
+using SignalMenu.Managers;
+using SignalMenu.Menu;
+using SignalMenu.Patches.Menu;
+using SignalMenu.Utilities;
 using Ionic.Zlib;
 using Photon.Pun;
 using Photon.Realtime;
@@ -56,16 +57,16 @@ using System.Reflection;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Windows.Speech;
-using static iiMenu.Menu.Main;
-using static iiMenu.Utilities.AssetUtilities;
-using static iiMenu.Utilities.GameModeUtilities;
-using static iiMenu.Utilities.RandomUtilities;
-using static iiMenu.Utilities.RigUtilities;
+using static SignalMenu.Menu.Main;
+using static SignalMenu.Utilities.AssetUtilities;
+using static SignalMenu.Utilities.GameModeUtilities;
+using static SignalMenu.Utilities.RandomUtilities;
+using static SignalMenu.Utilities.RigUtilities;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 using Object = UnityEngine.Object;
 using Random = UnityEngine.Random;
 
-namespace iiMenu.Mods
+namespace SignalMenu.Mods
 {
     public static class Fun
     {
@@ -599,7 +600,7 @@ namespace iiMenu.Mods
         {
             if (FreeCamObject == null)
             {
-                FreeCamObject = new GameObject("iiMenu_CameraObj");
+                FreeCamObject = new GameObject(ObjectNames.Get("CameraObj"));
                 FreeCamObject.transform.position = GorillaTagger.Instance.headCollider.transform.position;
             }
 
@@ -624,7 +625,7 @@ namespace iiMenu.Mods
         {
             if (FreeCamObject == null)
             {
-                FreeCamObject = new GameObject("iiMenu_CameraObj");
+                FreeCamObject = new GameObject(ObjectNames.Get("CameraObj"));
                 FreeCamObject.transform.position = GorillaTagger.Instance.headCollider.transform.position;
             }
 
@@ -640,7 +641,7 @@ namespace iiMenu.Mods
         {
             if (FreeCamObject == null)
             {
-                FreeCamObject = new GameObject("iiMenu_CameraObj");
+                FreeCamObject = new GameObject(ObjectNames.Get("CameraObj"));
                 FreeCamObject.transform.position = GorillaTagger.Instance.headCollider.transform.position;
             }
 
@@ -656,7 +657,7 @@ namespace iiMenu.Mods
         {
             if (FreeCamObject == null)
             {
-                FreeCamObject = new GameObject("iiMenu_CameraObj");
+                FreeCamObject = new GameObject(ObjectNames.Get("CameraObj"));
                 FreeCamObject.transform.position = GorillaTagger.Instance.headCollider.transform.position;
             }
 
@@ -739,7 +740,7 @@ namespace iiMenu.Mods
                 {
                     if (FreeCamObject == null)
                     {
-                        FreeCamObject = new GameObject("iiMenu_CameraObj");
+                        FreeCamObject = new GameObject(ObjectNames.Get("CameraObj"));
                         FreeCamObject.transform.position = GorillaTagger.Instance.headCollider.transform.position;
                     }
 
@@ -1458,7 +1459,7 @@ namespace iiMenu.Mods
 
         private static VirtualStumpAd virtualStumpAd;
         public static void CustomVirtualStumpVideo() =>
-            virtualStumpAd ??= new GameObject("iiMenu_VirtualStumpAd").AddComponent<VirtualStumpAd>();
+            virtualStumpAd ??= new GameObject(ObjectNames.Get("VirtualStumpAd")).AddComponent<VirtualStumpAd>();
 
         public static void DisableCustomVirtualStumpVideo()
         {
@@ -3346,7 +3347,7 @@ Piece Name: {gunTarget.name}";
 
                     ThrowableBug targetBug = bugSpamToggle ? bug : firefly;
                     
-                    GameObject bugSpamObject = new GameObject("iiMenu_BugSpamObject");
+                    GameObject bugSpamObject = new GameObject(ObjectNames.Get("BugSpamObject"));
                     bugSpamObject.transform.localScale = Vector3.one * 0.2f;
                     bugSpamObject.layer = 3;
 
@@ -3390,7 +3391,7 @@ Piece Name: {gunTarget.name}";
 
                 LckSocialCamera camera = cameraSpamType ? LckSocialCameraManager.Instance._socialCameraCococamInstance : LckSocialCameraManager.Instance._socialCameraTabletInstance;
 
-                GameObject cameraSpamObject = new GameObject("iiMenu_CameraSpamObject");
+                GameObject cameraSpamObject = new GameObject(ObjectNames.Get("CameraSpamObject"));
                 cameraSpamObject.transform.localScale = Vector3.one * 0.2f;
                 cameraSpamObject.layer = 3;
 
@@ -3469,7 +3470,7 @@ Piece Name: {gunTarget.name}";
                     case 0:
                         {
                             ThrowableBug targetBug = bug;
-                            GameObject bugSpamObject = new GameObject("iiMenu_BugSpamObject");
+                            GameObject bugSpamObject = new GameObject(ObjectNames.Get("BugSpamObject"));
                             bugSpamObject.transform.localScale = Vector3.one * 0.2f;
                             bugSpamObject.layer = 3;
 
@@ -3503,7 +3504,7 @@ Piece Name: {gunTarget.name}";
                     case 1:
                         {
                             ThrowableBug targetBug = firefly;
-                            GameObject bugSpamObject = new GameObject("iiMenu_FireflySpamObject");
+                            GameObject bugSpamObject = new GameObject(ObjectNames.Get("FireflySpamObject"));
                             bugSpamObject.transform.localScale = Vector3.one * 0.2f;
                             bugSpamObject.layer = 3;
 
@@ -3541,7 +3542,7 @@ Piece Name: {gunTarget.name}";
 
                             LckSocialCamera camera = LckSocialCameraManager.Instance._socialCameraCococamInstance;
 
-                            GameObject cameraSpamObject = new GameObject("iiMenu_CameraSpamObject");
+                            GameObject cameraSpamObject = new GameObject(ObjectNames.Get("CameraSpamObject"));
                             cameraSpamObject.transform.localScale = Vector3.one * 0.2f;
                             cameraSpamObject.layer = 3;
 
@@ -3585,7 +3586,7 @@ Piece Name: {gunTarget.name}";
 
                             LckSocialCamera camera = LckSocialCameraManager.Instance._socialCameraTabletInstance;
 
-                            GameObject cameraSpamObject = new GameObject("iiMenu_CameraSpamObject");
+                            GameObject cameraSpamObject = new GameObject(ObjectNames.Get("CameraSpamObject"));
                             cameraSpamObject.transform.localScale = Vector3.one * 0.2f;
                             cameraSpamObject.layer = 3;
 
@@ -3874,7 +3875,7 @@ Piece Name: {gunTarget.name}";
 
                 if (inAir && !lastInAir)
                 {
-                    GameObject bugSpamObject = new GameObject("iiMenu_BugSpamObject");
+                    GameObject bugSpamObject = new GameObject(ObjectNames.Get("BugSpamObject"));
                     bugSpamObject.transform.localScale = Vector3.one * 0.2f;
                     bugSpamObject.layer = 3;
 
@@ -3954,7 +3955,7 @@ Piece Name: {gunTarget.name}";
                 {
                     grabbingCamera = false;
 
-                    GameObject bugSpamObject = new GameObject("iiMenu_BugSpamObject");
+                    GameObject bugSpamObject = new GameObject(ObjectNames.Get("BugSpamObject"));
                     bugSpamObject.transform.localScale = Vector3.one * 0.2f;
                     bugSpamObject.layer = 3;
 
@@ -4619,111 +4620,6 @@ Piece Name: {gunTarget.name}";
                     {
                         floatPower += (0.3f - floatPower) * 0.05f;
                         RequestCreatePiece(-566818631, lockTarget.transform.position + Vector3.down * floatPower, Quaternion.Euler(0f, Random.Range(0f, 350f), 0f), 0, NetPlayerToPlayer(GetPlayerFromVRRig(lockTarget)), true);
-                        RPCProtection();
-                    }
-                }
-                if (GetGunInput(true))
-                {
-                    VRRig gunTarget = Ray.collider.GetComponentInParent<VRRig>();
-                    if (gunTarget && !gunTarget.IsLocal())
-                    {
-                        gunLocked = true;
-                        lockTarget = gunTarget;
-                    }
-                }
-            }
-            else
-            {
-                floatPower = 0.35f;
-                if (gunLocked)
-                    gunLocked = false;
-            }
-        }
-
-		public static void AtticFlingGun()
-        {
-            if (GetGunInput(false))
-            {
-                var GunData = RenderGun();
-                RaycastHit Ray = GunData.Ray;
-
-                if (gunLocked && lockTarget != null)
-                {
-                    if (!PhotonNetwork.IsMasterClient)
-                        NotificationManager.SendNotification("<color=grey>[</color><color=red>ERROR</color><color=grey>]</color> You are not master client.");
-                    else
-                    {
-                        RequestCreatePiece(-566818631, lockTarget.transform.position + Vector3.down * 0.35f, Quaternion.Euler(0f, Random.Range(0f, 350f), 0f), 0, NetPlayerToPlayer(GetPlayerFromVRRig(lockTarget)), false, true, Vector3.up * 50f);
-                        RPCProtection();
-                    }
-                }
-                if (GetGunInput(true))
-                {
-                    VRRig gunTarget = Ray.collider.GetComponentInParent<VRRig>();
-                    if (gunTarget && !gunTarget.IsLocal())
-                    {
-                        gunLocked = true;
-                        lockTarget = gunTarget;
-                    }
-                }
-            }
-            else
-            {
-                floatPower = 0.35f;
-                if (gunLocked)
-                    gunLocked = false;
-            }
-        }
-
-        public static void AtticBringGun()
-        {
-            if (GetGunInput(false))
-            {
-                var GunData = RenderGun();
-                RaycastHit Ray = GunData.Ray;
-
-                if (gunLocked && lockTarget != null)
-                {
-                    if (!PhotonNetwork.IsMasterClient)
-                        NotificationManager.SendNotification("<color=grey>[</color><color=red>ERROR</color><color=grey>]</color> You are not master client.");
-                    else
-                    {
-                        RequestCreatePiece(-566818631, lockTarget.transform.position, Quaternion.Euler(0f, Random.Range(0f, 350f), 0f), 0, NetPlayerToPlayer(GetPlayerFromVRRig(lockTarget)), false, true, (GorillaTagger.Instance.headCollider.transform.position - lockTarget.transform.position).normalized * 50f);
-                        RPCProtection();
-                    }
-                }
-                if (GetGunInput(true))
-                {
-                    VRRig gunTarget = Ray.collider.GetComponentInParent<VRRig>();
-                    if (gunTarget && !gunTarget.IsLocal())
-                    {
-                        gunLocked = true;
-                        lockTarget = gunTarget;
-                    }
-                }
-            }
-            else
-            {
-                floatPower = 0.35f;
-                if (gunLocked)
-                    gunLocked = false;
-            }
-        }
-
-        public static void AtticPushGun()
-        {
-            if (GetGunInput(false))
-            {
-                var GunData = RenderGun();
-                RaycastHit Ray = GunData.Ray;
-
-                if (gunLocked && lockTarget != null)
-                {
-                    if (!PhotonNetwork.IsMasterClient)
-                        NotificationManager.SendNotification("<color=grey>[</color><color=red>ERROR</color><color=grey>]</color> You are not master client.");
-                    else
-                    {
-                        RequestCreatePiece(-566818631, lockTarget.transform.position, Quaternion.Euler(0f, Random.Range(0f, 350f), 0f), 0, NetPlayerToPlayer(GetPlayerFromVRRig(lockTarget)), false, true, (lockTarget.transform.position - GorillaTagger.Instance.headCollider.transform.position).normalized * 50f);
                         RPCProtection();
                     }
                 }
@@ -6045,10 +5941,10 @@ Piece Name: {gunTarget.name}";
         public static string[] names = { };
         public static void EnableCustomNameCycle()
         {
-            if (File.Exists($"{PluginInfo.BaseDirectory}/iiMenu_CustomNameCycle.txt"))
-                names = File.ReadAllText($"{PluginInfo.BaseDirectory}/iiMenu_CustomNameCycle.txt").Split('\n');
+            if (File.Exists($"{PluginInfo.BaseDirectory}/Signal_CustomNameCycle.txt"))
+                names = File.ReadAllText($"{PluginInfo.BaseDirectory}/Signal_CustomNameCycle.txt").Split('\n');
             else
-                File.WriteAllText($"{PluginInfo.BaseDirectory}/iiMenu_CustomNameCycle.txt","YOUR\nTEXT\nHERE");
+                File.WriteAllText($"{PluginInfo.BaseDirectory}/Signal_CustomNameCycle.txt","YOUR\nTEXT\nHERE");
         }
 
         public static string name;
@@ -6689,8 +6585,8 @@ Piece Name: {gunTarget.name}";
             {
                 if (!rig.IsLocal())
                 {
-                    if (Vector3.Distance(rig.transform.position, VRRig.LocalRig.rightHandTransform.position) <= 0.35f ||
-                        Vector3.Distance(rig.transform.position, VRRig.LocalRig.leftHandTransform.position) <= 0.35f)
+                    if (Vector3.Distance(rig.transform.position, GorillaTagger.Instance.offlineVRRig.rightHandTransform.position) <= 0.35f ||
+                        Vector3.Distance(rig.transform.position, GorillaTagger.Instance.offlineVRRig.leftHandTransform.position) <= 0.35f)
                     {
                         touchedPlayers.Add(rig);
                     }
@@ -6788,8 +6684,8 @@ Piece Name: {gunTarget.name}";
             {
                 if (!rig.IsLocal())
                 {
-                    if (Vector3.Distance(rig.transform.position, VRRig.LocalRig.rightHandTransform.position) <= 0.35f ||
-                        Vector3.Distance(rig.transform.position, VRRig.LocalRig.leftHandTransform.position) <= 0.35f)
+                    if (Vector3.Distance(rig.transform.position, GorillaTagger.Instance.offlineVRRig.rightHandTransform.position) <= 0.35f ||
+                        Vector3.Distance(rig.transform.position, GorillaTagger.Instance.offlineVRRig.leftHandTransform.position) <= 0.35f)
                     {
                         touchedPlayers.Add(rig);
                     }
@@ -6874,8 +6770,8 @@ Piece Name: {gunTarget.name}";
             {
                 if (!rig.IsLocal())
                 {
-                    if (Vector3.Distance(rig.transform.position, VRRig.LocalRig.rightHandTransform.position) <= 0.35f ||
-                        Vector3.Distance(rig.transform.position, VRRig.LocalRig.leftHandTransform.position) <= 0.35f)
+                    if (Vector3.Distance(rig.transform.position, GorillaTagger.Instance.offlineVRRig.rightHandTransform.position) <= 0.35f ||
+                        Vector3.Distance(rig.transform.position, GorillaTagger.Instance.offlineVRRig.leftHandTransform.position) <= 0.35f)
                     {
                         touchedPlayers.Add(rig);
                     }
@@ -6954,8 +6850,8 @@ Piece Name: {gunTarget.name}";
             {
                 if (!rig.IsLocal())
                 {
-                    if (Vector3.Distance(rig.transform.position, VRRig.LocalRig.rightHandTransform.position) <= 0.35f ||
-                        Vector3.Distance(rig.transform.position, VRRig.LocalRig.leftHandTransform.position) <= 0.35f)
+                    if (Vector3.Distance(rig.transform.position, GorillaTagger.Instance.offlineVRRig.rightHandTransform.position) <= 0.35f ||
+                        Vector3.Distance(rig.transform.position, GorillaTagger.Instance.offlineVRRig.leftHandTransform.position) <= 0.35f)
                     {
                         touchedPlayers.Add(rig);
                     }
@@ -7020,7 +6916,7 @@ Piece Name: {gunTarget.name}";
         {
             if (!PhotonNetwork.InRoom) return;
 
-            List<VRRig> touchedPlayers = GorillaParent.instance.vrrigs.Where(rig => !rig.IsLocal()).Where(rig => Vector3.Distance(rig.transform.position, VRRig.LocalRig.rightHandTransform.position) <= 0.35f || Vector3.Distance(rig.transform.position, VRRig.LocalRig.leftHandTransform.position) <= 0.35f).ToList();
+            List<VRRig> touchedPlayers = GorillaParent.instance.vrrigs.Where(rig => !rig.IsLocal()).Where(rig => Vector3.Distance(rig.transform.position, GorillaTagger.Instance.offlineVRRig.rightHandTransform.position) <= 0.35f || Vector3.Distance(rig.transform.position, GorillaTagger.Instance.offlineVRRig.leftHandTransform.position) <= 0.35f).ToList();
 
             if (touchedPlayers.Count <= 0 || Time.time < allNarrationDelay) return;
             allNarrationDelay = Time.time + 10f;
@@ -7077,7 +6973,7 @@ Piece Name: {gunTarget.name}";
                 catch { LogManager.Log("Failed to log player"); }
             }
             text += "\n====================================\n";
-            text += "Text file generated with ii's Stupid Menu";
+            text += ObfStr.FileTag;
             string fileName = $"{PluginInfo.BaseDirectory}/PlayerInfo/" + PhotonNetwork.CurrentRoom.Name + ".txt";
 
             File.WriteAllText(fileName, text);

@@ -1,9 +1,9 @@
 /*
- * ii's Stupid Menu  Patches/Menu/DistancePatch.cs
+ * Signal Safety Menu  Patches/Menu/DistancePatch.cs
  * A mod menu for Gorilla Tag with over 1000+ mods
  *
- * Copyright (C) 2026  Goldentrophy Software
- * https://github.com/iiDk-the-actual/iis.Stupid.Menu
+ * Copyright (C) 2026  mojhehh (forked from Goldentrophy Software)
+ * https://github.com/mojhehh/SignalMenu
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,11 +20,11 @@
  */
 
 using HarmonyLib;
-using iiMenu.Menu;
-using iiMenu.Utilities;
+using SignalMenu.Menu;
+using SignalMenu.Utilities;
 using UnityEngine;
 
-namespace iiMenu.Patches.Menu
+namespace SignalMenu.Patches.Menu
 {
     [HarmonyPatch(typeof(VRRig), nameof(VRRig.IsPositionInRange))]
     public class DistancePatch
@@ -33,7 +33,7 @@ namespace iiMenu.Patches.Menu
 
         public static void Postfix(VRRig __instance, ref bool __result, Vector3 position, float range)
         {
-            NetPlayer player = RigUtilities.GetPlayerFromVRRig(__instance) ?? null;
+            NetPlayer player = RigUtilities.GetPlayerFromVRRig(__instance);
             if ((enabled && __instance.isLocal) || (player != null && Main.ShouldBypassChecks(player)))
                 __result = true;
         }

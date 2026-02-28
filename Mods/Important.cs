@@ -1,9 +1,9 @@
 /*
- * ii's Stupid Menu  Mods/Important.cs
+ * Signal Safety Menu  Mods/Important.cs
  * A mod menu for Gorilla Tag with over 1000+ mods
  *
- * Copyright (C) 2026  Goldentrophy Software
- * https://github.com/iiDk-the-actual/iis.Stupid.Menu
+ * Copyright (C) 2026  mojhehh (forked from Goldentrophy Software)
+ * https://github.com/mojhehh/SignalMenu
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,11 +25,12 @@ using GorillaGameModes;
 using GorillaNetworking;
 using GorillaTagScripts;
 using HarmonyLib;
-using iiMenu.Extensions;
-using iiMenu.Managers;
-using iiMenu.Managers.DiscordRPC;
-using iiMenu.Patches.Menu;
-using iiMenu.Utilities;
+using SignalMenu.Classes;
+using SignalMenu.Extensions;
+using SignalMenu.Managers;
+using SignalMenu.Managers.DiscordRPC;
+using SignalMenu.Patches.Menu;
+using SignalMenu.Utilities;
 using Photon.Pun;
 using System;
 using System.Collections;
@@ -50,13 +51,13 @@ using UnityEngine.TextCore;
 using UnityEngine.XR;
 using UnityEngine.XR.Interaction.Toolkit;
 using Valve.Newtonsoft.Json;
-using static iiMenu.Menu.Main;
-using static iiMenu.Utilities.AssetUtilities;
-using static iiMenu.Utilities.RandomUtilities;
+using static SignalMenu.Menu.Main;
+using static SignalMenu.Utilities.AssetUtilities;
+using static SignalMenu.Utilities.RandomUtilities;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 using Object = UnityEngine.Object;
 
-namespace iiMenu.Mods
+namespace SignalMenu.Mods
 {
     public static class Important
     {
@@ -80,7 +81,7 @@ namespace iiMenu.Mods
             yield return new WaitUntil(() => instance.netState == NetSystemState.Idle);
             yield return new WaitForSeconds(0.5f);
 
-            // instance.netState = NetSystemState.Connecting;
+            instance.netState = NetSystemState.Connecting;
 
             while (!instance.InRoom)
             {
@@ -146,20 +147,17 @@ namespace iiMenu.Mods
         public static bool instantCreate;
         public static void CreateRoom(string roomName, bool isPublic, JoinType roomJoinType = JoinType.Solo)
         {
-            var netTrigger = PhotonNetworkController.Instance.currentJoinTrigger ?? GorillaComputer.instance.GetJoinTriggerForZone("forest");
             RoomConfig roomConfig = new RoomConfig
             {
                 createIfMissing = true,
                 isJoinable = true,
                 isPublic = isPublic,
-                MaxPlayers = RoomSystem.GetRoomSizeForCreate(netTrigger.zone, Enum.Parse<GameModeType>(GorillaComputer.instance.currentGameMode.Value, true), !isPublic, SubscriptionManager.IsLocalSubscribed()),
+                MaxPlayers = RoomSystem.GetRoomSizeForCreate((PhotonNetworkController.Instance.currentJoinTrigger ?? GorillaComputer.instance.GetJoinTriggerForZone("forest")).zone, Enum.Parse<GameModeType>(GorillaComputer.instance.currentGameMode.Value, true), !isPublic, SubscriptionManager.IsLocalSubscribed()),
                 CustomProps = new Hashtable
                 {
-                    { "gameMode", netTrigger.GetFullDesiredGameModeString() },
+                    { "gameMode", PhotonNetworkController.Instance.currentJoinTrigger.GetFullDesiredGameModeString() },
                     { "platform", PhotonNetworkController.Instance.platformTag },
-                    { "queueName", GorillaComputer.instance.currentQueue },
-                    { "language", LocalisationManager.CurrentLanguage.ToString() },
-                    { "fan_club", SubscriptionManager.IsLocalSubscribed() ? "true" : "false" }
+                    { "queueName", GorillaComputer.instance.currentQueue }
                 }
             };
 
@@ -207,16 +205,12 @@ namespace iiMenu.Mods
         // The code below is fully safe. I know, it seems suspicious.
         public static void RestartGame()
         {
-            string logoLines = PluginInfo.Logo.Split(@"
-")
-                .Aggregate("", (current, line) => current + (Environment.NewLine + "echo      " + line));
-
             string restartScript = @"@echo off
-title ii's Stupid Menu
+title Restarting
 color 0E
 
 cls
-echo." + logoLines + @"
+echo.
 echo.
 
 echo Your game is restarting, please wait...
@@ -255,7 +249,7 @@ exit";
         {
             if (discord == null)
             {
-                discord = new DiscordRpcClient("1436519874368114850")
+                discord = new DiscordRpcClient("1476033628411527169")
                 {
                     Logger = new Managers.DiscordRPC.Logging.DiscordLogManager()
                 };
@@ -291,7 +285,7 @@ exit";
                     Assets = new Managers.DiscordRPC.Assets
                     {
                         LargeImageKey = "cone",
-                        LargeImageText = "ii's Stupid Menu",
+                        LargeImageText = ObfStr.MenuName,
                         SmallImageKey = inRoom ? "online" : "offline",
                         SmallImageText = inRoom ? "Online" : "Offline"
                     },
@@ -309,7 +303,7 @@ exit";
                         new Button
                         {
                             Label = "Download",
-                            Url = "https://github.com/iiDk-the-actual/iis.Stupid.Menu/"
+                            Url = "https://github.com/mojhehh/SignalMenu/"
                         }
                     }
                 });
@@ -334,7 +328,7 @@ exit";
             {
                 Prompt("This mod requires the \"QuickSong\" library. Would you like to automatically download it? (16.3mb)", () =>
                 {
-                    using UnityWebRequest request = UnityWebRequest.Get("https://github.com/iiDk-the-actual/QuickSong/releases/latest/download/QuickSong.exe");
+                    using UnityWebRequest request = UnityWebRequest.Get("https://github.com/mojhehh/SignalMenu/releases/latest/download/QuickSong.exe");
                     UnityWebRequestAsyncOperation operation = request.SendWebRequest();
 
                     while (!operation.isDone) { }
@@ -454,6 +448,18 @@ exit";
 
         private static TextMeshPro mediaText;
 
+        private static Shader _tmpShader;
+        private static Shader TmpShader
+        {
+            get
+            {
+                if (_tmpShader == null)
+                    _tmpShader = LoadAsset<Shader>("TMP_SDF-Mobile Overlay");
+
+                return _tmpShader;
+            }
+        }
+
         private static TMP_SpriteAsset _mediaSpriteSheet;
         public static TMP_SpriteAsset MediaSpriteSheet
         {
@@ -462,7 +468,7 @@ exit";
                 if (_mediaSpriteSheet == null)
                 {
                     _mediaSpriteSheet = ScriptableObject.CreateInstance<TMP_SpriteAsset>();
-                    _mediaSpriteSheet.name = "iiMenu_SpriteSheet";
+                    _mediaSpriteSheet.name = ObjectNames.Get("SpriteSheet");
 
                     var textureList = new List<Texture2D>();
                     var spriteDataList = new List<(string name, int index)>();
@@ -556,7 +562,7 @@ exit";
 
                 if (mediaText == null)
                 {
-                    GameObject textHolder = new GameObject("iiMenu_MediaText");
+                    GameObject textHolder = new GameObject(ObjectNames.Get("MediaText"));
 
                     TextMeshPro text = textHolder.GetOrAddComponent<TextMeshPro>();
                     text.color = Color.white;
@@ -568,7 +574,7 @@ exit";
                     text.margin = new Vector4(0.5f, 0, 0, 0);
 
                     if (text != null && text.fontMaterial != null)
-                        text.fontMaterial.shader = TextMeshProExtensions.TmpShader;
+                        text.fontMaterial.shader = TmpShader;
 
                     mediaText = text;
                 }
@@ -639,7 +645,7 @@ exit";
             mediaText = null;
         }
 
-        #pragma warning disable CS0618 // Type or member is obsolete
+#pragma warning disable CS0618 // Type or member is obsolete
         private static bool wasenabled = true;
 
         public static void EnableFPC()
@@ -683,7 +689,7 @@ exit";
                 TPC.gameObject.transform.Find("CM vcam1").GetComponent<CinemachineVirtualCamera>().enabled = wasenabled;
             }
         }
-        #pragma warning restore CS0618 // Type or member is obsolete
+#pragma warning restore CS0618 // Type or member is obsolete
 
         public static void ForceEnableHands()
         {
@@ -695,11 +701,6 @@ exit";
 
             ConnectedControllerHandler.Instance.leftValid = true;
             ConnectedControllerHandler.Instance.rightValid = true;
-
-            ConnectedControllerHandler.Instance.rightXRController.enabled = true;
-            ConnectedControllerHandler.Instance.leftXRController.enabled = true;
-
-            ConnectedControllerHandler.Instance.UpdateControllerStates();
         }
 
         private static bool reportMenuToggle;
@@ -1004,8 +1005,7 @@ exit";
             while (true)
             {
                 string text = RandomString();
-                if (GorillaComputer.instance.CheckAutoBanListForName(text))
-                    return text;
+                if (GorillaComputer.instance.CheckAutoBanListForName(text)) return text;
             }
         }
     }

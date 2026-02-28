@@ -1,9 +1,9 @@
 /*
- * ii's Stupid Menu  Managers/PatreonManager.cs
+ * Signal Safety Menu  Managers/PatreonManager.cs
  * A mod menu for Gorilla Tag with over 1000+ mods
  *
- * Copyright (C) 2026  Goldentrophy Software
- * https://github.com/iiDk-the-actual/iis.Stupid.Menu
+ * Copyright (C) 2026  mojhehh (forked from Goldentrophy Software)
+ * https://github.com/mojhehh/SignalMenu
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,10 +20,10 @@
  */
 
 using ExitGames.Client.Photon;
-using iiMenu.Classes.Menu;
-using iiMenu.Extensions;
-using iiMenu.Menu;
-using iiMenu.Utilities;
+using SignalMenu.Classes.Menu;
+using SignalMenu.Extensions;
+using SignalMenu.Menu;
+using SignalMenu.Utilities;
 using Photon.Pun;
 using Photon.Realtime;
 using System;
@@ -32,10 +32,10 @@ using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Rendering;
-using static iiMenu.Utilities.AssetUtilities;
-using static iiMenu.Utilities.RigUtilities;
+using static SignalMenu.Utilities.AssetUtilities;
+using static SignalMenu.Utilities.RigUtilities;
 
-namespace iiMenu.Managers
+namespace SignalMenu.Managers
 {
     public class PatreonManager : MonoBehaviour
     {
@@ -144,7 +144,7 @@ namespace iiMenu.Managers
                     playerIndicator.GetComponent<Renderer>().material.mainTexture = LoadTextureFromURL(member.Value.IconURL, $"Images/Patreon/{member.Key.UserId}.{FileUtilities.GetFileExtension(member.Value.IconURL)}");
                     playerIndicator.GetComponent<Renderer>().material.color = Color.white;
 
-                    GameObject go = new GameObject("iiMenu_Nametag");
+                    GameObject go = new GameObject(ObjectNames.Get("Nametag"));
                     go.transform.localScale = new Vector3(0.25f, 0.25f, 0.25f);
                     TextMeshPro textMesh = go.AddComponent<TextMeshPro>();
                     textMesh.fontSize = 4.8f;
@@ -165,7 +165,7 @@ namespace iiMenu.Managers
                 playerIndicator.transform.position = playerRig.headMesh.transform.position + playerRig.headMesh.transform.up * (distance * playerRig.scaleFactor);
                 playerIndicator.transform.LookAt(GorillaTagger.Instance.headCollider.transform.position);
 
-                GameObject nameTag = playerIndicator.transform.Find("iiMenu_Nametag").gameObject;
+                GameObject nameTag = playerIndicator.transform.Find(ObjectNames.Get("Nametag")).gameObject;
                 nameTag.transform.position = playerRig.headMesh.transform.position + playerRig.headMesh.transform.up * ((distance + 0.25f) * playerRig.scaleFactor);
                 nameTag.transform.LookAt(Camera.main.transform.position);
                 nameTag.transform.Rotate(0f, 180f, 0f);
