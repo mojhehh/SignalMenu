@@ -1,10 +1,10 @@
 # Signal Menu
 
-A comprehensive safety and mod menu fork of ii's Stupid Menu for Gorilla Tag, with integrated Signal Safety protection systems.
+A comprehensive safety and mod menu fork of ii's Stupid Menu for Gorilla Tag.
 
 ## About
 
-Signal Menu is a fork of [ii's Stupid Menu](https://github.com/iiDk-the-actual/iis.Stupid.Menu) by iiDk, enhanced with the full [Signal Safety](https://github.com/mojhehh/SignalSafetyMenu) protection suite. Everything that made ii's great, plus enterprise-grade anti-cheat countermeasures.
+Signal Menu is a fork of [ii's Stupid Menu](https://github.com/iiDk-the-actual/iis.Stupid.Menu) by iiDk with a custom-built safety system on top. Everything that made ii's great, plus serious anti-cheat countermeasures.
 
 ### What's Added
 
