@@ -789,5 +789,51 @@ namespace SignalMenu.Mods
             if (!Mathf.Approximately(VRRig.LocalRig.currentRankedELO, targetElo) || VRRig.LocalRig.currentRankedSubTierQuest != targetBadge || VRRig.LocalRig.currentRankedSubTierPC != targetBadge)
                 VRRig.LocalRig.SetRankedInfo(targetElo, targetBadge, targetBadge);
         }
+
+        private static bool _antiBanTutorialShown = false;
+
+        public static void AntiBanWithTutorial()
+        {
+            if (AntiBan.IsRunning)
+            {
+                NotificationManager.SendNotification("<color=grey>[</color><color=green>ANTI-BAN</color><color=grey>]</color> Already running.");
+                return;
+            }
+
+            if (AntiBan.IsActive)
+            {
+                AntiBan.Disable();
+                NotificationManager.SendNotification("<color=grey>[</color><color=red>ANTI-BAN</color><color=grey>]</color> Disabled. Room re-opened.");
+                return;
+            }
+
+            if (!_antiBanTutorialShown)
+            {
+                _antiBanTutorialShown = true;
+                AudioManager.Play("antibantutorial", AudioManager.AudioCategory.Warning);
+                Prompt(
+                    "Anti-Ban will kick everyone in your room, make it private, and lock it down so reports from this room get ignored by the server.\n\nYour friends can rejoin with the room code after.\n\nThis is NOT a simple toggle. Once active, the room stays locked until you disable it or leave.\n\nStart anti-ban now?",
+                    () => { AntiBan.RunAntiBan(); },
+                    null,
+                    "Start",
+                    "Cancel"
+                );
+                return;
+            }
+
+            AntiBan.RunAntiBan();
+        }
+
+        public static void AntiBanStatus()
+        {
+            string status = AntiBan.Status ?? "Idle";
+            int players = AntiBan.PlayersInRoom;
+            int kicked = AntiBan.PlayersKicked;
+            bool active = AntiBan.IsActive;
+            bool running = AntiBan.IsRunning;
+
+            string state = running ? "<color=yellow>RUNNING</color>" : active ? "<color=green>ACTIVE</color>" : "<color=grey>OFF</color>";
+            NotificationManager.SendNotification($"<color=grey>[</color>{state}<color=grey>]</color> {status} | Kicked: {kicked} | In room: {players}");
+        }
     }
 }

@@ -584,6 +584,9 @@ namespace SignalMenu.Menu
                 new ButtonInfo { buttonText = "Name Spoof", method = Safety.NameSpoof, toolTip = "Changes your name on the leaderboard to something random, but not on your rig."},
                 new ButtonInfo { buttonText = "Color Spoof", method = Safety.ColorSpoof, toolTip = "Makes your color appear different to every player."},
 
+                new ButtonInfo { buttonText = "Anti Ban", overlapText = "Anti Ban <color=grey>[</color><color=red>Risky</color><color=grey>]</color>", method = Safety.AntiBanWithTutorial, isTogglable = false, toolTip = "Kicks everyone, locks the room private, and blocks server reports. Your friends can rejoin with the code."},
+                new ButtonInfo { buttonText = "Anti Ban Status", method = Safety.AntiBanStatus, isTogglable = false, toolTip = "Shows the current anti-ban status."},
+
                 new ButtonInfo { buttonText = "Unload Menu", method = () => Prompt("Are you sure you want unload the menu?", UnloadMenu), isTogglable = false, toolTip = "Unloads the menu from your game."}
             },
 
