@@ -3336,7 +3336,7 @@ namespace SignalMenu.SignalSafety.Patches
     {
         internal static bool _intentionalQuit = false;
         internal static float _startupTime = -1f;
-        private const float STARTUP_GRACE_PERIOD = 120f; // 2 minutes grace period
+        private const float STARTUP_GRACE_PERIOD = 120f;
 
         internal static bool IsInStartupGracePeriod()
         {
@@ -3346,10 +3346,8 @@ namespace SignalMenu.SignalSafety.Patches
 
         internal static bool HasBeenInGame()
         {
-            // Only consider it a ban if user has actually been in-game
             try
             {
-                // Check if we've successfully authenticated and played
                 if (!PhotonNetwork.IsConnectedAndReady) return false;
                 if (!PhotonNetwork.InRoom) return false;
                 return true;
@@ -3362,15 +3360,11 @@ namespace SignalMenu.SignalSafety.Patches
         {
             if (_intentionalQuit) return true;
             if (!SafetyConfig.PatchBanDetection) return true;
-            
-            // Allow quit during startup - game may quit due to connection errors
             if (IsInStartupGracePeriod())
             {
                 Plugin.Instance?.Log("[Exit] Application.Quit() during startup grace period - allowing");
                 return true;
             }
-            
-            // Only treat as ban if user was actively in a room
             if (!HasBeenInGame())
             {
                 Plugin.Instance?.Log("[Exit] Application.Quit() but not in-game - allowing");
@@ -3393,15 +3387,11 @@ namespace SignalMenu.SignalSafety.Patches
         {
             if (PatchApplicationQuit._intentionalQuit) return true;
             if (!SafetyConfig.PatchBanDetection) return true;
-            
-            // Allow quit during startup - game may quit due to connection errors
             if (PatchApplicationQuit.IsInStartupGracePeriod())
             {
                 Plugin.Instance?.Log("[Exit] Application.Quit(int) during startup grace period - allowing");
                 return true;
             }
-            
-            // Only treat as ban if user was actively in a room
             if (!PatchApplicationQuit.HasBeenInGame())
             {
                 Plugin.Instance?.Log("[Exit] Application.Quit(int) but not in-game - allowing");
@@ -3422,8 +3412,6 @@ namespace SignalMenu.SignalSafety.Patches
         [HarmonyPostfix]
         public static void Postfix(GorillaVRConstraint __instance)
         {
-            // Only override the constrained flag AFTER the original method runs
-            // This ensures normal VR movement processing still happens
             __instance.isConstrained = false;
         }
     }
