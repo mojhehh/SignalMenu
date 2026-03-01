@@ -320,7 +320,7 @@ namespace SignalMenu.Managers
 
                 motdHeadingText.richText = true;
                 motdHeadingText.SafeSetFontSize(100);
-                motdHeadingText.SafeSetText($"Thanks for using {(doCustomName ? customMenuName : "Signal Menu")}!\n<size=60%>A fork of ii's Stupid Menu</size>");
+                motdHeadingText.SafeSetText($"Thanks for using {(doCustomName ? customMenuName : "Signal Menu")}!");
                 motdHeadingText.SafeSetFontStyle(activeFontStyle);
                 motdHeadingText.SafeSetFont(activeFont);
                 FollowMenuSettings(motdHeadingText, -4f);

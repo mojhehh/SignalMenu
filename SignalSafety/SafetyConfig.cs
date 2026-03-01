@@ -57,7 +57,7 @@ namespace SignalMenu.SignalSafety
         public static bool AntiNameBanEnabled = true;
 
         public static bool AntiReportSmartMode = true;
-        public static bool AntiReportVisualizerEnabled = true;
+        public static bool AntiReportVisualizerEnabled = false;
         public static bool AntiReportMuteDetect = false;
         public static int AntiReportRangeIndex = 0;
 
@@ -542,7 +542,7 @@ namespace SignalMenu.SignalSafety
             TOSBypassEnabled = true;
             AntiNameBanEnabled = true;
             AntiReportSmartMode = true;
-            AntiReportVisualizerEnabled = true;
+            AntiReportVisualizerEnabled = false;
             AntiReportMuteDetect = false;
             AntiReportRangeIndex = 0;
             ModeratorDetectorEnabled = true;
