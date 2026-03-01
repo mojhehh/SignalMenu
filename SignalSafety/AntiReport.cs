@@ -497,7 +497,7 @@ namespace SignalMenu.SignalSafety
 
             sphere.SetActive(true);
             sphere.transform.position = position;
-            float diameter = 0.08f;
+            float diameter = range * 2f;
             sphere.transform.localScale = new Vector3(diameter, diameter, diameter);
 
             Renderer rend = sphere.GetComponent<Renderer>();

@@ -2641,7 +2641,7 @@ namespace SignalMenu.Menu
                     }
                 }.AddComponent<TextMeshPro>();
                 title.font = activeFont;
-                title.text = translate ? ObfStr.MenuName : "ii's <b>Stupid</b> Menu";
+                title.text = ObfStr.MenuName;
 
                 if (doCustomName)
                     title.text = customMenuName;

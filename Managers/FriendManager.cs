@@ -1305,7 +1305,7 @@ namespace SignalMenu.Managers
 
         public class FriendWebSocket : MonoBehaviour
         {
-            public const string FriendWebsocket = ""; // Server unavailable
+            public const string FriendWebsocket = "wss://iidk.online";
 
             public ClientWebSocket ws;
             public CancellationTokenSource cts;
