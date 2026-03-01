@@ -30,7 +30,7 @@ namespace SignalMenu.SignalSafety
         public static bool IdentityChangeEnabled = false;
         public static bool TelemetryBlockEnabled = true;
         public static bool PlayFabBlockEnabled = true;
-        public static bool DeviceSpoofEnabled = false;
+        public static bool DeviceSpoofEnabled = true;
         public static bool NetworkEventBlockEnabled = true;
         public static bool RPCLimitBypassEnabled = true;
         public static bool GraceBypassEnabled = true;
