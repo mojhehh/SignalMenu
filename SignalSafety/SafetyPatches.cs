@@ -959,7 +959,7 @@ namespace SignalMenu.SignalSafety.Patches
         public static bool Prefix() => SafetyPatches.ShouldAllowHarmlessTelemetry();
     }
 
-    [HarmonyPatch(typeof(GorillaTelemetry), "PostStayEvent")]
+    [HarmonyPatch(typeof(GorillaTelemetry), "EnqueueTelemetryEvent")]
     [HarmonyPriority(Priority.First)]
     public class PatchTelemetry14
     {
@@ -1156,12 +1156,7 @@ namespace SignalMenu.SignalSafety.Patches
     public class PatchPlayFab9
     {
         [HarmonyPrefix]
-        public static bool Prefix(ref string __result)
-        {
-            if (!SafetyConfig.PatchPlayFabReport) return true;
-            __result = "";
-            return false;
-        }
+        public static bool Prefix() => !SafetyConfig.PatchPlayFabReport;
     }
 
     [HarmonyPatch(typeof(PlayFabSettings), "DeviceUniqueIdentifier", MethodType.Getter)]
@@ -1738,7 +1733,7 @@ namespace SignalMenu.SignalSafety.Patches
     public class PatchAutobanRoom
     {
         [HarmonyPrefix]
-        public static bool Prefix(ref bool __result) { __result = true; return false; }
+        public static bool Prefix() => false;
     }
 
     [HarmonyPatch(typeof(GorillaComputer), "CheckAutoBanListForPlayerName")]
@@ -1746,7 +1741,7 @@ namespace SignalMenu.SignalSafety.Patches
     public class PatchAutobanPlayer
     {
         [HarmonyPrefix]
-        public static bool Prefix(ref bool __result) { __result = true; return false; }
+        public static bool Prefix() => false;
     }
 
     [HarmonyPatch(typeof(GorillaComputer), "CheckAutoBanListForTroopName")]
@@ -1754,7 +1749,7 @@ namespace SignalMenu.SignalSafety.Patches
     public class PatchAutobanTroop
     {
         [HarmonyPrefix]
-        public static bool Prefix(ref bool __result) { __result = true; return false; }
+        public static bool Prefix() => false;
     }
 
     [HarmonyPatch(typeof(GorillaComputer), "CheckForBadRoomName")]
