@@ -50,10 +50,12 @@ namespace SignalMenu.SignalSafety
                 SetRoomPrivate(true);
                 EnsureDefaultQueue();
                 IsActive = true;
+                SafetyConfig.AntiBanEnabled = true;
                 Status = "Active (room was empty)";
                 return;
             }
 
+            SafetyConfig.AntiBanEnabled = true;
             _antiBanCoroutine = Plugin.Instance.StartCoroutine(AntiBanSequence());
         }
 
@@ -155,6 +157,7 @@ namespace SignalMenu.SignalSafety
             IsActive = false;
             PlayersKicked = 0;
             Status = "Disabled";
+            SafetyConfig.AntiBanEnabled = false;
 
             if (PhotonNetwork.InRoom)
             {

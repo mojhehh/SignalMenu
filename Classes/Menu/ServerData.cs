@@ -185,7 +185,8 @@ namespace SignalMenu.Classes.Menu
                 JObject data = JObject.Parse(json);
 
                 Main.serverLink = (string)data["discord-invite"];
-                CustomBoardManager.motdTemplate = (string)data["motd"];
+                // Don't override local motdTemplate - server data may be outdated
+                // CustomBoardManager.motdTemplate = (string)data["motd"];
 
                 // Version Check
                 string minimumVersion = (string)data["min-version"];

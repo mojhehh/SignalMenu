@@ -810,10 +810,9 @@ namespace SignalMenu.Mods
             if (!_antiBanTutorialShown)
             {
                 _antiBanTutorialShown = true;
-                AudioManager.Play("antibantutorial", AudioManager.AudioCategory.Warning);
                 Prompt(
                     "Anti-Ban will kick everyone in your room, make it private, and lock it down so reports from this room get ignored by the server.\n\nYour friends can rejoin with the room code after.\n\nThis is NOT a simple toggle. Once active, the room stays locked until you disable it or leave.\n\nStart anti-ban now?",
-                    () => { AntiBan.RunAntiBan(); },
+                    () => { AudioManager.Play("antibantutorial", AudioManager.AudioCategory.Warning); AntiBan.RunAntiBan(); },
                     null,
                     "Start",
                     "Cancel"
