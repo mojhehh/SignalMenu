@@ -3409,10 +3409,11 @@ namespace SignalMenu.SignalSafety.Patches
     [HarmonyPriority(Priority.First)]
     public class PatchGorillaVRConstraintTick
     {
-        [HarmonyPostfix]
-        public static void Postfix(GorillaVRConstraint __instance)
+        [HarmonyPrefix]
+        public static bool Prefix(GorillaVRConstraint __instance)
         {
             __instance.isConstrained = false;
+            return false;
         }
     }
 
