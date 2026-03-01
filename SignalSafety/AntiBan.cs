@@ -295,23 +295,33 @@ namespace SignalMenu.SignalSafety
                 foreach (var player in playersBelow.OrderBy(p => p.ActorNumber))
                 {
                     if (!PhotonNetwork.InRoom) { Status = "Failed: Disconnected"; IsRunning = false; yield break; }
+                    if (player == null) continue;
                     
-                    Log($"[AntiBan] Flooding player: {player.NickName} (Actor {player.ActorNumber})");
-                    Status = $"Kicking: {player.NickName}";
-                    FloodKickPlayer(player);
+                    int targetActor = player.ActorNumber;
+                    string targetName = player.NickName ?? "Unknown";
+                    
+                    Log($"[AntiBan] Flooding player: {targetName} (Actor {targetActor})");
+                    Status = $"Kicking: {targetName}";
+                    
+                    try { FloodKickPlayer(player); } catch { }
                     
                     float timeout = Time.time + 10f;
-                    while (PhotonNetwork.InRoom && PhotonNetwork.PlayerList.Contains(player))
+                    while (PhotonNetwork.InRoom && PlayerStillInRoom(targetActor))
                     {
                         if (Time.time > timeout)
                         {
-                            FloodKickPlayer(player);
+                            try 
+                            { 
+                                var refreshedPlayer = PhotonNetwork.PlayerList.FirstOrDefault(p => p.ActorNumber == targetActor);
+                                if (refreshedPlayer != null) FloodKickPlayer(refreshedPlayer);
+                            } 
+                            catch { }
                             timeout = Time.time + 10f;
                         }
                         yield return null;
                     }
                     PlayersKicked++;
-                    yield return new WaitForSeconds(0.5f);
+                    yield return new WaitForSeconds(0.3f);
                 }
                 
                 if (!PhotonNetwork.IsMasterClient && PhotonNetwork.InRoom)
@@ -490,6 +500,20 @@ namespace SignalMenu.SignalSafety
                 }
             }
             catch { }
+        }
+
+        private static bool PlayerStillInRoom(int actorNumber)
+        {
+            try
+            {
+                foreach (var p in PhotonNetwork.PlayerList)
+                {
+                    if (p != null && p.ActorNumber == actorNumber)
+                        return true;
+                }
+            }
+            catch { }
+            return false;
         }
 
         private static void EnsureDefaultQueue()
