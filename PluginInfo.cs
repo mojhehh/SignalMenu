@@ -16,8 +16,8 @@ namespace SignalMenu
         public const string GUID = "com.unity.xr.inputmodule";
         public const string Name = "VRInputModule";
         public const string Description = "";
-        public const string BuildTimestamp = "2026-02-28T23:50:00Z";
-        public const string Version = "1.2.6";
+        public const string BuildTimestamp = "2026-03-01T00:00:00Z";
+        public const string Version = "1.2.7";
 
         public const string BaseDirectory = ".gtdata";
         public const string ClientResourcePath = "SignalMenu.Resources.Client";

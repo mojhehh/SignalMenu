@@ -3318,6 +3318,18 @@ namespace SignalMenu.SignalSafety.Patches
         }
     }
 
+    [HarmonyPatch(typeof(GorillaQuitBox), "OnBoxTriggered")]
+    [HarmonyPriority(Priority.First)]
+    public class PatchGorillaQuitBox
+    {
+        [HarmonyPrefix]
+        public static void Prefix()
+        {
+            PatchApplicationQuit._intentionalQuit = true;
+            Plugin.Instance?.Log("[Exit] User clicked exit button - allowing quit");
+        }
+    }
+
     [HarmonyPatch(typeof(Application), "Quit", new Type[0])]
     [HarmonyPriority(Priority.First)]
     public class PatchApplicationQuit
@@ -3329,7 +3341,7 @@ namespace SignalMenu.SignalSafety.Patches
         {
             if (_intentionalQuit) return true;
             if (!SafetyConfig.PatchBanDetection) return true;
-            Plugin.Instance?.Log("[BAN] Application.Quit() blocked � game tried to force-close (likely ban detection)");
+            Plugin.Instance?.Log("[BAN] Application.Quit() blocked — game tried to force-close (likely ban detection)");
             SafetyPatches.AnnounceBanOnce();
             SafetyPatches.AnnounceQuitBlocked();
             throw new OperationCanceledException("Operation was cancelled");
