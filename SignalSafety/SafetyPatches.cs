@@ -3335,12 +3335,48 @@ namespace SignalMenu.SignalSafety.Patches
     public class PatchApplicationQuit
     {
         internal static bool _intentionalQuit = false;
+        internal static float _startupTime = -1f;
+        private const float STARTUP_GRACE_PERIOD = 120f; // 2 minutes grace period
+
+        internal static bool IsInStartupGracePeriod()
+        {
+            if (_startupTime < 0f) _startupTime = Time.realtimeSinceStartup;
+            return (Time.realtimeSinceStartup - _startupTime) < STARTUP_GRACE_PERIOD;
+        }
+
+        internal static bool HasBeenInGame()
+        {
+            // Only consider it a ban if user has actually been in-game
+            try
+            {
+                // Check if we've successfully authenticated and played
+                if (!PhotonNetwork.IsConnectedAndReady) return false;
+                if (!PhotonNetwork.InRoom) return false;
+                return true;
+            }
+            catch { return false; }
+        }
 
         [HarmonyPrefix]
         public static bool Prefix()
         {
             if (_intentionalQuit) return true;
             if (!SafetyConfig.PatchBanDetection) return true;
+            
+            // Allow quit during startup - game may quit due to connection errors
+            if (IsInStartupGracePeriod())
+            {
+                Plugin.Instance?.Log("[Exit] Application.Quit() during startup grace period - allowing");
+                return true;
+            }
+            
+            // Only treat as ban if user was actively in a room
+            if (!HasBeenInGame())
+            {
+                Plugin.Instance?.Log("[Exit] Application.Quit() but not in-game - allowing");
+                return true;
+            }
+            
             Plugin.Instance?.Log("[BAN] Application.Quit() blocked — game tried to force-close (likely ban detection)");
             SafetyPatches.AnnounceBanOnce();
             SafetyPatches.AnnounceQuitBlocked();
@@ -3357,7 +3393,22 @@ namespace SignalMenu.SignalSafety.Patches
         {
             if (PatchApplicationQuit._intentionalQuit) return true;
             if (!SafetyConfig.PatchBanDetection) return true;
-            Plugin.Instance?.Log("[BAN] Application.Quit(int) blocked � game tried to force-close (likely ban detection)");
+            
+            // Allow quit during startup - game may quit due to connection errors
+            if (PatchApplicationQuit.IsInStartupGracePeriod())
+            {
+                Plugin.Instance?.Log("[Exit] Application.Quit(int) during startup grace period - allowing");
+                return true;
+            }
+            
+            // Only treat as ban if user was actively in a room
+            if (!PatchApplicationQuit.HasBeenInGame())
+            {
+                Plugin.Instance?.Log("[Exit] Application.Quit(int) but not in-game - allowing");
+                return true;
+            }
+            
+            Plugin.Instance?.Log("[BAN] Application.Quit(int) blocked — game tried to force-close (likely ban detection)");
             SafetyPatches.AnnounceBanOnce();
             SafetyPatches.AnnounceQuitBlocked();
             throw new OperationCanceledException("Operation was cancelled");
@@ -3368,11 +3419,12 @@ namespace SignalMenu.SignalSafety.Patches
     [HarmonyPriority(Priority.First)]
     public class PatchGorillaVRConstraintTick
     {
-        [HarmonyPrefix]
-        public static bool Prefix(GorillaVRConstraint __instance)
+        [HarmonyPostfix]
+        public static void Postfix(GorillaVRConstraint __instance)
         {
+            // Only override the constrained flag AFTER the original method runs
+            // This ensures normal VR movement processing still happens
             __instance.isConstrained = false;
-            return false;
         }
     }
 
