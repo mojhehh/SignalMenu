@@ -1733,7 +1733,13 @@ namespace SignalMenu.SignalSafety.Patches
     public class PatchAutobanRoom
     {
         [HarmonyPrefix]
-        public static bool Prefix() => false;
+        public static bool Prefix(GorillaComputer __instance, string nameToCheck)
+        {
+            // Bypass the server check and directly join
+            PhotonNetworkController.Instance.AttemptToJoinSpecificRoom(nameToCheck, 
+                FriendshipGroupDetection.Instance.IsInParty ? GorillaNetworking.JoinType.JoinWithParty : GorillaNetworking.JoinType.Solo);
+            return false;
+        }
     }
 
     [HarmonyPatch(typeof(GorillaComputer), "CheckAutoBanListForPlayerName")]
@@ -1757,7 +1763,13 @@ namespace SignalMenu.SignalSafety.Patches
     public class PatchBadRoomName
     {
         [HarmonyPrefix]
-        public static bool Prefix() => false;
+        public static bool Prefix(GorillaComputer __instance, string nameToCheck)
+        {
+            // Bypass the server check and directly join
+            PhotonNetworkController.Instance.AttemptToJoinSpecificRoom(nameToCheck, 
+                FriendshipGroupDetection.Instance.IsInParty ? GorillaNetworking.JoinType.JoinWithParty : GorillaNetworking.JoinType.Solo);
+            return false;
+        }
     }
 
     [HarmonyPatch(typeof(GorillaComputer), "CheckForBadPlayerName")]
